@@ -1,0 +1,32 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Project1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Buildings.cpp
+  Game.cpp
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Units.h(20,48): warning C4042: 't_amount': has bad storage class
+  (compiling source file 'Game.cpp')
+  
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(231,66): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(231,66): warning C4244:         with
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(231,66): warning C4244:         [
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(231,66): warning C4244:             T=float
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(231,66): warning C4244:         ]
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(232,66): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(232,66): warning C4244:         with
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(232,66): warning C4244:         [
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(232,66): warning C4244:             T=float
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Game.cpp(232,66): warning C4244:         ]
+  main.cpp
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Units.h(20,48): warning C4042: 't_amount': has bad storage class
+  (compiling source file 'main.cpp')
+  
+  Soldier.cpp
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Units.h(20,48): warning C4042: 't_amount': has bad storage class
+  (compiling source file 'Soldier.cpp')
+  
+  Spawner.cpp
+  Units.cpp
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Units.h(20,48): warning C4042: 't_amount': has bad storage class
+  (compiling source file 'Units.cpp')
+  
+C:\Users\gameuser\Desktop\Final Year Project\CowStrike\Project1\Units.cpp(20,54): warning C4042: 't_amount': has bad storage class
+  Generating Code...
+  Project1.vcxproj -> C:\Users\gameuser\Desktop\Final Year Project\CowStrike\x64\Debug\CowStrike.exe

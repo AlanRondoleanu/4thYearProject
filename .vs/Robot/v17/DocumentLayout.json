@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Buildings.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Buildings.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Buildings.cpp",
+              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Buildings.cpp",
+              "RelativeDocumentMoniker": "Project1\\Buildings.cpp",
+              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Buildings.cpp",
+              "RelativeToolTip": "Project1\\Buildings.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-24T12:57:38.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\main.cpp",
+              "RelativeDocumentMoniker": "Project1\\main.cpp",
+              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\main.cpp",
+              "RelativeToolTip": "Project1\\main.cpp",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-24T12:56:57.184Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Game.cpp",
+              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Game.cpp",
+              "RelativeDocumentMoniker": "Project1\\Game.cpp",
+              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\CowStrike\\Project1\\Game.cpp",
+              "RelativeToolTip": "Project1\\Game.cpp",
+              "ViewState": "AgIAANsAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-24T12:11:19.405Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
