@@ -1,18 +1,58 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\",
+  "WorkspaceRootPath": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Buildings.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Soldier.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Buildings.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Spawner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Spawner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Buildings.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Units.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Units.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\FlowField.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Cell.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\FlowField.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Cell.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{349D6BEC-802D-4F60-AC07-14D38CC7BBEC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Soldier.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,46 +61,183 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "DockedWidth": 257,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Buildings.cpp",
-              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Buildings.cpp",
-              "RelativeDocumentMoniker": "Project1\\Buildings.cpp",
-              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Buildings.cpp",
-              "RelativeToolTip": "Project1\\Buildings.cpp",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-24T12:57:38.711Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\main.cpp",
-              "RelativeDocumentMoniker": "Project1\\main.cpp",
-              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\main.cpp",
-              "RelativeToolTip": "Project1\\main.cpp",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
+              "Title": "Soldier.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.cpp",
+              "RelativeDocumentMoniker": "Project1\\Soldier.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.cpp",
+              "RelativeToolTip": "Project1\\Soldier.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-24T12:56:57.184Z",
+              "WhenOpened": "2024-11-13T01:24:29.249Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Game.cpp",
-              "DocumentMoniker": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Game.cpp",
-              "RelativeDocumentMoniker": "Project1\\Game.cpp",
-              "ToolTip": "C:\\Users\\gameuser\\Desktop\\Final Year Project\\4thYearProject\\Project1\\Game.cpp",
-              "RelativeToolTip": "Project1\\Game.cpp",
-              "ViewState": "AgIAANsAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
+              "Title": "Buildings.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.cpp",
+              "RelativeDocumentMoniker": "Project1\\Buildings.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.cpp",
+              "RelativeToolTip": "Project1\\Buildings.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-24T12:11:19.405Z"
+              "WhenOpened": "2024-11-13T00:25:47.763Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Spawner.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Spawner.cpp",
+              "RelativeDocumentMoniker": "Project1\\Spawner.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Spawner.cpp",
+              "RelativeToolTip": "Project1\\Spawner.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-13T00:44:52.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Game.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.cpp",
+              "RelativeDocumentMoniker": "Project1\\Game.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.cpp",
+              "RelativeToolTip": "Project1\\Game.cpp",
+              "ViewState": "AgIAADwAAAAAAAAAAAAowFEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-24T12:11:19.405Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Cell.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.cpp",
+              "RelativeDocumentMoniker": "Project1\\Cell.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.cpp",
+              "RelativeToolTip": "Project1\\Cell.cpp",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAEgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-12T16:19:17.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FlowField.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.cpp",
+              "RelativeDocumentMoniker": "Project1\\FlowField.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.cpp",
+              "RelativeToolTip": "Project1\\FlowField.cpp",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAAIwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-12T16:23:25.264Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Units.cpp",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.cpp",
+              "RelativeDocumentMoniker": "Project1\\Units.cpp",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.cpp",
+              "RelativeToolTip": "Project1\\Units.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-12T23:08:40.224Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 143,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Buildings.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.h",
+              "RelativeDocumentMoniker": "Project1\\Buildings.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Buildings.h",
+              "RelativeToolTip": "Project1\\Buildings.h",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-13T00:26:13.927Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Cell.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.h",
+              "RelativeDocumentMoniker": "Project1\\Cell.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Cell.h",
+              "RelativeToolTip": "Project1\\Cell.h",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAtwCgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-12T16:19:20.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "FlowField.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.h",
+              "RelativeDocumentMoniker": "Project1\\FlowField.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\FlowField.h",
+              "RelativeToolTip": "Project1\\FlowField.h",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABUAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-12T16:23:16.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Units.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.h",
+              "RelativeDocumentMoniker": "Project1\\Units.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Units.h",
+              "RelativeToolTip": "Project1\\Units.h",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAC0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-12T23:08:36.046Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Game.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.h",
+              "RelativeDocumentMoniker": "Project1\\Game.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Game.h",
+              "RelativeToolTip": "Project1\\Game.h",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAACAAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-12T16:55:58.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Soldier.h",
+              "DocumentMoniker": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.h",
+              "RelativeDocumentMoniker": "Project1\\Soldier.h",
+              "ToolTip": "C:\\Users\\Archi\\Desktop\\Work\\4thYearProject\\Project1\\Soldier.h",
+              "RelativeToolTip": "Project1\\Soldier.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-12T23:37:30.298Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -7,16 +7,14 @@ Spawner::Spawner()
 
 void Spawner::update()
 {
-	if (placed == false)
-	{
-		body.setPosition(getPos());
-	}
+
 }
 
 void Spawner::initialize()
 {
-	body.setSize(sf::Vector2f{ 50,50 });
-	body.setOrigin(25, 25);
+	float size = 225;
+	body.setSize(sf::Vector2f{ size,size });
+	body.setOrigin(size / 2, size / 2);
 	body.setFillColor(sf::Color::Green);
 }
 

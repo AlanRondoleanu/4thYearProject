@@ -1,6 +1,10 @@
 #include "Buildings.h"
 
-Buildings::Buildings(){}
+Buildings::Buildings()
+{
+	
+}
+
 Buildings::~Buildings(){}
 
 void Buildings::draw(sf::RenderWindow& t_window)
@@ -8,12 +12,11 @@ void Buildings::draw(sf::RenderWindow& t_window)
 	t_window.draw(body);
 }
 
-void Buildings::place(sf::Vector2f t_position)
+void Buildings::setPos(sf::Vector2f t_position)
 {
-	setPos(t_position);
-	body.setPosition(pos);
-	body.setFillColor(sf::Color::Black);
-	placed = true;
+	body.setPosition(t_position);
+	spawnPoint = body.getPosition();
+	spawnPoint.y -= 225 / 2;
 }
 
 void Buildings::setEnemy(bool t_enemy)
@@ -30,11 +33,11 @@ void Buildings::setEnemy(bool t_enemy)
 }
 
 
-void Buildings::placementCollision(Buildings* t_buildings[])
+void Buildings::placementCollision(std::vector<Buildings*> t_buildings)
 {
 	body.setFillColor(sf::Color::Green);
 	blocked = false;
-	for (int i = 0; i < PLAYER_BUILDING_AMOUNT; i++)
+	for (int i = 0; i < t_buildings.size(); i++)
 	{
 		if (body.getGlobalBounds().intersects(t_buildings[i]->body.getGlobalBounds()))
 		{
