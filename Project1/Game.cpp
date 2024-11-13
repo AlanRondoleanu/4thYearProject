@@ -14,7 +14,7 @@ int Units::PLAYER_UNIT_AMOUNT = 0;
 /// default constructor
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1200U, 900U, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 1600U, 1200U, 32U }, "SFML Game" },
 	m_exitGame{ false } //when true game will exit
 
 {
@@ -72,6 +72,17 @@ void Game::processEvents()
 		{
 			processKeyReleases(newEvent);
 		}
+		if (sf::Event::MouseWheelScrolled == newEvent.type)
+		{
+			if (newEvent.mouseWheelScroll.delta > 0) 
+			{
+				camera.zoom(0.9f); // Zoom in
+			}
+			else {
+				camera.zoom(1.1f); // Zoom out
+			}
+			m_window.setView(camera);
+		}
 	}
 }
 
@@ -88,15 +99,46 @@ void Game::processKeys(sf::Event t_event)
 	}
 	if (sf::Keyboard::Space == t_event.key.code)
 	{
-		if (playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->getBlocked() == false)
+		if (placementTemp->getBlocked() == false)
 		{
-			playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->place(gridPlacement());
-			playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->setEnemy(false);
+			placeBuilding();
+			placementTemp->setEnemy(false);
 		}
 	}
-	if (sf::Keyboard::E == t_event.key.code)
+	if (sf::Keyboard::Q == t_event.key.code)
 	{
 		spawnUnits();
+		for (Units* unit : playerUnits)
+		{
+			unit->setFlowField(&flowfield);
+		}
+	}
+
+	//Creating Flow Field
+	if (sf::Keyboard::E == t_event.key.code)
+	{
+		flowfield.resetField(playerBuildings);
+ 		flowfield.setDestination(selectCell());
+		flowfield.createIntegrationField();
+		flowfield.createFlowField();
+	}
+
+	// Camera movement
+	if (sf::Keyboard::W == t_event.key.code)
+	{
+		cameraMovement = { cameraMovement.x, -cameraSpeed };
+	}
+	if (sf::Keyboard::A == t_event.key.code)
+	{
+		cameraMovement = { -cameraSpeed, cameraMovement.y };
+	}
+	if (sf::Keyboard::S == t_event.key.code)
+	{
+		cameraMovement = { cameraMovement.x, cameraSpeed };
+	}
+	if (sf::Keyboard::D == t_event.key.code)
+	{
+		cameraMovement = { cameraSpeed, cameraMovement.y };
 	}
 }
 
@@ -106,7 +148,23 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_event">the key released</param>
 void Game::processKeyReleases(sf::Event t_event)
 {
-	
+	// Camera movement
+	if (sf::Keyboard::W == t_event.key.code)
+	{
+		cameraMovement = { cameraMovement.x, 0 };
+	}
+	if (sf::Keyboard::A == t_event.key.code)
+	{
+		cameraMovement = { 0, cameraMovement.y };
+	}
+	if (sf::Keyboard::S == t_event.key.code)
+	{
+		cameraMovement = { cameraMovement.x, 0 };
+	}
+	if (sf::Keyboard::D == t_event.key.code)
+	{
+		cameraMovement = { 0, cameraMovement.y };
+	}
 }
 
 /// <summary>
@@ -119,13 +177,16 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
-	mousePosition = getMousePosition(m_window);
+
+	// Mouse Position
+	getMousePosition(m_window);
+	mousePostion_Mapped = m_window.mapPixelToCoords(mousePosition, camera);
 
 	//Update for players
 	for (int i = 0; i < Units::PLAYER_UNIT_AMOUNT; i++)
 	{
 		playerUnits[i]->update();
-		playerUnits[i]->findEnemy(enemyUnits, Units::ENEMY_UNIT_AMOUNT);
+		//playerUnits[i]->findEnemy(enemyUnits, Units::ENEMY_UNIT_AMOUNT);
 	}
 	//Update for enemies
 	for (int i = 0; i < Units::ENEMY_UNIT_AMOUNT; i++)
@@ -134,9 +195,14 @@ void Game::update(sf::Time t_deltaTime)
 		enemyUnits[i]->findEnemy(playerUnits, Units::PLAYER_UNIT_AMOUNT);
 	}
 
-	playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->setPos(gridPlacement());
-	playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->update();
-	playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->placementCollision(playerBuildings);
+	placementTemp->setPos(gridPlacement());
+	placementTemp->update();
+	placementTemp->placementCollision(playerBuildings);
+
+	// Camera
+	float delta = t_deltaTime.asMilliseconds();
+	sf::Vector2f cameraOffset = { cameraMovement.x * delta , cameraMovement.y * delta };
+	camera.move(cameraOffset);
 }
 
 /// <summary>
@@ -146,8 +212,12 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
+
+	// Grid Render
+	flowfield.render(m_window);
+
 	//Player Building Render
-	for (size_t i = 0; i < Buildings::PLAYER_BUILDING_AMOUNT; i++)
+	for (size_t i = 0; i < playerBuildings.size(); i++)
 	{
 		playerBuildings[i]->draw(m_window);
 	}
@@ -166,24 +236,23 @@ void Game::render()
 	{
 		enemyUnits[i]->draw(m_window);
 	}
+
+
 	//Draws the selected building on mouse location
-	playerBuildings[Buildings::PLAYER_BUILDING_AMOUNT]->draw(m_window);
+	placementTemp->draw(m_window);
+
+	m_window.setView(camera);
 	m_window.display();
 }
 
 void Game::initialize()
 {
-	for (int i = 0; i < 10; i++)
-	{
-		playerBuildings[i] = new Spawner;
-	}
+	placementTemp = new Spawner;
+
 	for (int i = 0; i < 10; i++)
 	{
 		enemyBuildings[i] = new Spawner;
 	}
-
-	enemyBuildings[0]->place(sf::Vector2f{ 500, 100 });
-	enemyBuildings[0]->setEnemy(true);
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -193,17 +262,20 @@ void Game::initialize()
 	{
 		enemyUnits[i] = new Soldier;
 	}
+
+	// Camera
+	sf::View cameraView(sf::FloatRect(0, 0, 1200, 600));
 }
 
 void Game::spawnUnits()
 {
-	for (int i = 0; i < Buildings::PLAYER_BUILDING_AMOUNT; i++)
+	for (int i = 0; i < playerBuildings.size(); i++)
 	{
 		for (int k = 0; k < Units::MAX_UNITS; k++)
 		{
 			if (playerUnits[k]->getAlive() == false)
 			{
-				playerUnits[k]->setPos(playerBuildings[i]->getPos());
+				playerUnits[k]->setPos(playerBuildings[i]->getSpawnPoint());
 				playerUnits[k]->setEnemy(false);
 				playerUnits[k]->setAlive(true);
 				break;
@@ -225,21 +297,41 @@ void Game::spawnUnits()
 	}
 }
 
+void Game::placeBuilding()
+{
+	Buildings* building = new Spawner;
+	building->setPos(gridPlacement());
+	building->body.setPosition(gridPlacement());
+	building->body.setFillColor(sf::Color::Black);
+	building->placed = true;
+	building->setEnemy(false);
+	playerBuildings.push_back(building);
+}
+
+Cell* Game::selectCell()
+{
+	for (auto& row : flowfield.Grid)
+	{
+		for (Cell& cell : row)
+		{
+			if (cell.shape.getGlobalBounds().contains(mousePostion_Mapped))
+			{
+				return &cell;
+			}
+		}
+	}
+}
+
 sf::Vector2f Game::gridPlacement()
 {
-	mouseGridPlacement.x = (static_cast<int>(mousePosition.x) / 15) * 15;
-	mouseGridPlacement.y = (static_cast<int>(mousePosition.y) / 15) * 15;
+	mouseGridPlacement.x = (static_cast<int>(mousePostion_Mapped.x) / 50) * 50 + 25;
+	mouseGridPlacement.y = (static_cast<int>(mousePostion_Mapped.y) / 50) * 50 + 25;
 	return mouseGridPlacement;
 }
 
-sf::Vector2f Game::getMousePosition(sf::RenderWindow& t_window)
+void Game::getMousePosition(sf::RenderWindow& t_window)
 {
-	sf::Vector2f m_mousePosition;
-
-	m_mousePosition.x = (float)sf::Mouse::getPosition(t_window).x;
-	m_mousePosition.y = (float)sf::Mouse::getPosition(t_window).y;
-
-	return m_mousePosition;
+	mousePosition = static_cast<sf::Vector2i>(sf::Mouse::getPosition(t_window));
 }
 
 /// <summary>

@@ -7,7 +7,17 @@ void Units::update()
 {
 	if (getAlive() == true)
 	{
-		body.move(velocity * speed);
+		//body.move(velocity * speed);
+		//pos = body.getPosition();
+	}
+
+	if (flowfield != nullptr)
+	{
+		int gridX = static_cast<int>(pos.x / FlowField::CELL_WIDTH);
+		int gridY = static_cast<int>(pos.y / FlowField::CELL_HEIGHT);
+		sf::Vector2f direction = flowfield->Grid[gridY][gridX].getDirection();
+
+		body.move(direction * speed);
 		pos = body.getPosition();
 	}
 }

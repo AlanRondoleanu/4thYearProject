@@ -4,6 +4,8 @@
 #include "Trigonometry.hpp"
 #include "VectorAlgebra2D.h"
 #include "VectorAlgebra2D.inl"
+#include "FlowField.h"
+
 
 class Units
 {
@@ -19,9 +21,11 @@ public:
 	void draw(sf::RenderWindow& t_window);
 	void findEnemy(Units* t_enemies[], static int t_amount);
 	void chaseEnemy();
-
+	void setFlowField(FlowField* t_field) { flowfield = t_field; }
+	
 	sf::RectangleShape body;
 	Units* currentTarget = nullptr;
+	FlowField* flowfield;
 
 	//Booleans
 	bool enemy{ false };
@@ -29,7 +33,7 @@ public:
 	bool foundTarget{ false };
 
 	//Stat variables
-	float speed{ 0.5 };
+	float speed{ 1 };
 	float aggroRange{ 250 };
 	float range{ 0 };
 	sf::Vector2f velocity{ 0,-1 };

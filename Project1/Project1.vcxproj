@@ -145,6 +145,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buildings.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="FlowField.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Soldier.cpp" />
@@ -153,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="FlowField.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="Spawner.h" />
