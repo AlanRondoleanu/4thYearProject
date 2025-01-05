@@ -1,24 +1,24 @@
 #include "Units.h"
 
-Units::Units() {}
+Units::Units() 
+{
+	//movement.stats = &stats;
+}
 Units::~Units() {}
 
 void Units::update()
 {
 	if (getAlive() == true)
 	{
-		//body.move(velocity * speed);
-		//pos = body.getPosition();
-	}
-
-	if (flowfield != nullptr)
-	{
-		int gridX = static_cast<int>(pos.x / FlowField::CELL_WIDTH);
-		int gridY = static_cast<int>(pos.y / FlowField::CELL_HEIGHT);
-		sf::Vector2f direction = flowfield->Grid[gridY][gridX].getDirection();
-
-		body.move(direction * speed);
 		pos = body.getPosition();
+	}
+}
+
+void Units::moveUnit(sf::Vector2f t_direction)
+{
+	if (getAlive() == true)
+	{
+		body.move(t_direction * stats.speed);
 	}
 }
 
@@ -27,55 +27,17 @@ void Units::draw(sf::RenderWindow& t_window)
 	t_window.draw(body);
 }
 
-void Units::findEnemy(Units* t_enemies[], static int t_amount)
+void Units::select()
 {
-	if (foundTarget == false && alive == true)
-	{
-		for (int i = 0; i < t_amount; i++)
-		{
-			sf::Vector2f distanceVector = getPos() - t_enemies[i]->getPos();
-			float contactRadius = std::sqrtf(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
-
-			if (distanceVector != sf::Vector2f(0.0f, 0.0f) &&
-				contactRadius < aggroRange)
-			{
-				body.setFillColor(sf::Color::Red);
-				
-				currentTarget = t_enemies[i];
-				foundTarget = true;
-			}
-		}
-	}
-	if (foundTarget == true && alive == true)
-	{
-		chaseEnemy();
-	}
+	body.setFillColor(sf::Color::Green);
 }
 
-void Units::chaseEnemy()
+void Units::deselect()
 {
-	sf::Vector2f distanceVector = currentTarget->getPos() - getPos();
-	float contactRadius = std::sqrtf(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
-	velocity = thor::unitVector(distanceVector);
-
-	if (distanceVector != sf::Vector2f(0.0f, 0.0f) &&
-		contactRadius < range)
-	{
-		velocity = { 0,0 };
-	}
+	body.setFillColor(sf::Color::Blue);
 }
 
-void Units::setEnemy(bool t_enemy)
+bool Units::isInsideSelection(const sf::FloatRect& selection) const
 {
-	enemy = t_enemy;
-	if (t_enemy == true)
-	{
-		velocity = { 0,1 };
-		ENEMY_UNIT_AMOUNT++;
-	}
-	else if (t_enemy == false)
-	{
-		velocity = { 0,-1 };
-		PLAYER_UNIT_AMOUNT++;
-	}
+	return selection.intersects(body.getGlobalBounds());
 }

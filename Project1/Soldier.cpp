@@ -8,12 +8,12 @@ Soldier::Soldier()
 
 void Soldier::initialize()
 {
-	float size = 50;
-	body.setSize(sf::Vector2f{ size, size });
-	body.setOrigin({ size / 2, size / 2 });
+	float size = 25;
+	body.setRadius(size);
+	body.setOrigin({ size, size});
 	body.setFillColor(sf::Color::Blue);
 
-	range = 50;
+	stats.range = 50;
 }
 
 

@@ -149,18 +149,28 @@
     <ClCompile Include="FlowField.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="MovementManager.cpp" />
+    <ClCompile Include="SelectorTool.cpp" />
     <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="Spawner.cpp" />
+    <ClCompile Include="UnitHandler.cpp" />
     <ClCompile Include="Units.cpp" />
+    <ClCompile Include="UnitStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="FlowField.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MovementManager.h" />
+    <ClInclude Include="SelectorTool.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="Spawner.h" />
+    <ClInclude Include="UnitHandler.h" />
     <ClInclude Include="Units.h" />
+    <ClInclude Include="UnitStats.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,6 +16,7 @@ public:
 	static int const CELL_AMOUNT{ 50 };
 
 	Cell* destination;
+	sf::Vector2f destinationPosition;
 	std::vector<std::vector<Cell>> Grid;
 
 	// Functions
@@ -26,7 +27,7 @@ public:
 
 	// Gets-Sets
 	void setNeighbors();
-	void setDestination(Cell* t_cell);
+	void setDestination(Cell* t_cell, sf::Vector2f t_destination);
 
 private:
 	void loadFont();

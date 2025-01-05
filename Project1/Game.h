@@ -10,9 +10,10 @@
 #include <SFML/Audio.hpp>
 #include "Buildings.h"
 #include "Spawner.h"
-#include "Units.h"
-#include "Soldier.h"
 #include "FlowField.h"
+#include "SelectorTool.h"
+#include "Mouse.h"
+#include "UnitHandler.h"
 
 class Game
 {
@@ -27,35 +28,35 @@ private:
 	void processEvents();
 	void processKeys(sf::Event t_event);
 	void processKeyReleases(sf::Event t_event);
+	void processMouse(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
 	void initialize();
-	void spawnUnits();
 	void placeBuilding();
 	Cell* selectCell();
 
 	// Grid
 	FlowField flowfield;
 
-	// Mouse positions
-	sf::Vector2f gridPlacement();
-	void getMousePosition(sf::RenderWindow& t_window);
-	sf::Vector2i mousePosition;
-	sf::Vector2f mousePostion_Mapped;
-	sf::Vector2f mouseGridPlacement;
+	//Selector Tool
+	SelectorTool selector;
 
 	Buildings* playerMainBuilding;
 	Buildings* enemyMainBuilding;
 	Buildings* placementTemp;
 	std::vector<Buildings*> playerBuildings;
 	Buildings* enemyBuildings[10];
-	Units* playerUnits[Units::MAX_UNITS];
-	Units* enemyUnits[Units::MAX_UNITS];
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Sprite backgroundSprite; // the sprite for the background
 	sf::Texture gameBackground; // The background for the game
 	
+	enum modes {
+		Building,
+		Selecting
+	};
+	modes currentMode{ Selecting };
+
 	//Camera
 	sf::View camera;
 	sf::Vector2f cameraMovement;
