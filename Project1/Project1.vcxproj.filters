@@ -39,6 +39,21 @@
     <ClCompile Include="FlowField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SelectorTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -60,6 +75,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlowField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectorTool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

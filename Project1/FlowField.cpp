@@ -86,9 +86,10 @@ void FlowField::setNeighbors()
 	}
 }
 
-void FlowField::setDestination(Cell* t_cell)
+void FlowField::setDestination(Cell* t_cell, sf::Vector2f t_destination)
 {
 	destination = t_cell;
+	destinationPosition = t_destination;
 }
 
 void FlowField::createFlowField()
