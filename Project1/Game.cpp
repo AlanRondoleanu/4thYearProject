@@ -169,15 +169,10 @@ void Game::processMouse(sf::Event t_event)
 	{
 		if (currentMode == Selecting)
 		{
-			flowfield.resetField(playerBuildings);
-			flowfield.setDestination(selectCell(), Mouse::getInstance().getPosition());
-			flowfield.createIntegrationField();
-			flowfield.createFlowField();
-
-			for (auto& selected : UnitHandler::getInstance().selectedUnits)
+			for (auto& markerLocation : UnitHandler::getInstance().unitMoveOrder())
 			{
-				selected->setFlowField(flowfield);
-				selected->moving = true;
+				PlaceMarkers newMarker(markerLocation);
+				moveMarkers.push_back(newMarker);
 			}
 		}
 	}
@@ -196,6 +191,19 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Mouse Position
 	Mouse::getInstance().UpdateMousePostion(m_window, camera);
+
+	// Move Marker
+	for (auto it = moveMarkers.begin(); it != moveMarkers.end(); )
+	{
+		it->update();
+		if (it->isExpired()) 
+		{
+			it = moveMarkers.erase(it); // Remove expired marker
+		}
+		else {
+			++it;
+		}
+	}
 	
 	// Update Units
 	UnitHandler::getInstance().update();
@@ -218,9 +226,14 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
-
 	// Grid Render
 	flowfield.render(m_window);
+
+	// Move Markers
+	for (auto& marker : moveMarkers)
+	{
+		marker.render(m_window);
+	}
 
 	// Selector Render
 	selector.render(m_window);
@@ -258,6 +271,9 @@ void Game::initialize()
 
 	// Camera
 	sf::View cameraView(sf::FloatRect(0, 0, 1200, 600));
+
+	// Giving the flowfield to the unit handler
+	UnitHandler::getInstance().setFlowField(&flowfield);
 }
 
 void Game::placeBuilding()
@@ -273,20 +289,6 @@ void Game::placeBuilding()
 		building->placed = true;
 		building->setEnemy(false);
 		playerBuildings.push_back(building);
-	}
-}
-
-Cell* Game::selectCell()
-{
-	for (auto& row : flowfield.Grid)
-	{
-		for (Cell& cell : row)
-		{
-			if (cell.shape.getGlobalBounds().contains(Mouse::getInstance().getPosition()))
-			{
-				return &cell;
-			}
-		}
 	}
 }
 

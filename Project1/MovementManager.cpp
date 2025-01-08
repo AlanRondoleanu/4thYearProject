@@ -1,25 +1,21 @@
 #include "MovementManager.h"
 
 
-sf::Vector2f MovementManager::move(sf::Vector2f t_position, FlowField* t_flowfield)
+sf::Vector2f MovementManager::applyFlowFieldDirection(sf::Vector2f t_position, FlowField* t_flowfield)
 {
 	sf::Vector2f pos = t_position;
-	int gridX = static_cast<int>(pos.x / FlowField::CELL_WIDTH);
-	int gridY = static_cast<int>(pos.y / FlowField::CELL_HEIGHT);
+	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
+	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
 
 	Cell currentCell = t_flowfield->Grid[gridY][gridX];
 	sf::Vector2f direction = currentCell.getDirection();
 
-	// Swaps to direct movement when in destination cell
-	if (t_flowfield->destination != nullptr)
+	// Swaps to direct movement when near destination cell
+	if (isNearDestination(pos, t_flowfield, 75))
 	{
-		Cell destinationCell = *t_flowfield->destination;
-		if (currentCell.getID() == destinationCell.getID())
-		{
-			direction = t_flowfield->destinationPosition - pos;
-			direction = normalize(direction);
-			return direction;
-		}
+		direction = t_flowfield->destinationPosition - pos;
+		direction = normalize(direction);
+		return direction;
 	}
 	return direction;
 }
@@ -58,12 +54,27 @@ bool MovementManager::isDestinationReached(sf::Vector2f t_position, FlowField* t
 	float distance = std::sqrt(length.x * length.x + length.y * length.y);
 
 	// Distance check to stop unit vibration when moving
-	if (distance <= 0.5f)
+	if (distance <= 10.f)
 	{
-		return false;
+		return true;
 	}
 	else {
+		return false;
+	}
+}
+
+bool MovementManager::isNearDestination(sf::Vector2f t_position, FlowField* t_flowfield, float t_radius)
+{
+	sf::Vector2f length = t_position - t_flowfield->destination->getPostion();
+	float distance = std::sqrt(length.x * length.x + length.y * length.y);
+
+	// Distance check to stop unit vibration when moving
+	if (distance <= t_radius)
+	{
 		return true;
+	}
+	else {
+		return false;
 	}
 }
 

@@ -11,14 +11,7 @@ void Units::update()
 	if (getAlive() == true)
 	{
 		pos = body.getPosition();
-	}
-}
-
-void Units::moveUnit(sf::Vector2f t_direction)
-{
-	if (getAlive() == true)
-	{
-		body.move(t_direction * stats.speed);
+		body.move(velocity * stats.speed);
 	}
 }
 
@@ -40,4 +33,18 @@ void Units::deselect()
 bool Units::isInsideSelection(const sf::FloatRect& selection) const
 {
 	return selection.intersects(body.getGlobalBounds());
+}
+
+void Units::push(sf::Vector2f t_direction)
+{
+	body.move(t_direction);
+}
+
+void Units::setCellID(FlowField* t_flowfield)
+{
+	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
+	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
+
+	Cell cell = t_flowfield->Grid[gridY][gridX];
+	cellID = cell.getID();
 }

@@ -13,21 +13,23 @@ public:
 	FlowField();
 	static int const CELL_WIDTH{ 50 };
 	static int const CELL_HEIGHT{ 50 };
-	static int const CELL_AMOUNT{ 50 };
+	static int const GRID_HEIGHT{ 50 };
+	static int const GRID_WIDTH{ 50 };
 
 	Cell* destination;
 	sf::Vector2f destinationPosition;
 	std::vector<std::vector<Cell>> Grid;
 
 	// Functions
-	void resetField(std::vector<Buildings*> t_buildings);
+	void resetField();
 	void createIntegrationField();
 	void createFlowField();
 	void render(sf::RenderWindow& t_window);
 
 	// Gets-Sets
 	void setNeighbors();
-	void setDestination(Cell* t_cell, sf::Vector2f t_destination);
+	void setDestinationCell(Cell* t_cell);
+	void setDestinationPosition(sf::Vector2f t_destination);
 
 private:
 	void loadFont();

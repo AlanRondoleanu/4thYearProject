@@ -7,7 +7,8 @@
 #include "Soldier.h"
 #include "Mouse.h"
 #include "MovementManager.h"
-
+#include <unordered_map>
+#include <unordered_set>
 
 class UnitHandler
 {
@@ -23,16 +24,25 @@ public:
 		static UnitHandler instance;
 		return instance;
 	}
+	void setFlowField(FlowField* t_flowfield) { mainFlowField = t_flowfield; }
 	
 	void update();
 	void render(sf::RenderWindow& t_window);
 	void spawnUnit();
+	std::vector<sf::Vector2f> unitMoveOrder();
+	Cell* selectCell();
+
+	std::vector<Units*> getUnitsInCellAndNeighbors(int cellID);
+	void applyAlignmentAndCohesion(Units* t_self);
 
 	MovementManager movementManager;
+	FlowField* mainFlowField;
+	std::unordered_map<int, std::vector<Units*>> partitionedMap;
 
 	std::vector<std::unique_ptr<Units>> playerUnits;
 	std::vector<std::unique_ptr<Units>> enemyUnits;
-	std::vector<Units*> selectedUnits;
+	std::unordered_set<Units*> selectedUnits;
+
 private:
 	
 	int const MAX_UNITS{ 100 };
