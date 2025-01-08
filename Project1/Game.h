@@ -14,6 +14,7 @@
 #include "SelectorTool.h"
 #include "Mouse.h"
 #include "UnitHandler.h"
+#include "PlaceMarkers.h"
 
 class Game
 {
@@ -33,13 +34,13 @@ private:
 	void render();
 	void initialize();
 	void placeBuilding();
-	Cell* selectCell();
 
 	// Grid
 	FlowField flowfield;
 
 	//Selector Tool
 	SelectorTool selector;
+	std::vector<PlaceMarkers> moveMarkers;
 
 	Buildings* playerMainBuilding;
 	Buildings* enemyMainBuilding;

@@ -67,7 +67,7 @@ void SelectorTool::selectUnits()
         bool inside = unit->isInsideSelection(selectionBox.getGlobalBounds());
         if (inside == true)
         {
-            UnitHandler::getInstance().selectedUnits.push_back(unit.get());
+            UnitHandler::getInstance().selectedUnits.insert(unit.get());
             unit->select();
         }
     }

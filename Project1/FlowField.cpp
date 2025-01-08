@@ -10,11 +10,11 @@ FlowField::FlowField()
 	int cellNumber = 0;
 	Cell cell = Cell();
 
-	Grid.resize(CELL_AMOUNT, std::vector<Cell>(CELL_AMOUNT));
+	Grid.resize(GRID_HEIGHT, std::vector<Cell>(GRID_WIDTH));
 
-	for (size_t o = 0; o < CELL_AMOUNT; o++)
+	for (size_t o = 0; o < GRID_HEIGHT; o++)
 	{
-		for (size_t i = 0; i < CELL_AMOUNT; i++)
+		for (size_t i = 0; i < GRID_WIDTH; i++)
 		{
 			sf::Vector2f newPosition = { x, y };
 			cell.setPosition(newPosition);
@@ -37,9 +37,9 @@ FlowField::FlowField()
 
 void FlowField::setNeighbors()
 {
-	for (int o = 0; o < CELL_AMOUNT; o++)
+	for (int o = 0; o < GRID_HEIGHT; o++)
 	{
-		for (int i = 0; i < CELL_AMOUNT; i++)
+		for (int i = 0; i < GRID_WIDTH; i++)
 		{
 			Cell* currentCell = &Grid[o][i];
 
@@ -54,12 +54,12 @@ void FlowField::setNeighbors()
 				currentCell->neighbouringCells.push_back(&Grid[o][i - 1]);
 			}
 			// Right
-			if (i + 1 < CELL_AMOUNT)
+			if (i + 1 < GRID_WIDTH)
 			{
 				currentCell->neighbouringCells.push_back(&Grid[o][i + 1]);
 			}
 			// Down
-			if (o + 1 < CELL_AMOUNT)
+			if (o + 1 < GRID_HEIGHT)
 			{
 				currentCell->neighbouringCells.push_back(&Grid[o + 1][i]);
 			}
@@ -71,24 +71,28 @@ void FlowField::setNeighbors()
 				currentCell->diagonalCells.push_back(&Grid[o - 1][i - 1]);
 			}
 			// Up-Right
-			if (o > 0 && i + 1 < CELL_AMOUNT) {
+			if (o > 0 && i + 1 < GRID_WIDTH) {
 				currentCell->diagonalCells.push_back(&Grid[o - 1][i + 1]);
 			}
 			// Down-Left
-			if (o + 1 < CELL_AMOUNT && i > 0) {
+			if (o + 1 < GRID_HEIGHT && i > 0) {
 				currentCell->diagonalCells.push_back(&Grid[o + 1][i - 1]);
 			}
 			// Down-Right
-			if (o + 1 < CELL_AMOUNT && i + 1 < CELL_AMOUNT) {
+			if (o + 1 < GRID_HEIGHT && i + 1 < GRID_WIDTH) {
 				currentCell->diagonalCells.push_back(&Grid[o + 1][i + 1]);
 			}
 		}
 	}
 }
 
-void FlowField::setDestination(Cell* t_cell, sf::Vector2f t_destination)
+void FlowField::setDestinationCell(Cell* t_cell)
 {
 	destination = t_cell;
+}
+
+void FlowField::setDestinationPosition(sf::Vector2f t_destination)
+{
 	destinationPosition = t_destination;
 }
 
@@ -127,7 +131,7 @@ void FlowField::render(sf::RenderWindow& t_window)
 	}
 }
 
-void FlowField::resetField(std::vector<Buildings*> t_buildings)
+void FlowField::resetField()
 {
 	for (auto& row : Grid)
 	{
@@ -137,13 +141,13 @@ void FlowField::resetField(std::vector<Buildings*> t_buildings)
 			cell.setCost(1);
 			cell.setBestCost(99999);
 
-			for (Buildings* building : t_buildings)
+			/*for (Buildings* building : t_buildings)
 			{
 				if (building->body.getGlobalBounds().intersects(cell.shape.getGlobalBounds()))
 				{
 					cell.setCost(99999);
 				}
-			}
+			}*/
 		}
 	}
 }

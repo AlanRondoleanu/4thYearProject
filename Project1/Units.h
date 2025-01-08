@@ -16,20 +16,22 @@ public:
 	static const int MAX_UNITS{ 100 };
 
 	void update();
-	void moveUnit(sf::Vector2f t_direction);
 	void draw(sf::RenderWindow& t_window);
 	void setFlowField(FlowField t_field) { flowfield = t_field; }
 	void select();
 	void deselect();
 	bool isInsideSelection(const sf::FloatRect& selection) const;
-	
+	void push(sf::Vector2f t_direction);
+
 	// Movement Manager
 	FlowField flowfield;
 
 	// Statistic values for unit
 	UnitStats stats;
 
+	int cellID;
 	sf::CircleShape body;
+	sf::Vector2f velocity;
 	Units* currentTarget = nullptr;
 
 	//Booleans
@@ -45,6 +47,7 @@ public:
 
 	void setPos(sf::Vector2f t_position) { pos = t_position, body.setPosition(pos); }
 	void setAlive(bool t_status) { alive = true; }
+	void setCellID(FlowField* t_flowfield);
 
 private:
 	virtual void initialize() = 0;

@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 
-
 class Cell
 {
 public:
@@ -43,6 +42,8 @@ public:
 
 	sf::RectangleShape shape;
 	sf::Vertex lines[2];
+
+	//std::vector<Units*> unitsInCell;
 
 private:
 
