@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Units.h"
 
 class Mouse
 {
@@ -33,11 +34,14 @@ public:
         sf::Vector2i mouseTemp = sf::Mouse::getPosition(t_window);
         mousePosition = t_window.mapPixelToCoords(mouseTemp, t_camera);
     }
+    bool isHoveringEnemy(const std::vector<std::shared_ptr<Units>>& t_enemies);
+
+    Units* getHovered() { return hoveredUnit; }
 
 private:
     sf::Vector2f mousePosition;
+    Units* hoveredUnit;
 
-    // Private constructor for singleton
     Mouse() = default;
 };
 
