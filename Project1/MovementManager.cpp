@@ -1,23 +1,24 @@
 #include "MovementManager.h"
 
 
-sf::Vector2f MovementManager::applyFlowFieldDirection(sf::Vector2f t_position, FlowField* t_flowfield)
+sf::Vector2f MovementManager::applyFlowFieldDirection(sf::Vector2f t_position, sf::Vector2f t_flowfield_direction, sf::Vector2f t_destination, sf::Vector2f t_cell_location)
 {
-	sf::Vector2f pos = t_position;
-	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
-	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
+	sf::Vector2f currentPosition = t_position;
+	sf::Vector2f direction = t_flowfield_direction;
 
-	Cell currentCell = t_flowfield->Grid[gridY][gridX];
-	sf::Vector2f direction = currentCell.getDirection();
+	sf::Vector2f radiusSize = t_destination - t_cell_location;
+	float distance = length(radiusSize);
 
 	// Swaps to direct movement when near destination cell
-	if (isNearDestination(pos, t_flowfield, 75))
+	if (isNearDestination(currentPosition, t_cell_location, distance + 10))
 	{
-		direction = t_flowfield->destinationPosition - pos;
+		direction = t_destination - currentPosition;
 		direction = normalize(direction);
 		return direction;
 	}
-	return direction;
+	else {
+		return direction;
+	}
 }
 
 sf::Vector2f MovementManager::repulsion(sf::Vector2f t_position, sf::Vector2f t_position_2, float t_radius_1, float t_radius_2)
@@ -48,6 +49,39 @@ sf::Vector2f MovementManager::repulsion(sf::Vector2f t_position, sf::Vector2f t_
 	return sf::Vector2f(0,0);
 }
 
+sf::Vector2f MovementManager::applyAlignmentAndCohesion(sf::Vector2f t_self_position, sf::Vector2f t_self_velocity, std::vector<sf::Vector2f> t_velocities, std::vector<sf::Vector2f> t_positions)
+{
+	const float ALIGNMENT_WEIGHT = 0.5f;   // Influence of alignment
+	const float FLOWFIELD_WEIGHT = 0.5f;   // Influence of the flow field
+	const float COHESION_WEIGHT = 0.2f;   // Influence of cohesion
+
+	sf::Vector2f alignmentVector = { 0, 0 };
+	sf::Vector2f cohesionVector = { 0.f, 0.f };
+
+	int selectedCount = 0;
+	for (size_t i = 0; i < t_velocities.size(); i++)
+	{
+		alignmentVector += t_velocities[i];
+		cohesionVector += t_positions[i];
+		selectedCount++;
+	}
+
+	// Average the vectors
+	alignmentVector /= static_cast<float>(selectedCount);
+	cohesionVector /= static_cast<float>(selectedCount);
+	cohesionVector -= t_self_position;
+
+	// Combine alignment, cohesion and flow field vectors
+	sf::Vector2f combinedVector =
+		(ALIGNMENT_WEIGHT * normalize(alignmentVector)) +
+		(COHESION_WEIGHT * normalize(cohesionVector)) +
+		(FLOWFIELD_WEIGHT * t_self_velocity);
+
+	combinedVector = normalize(combinedVector);
+
+	return combinedVector;
+}
+
 bool MovementManager::isDestinationReached(sf::Vector2f t_position, FlowField* t_flowfield)
 {
 	sf::Vector2f length = t_position - t_flowfield->destinationPosition;
@@ -63,9 +97,9 @@ bool MovementManager::isDestinationReached(sf::Vector2f t_position, FlowField* t
 	}
 }
 
-bool MovementManager::isNearDestination(sf::Vector2f t_position, FlowField* t_flowfield, float t_radius)
+bool MovementManager::isNearDestination(sf::Vector2f t_position, sf::Vector2f t_destination, float t_radius)
 {
-	sf::Vector2f length = t_position - t_flowfield->destination->getPostion();
+	sf::Vector2f length = t_position - t_destination;
 	float distance = std::sqrt(length.x * length.x + length.y * length.y);
 
 	// Distance check to stop unit vibration when moving
@@ -76,6 +110,11 @@ bool MovementManager::isNearDestination(sf::Vector2f t_position, FlowField* t_fl
 	else {
 		return false;
 	}
+}
+
+float MovementManager::length(const sf::Vector2f& t_vector)
+{
+	return std::sqrt(t_vector.x * t_vector.x + t_vector.y * t_vector.y);
 }
 
 sf::Vector2f MovementManager::normalize(const sf::Vector2f& vector)

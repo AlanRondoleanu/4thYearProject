@@ -2,10 +2,10 @@
 
 void UnitHandler::update()
 {
+	// Spacial Partition
 	partitionedMap.clear();
 	for (auto& playerUnit : playerUnits)
 	{
-		// Spacial Partition
 		partitionedMap[playerUnit->cellID].push_back(playerUnit.get());
 	}
 
@@ -17,14 +17,37 @@ void UnitHandler::update()
 		// Movement Update
 		if (playerUnit->moving)
 		{
-			playerUnit->velocity = movementManager.applyFlowFieldDirection(playerUnit->getPos(), &playerUnit->flowfield);
+			// Applies movement to unit using flowchart directions
+			sf::Vector2f currentPostion = playerUnit->getPos();
+			int gridX = static_cast<int>(currentPostion.x / FlowField::GRID_WIDTH);
+			int gridY = static_cast<int>(currentPostion.y / FlowField::GRID_HEIGHT);
+
+			Cell currentCell = playerUnit->flowfield.Grid[gridY][gridX];
+			sf::Vector2f direction = currentCell.getDirection();
+			playerUnit->velocity = movementManager.applyFlowFieldDirection(currentPostion, direction, playerUnit->flowfield.destinationPosition, playerUnit->flowfield.destination->getPostion());
 			
-			if (selectedUnits.size() > 1 &&
-				selectedUnits.find(playerUnit.get()) != selectedUnits.end())
+			// Compile all needed variables for adding flocking/swarm weights
+			std::vector<sf::Vector2f> unitVelocities;
+			std::vector<sf::Vector2f> unitPositions;
+
+			// If selected units is larger than 1 and contains current this unit
+			for (auto& group : groups)
 			{
-				applyAlignmentAndCohesion(playerUnit.get());
+				if (group.getUnits().size() > 1 &&
+					group.containsUnit(playerUnit.get()))
+				{
+					for (auto& unit : group.getUnits())
+					{
+						if (unit == playerUnit.get()) continue; // Skips  itself
+
+						unitVelocities.push_back(unit->velocity);
+						unitPositions.push_back(unit->getPos());
+					}
+					playerUnit->velocity = movementManager.applyAlignmentAndCohesion(playerUnit->getPos(), playerUnit->velocity, unitVelocities, unitPositions);
+				}	
 			}
 
+			// Stop movement when destination is reached
 			if (movementManager.isDestinationReached(playerUnit->getPos(), &playerUnit->flowfield))
 			{
 				playerUnit->moving = false;
@@ -46,12 +69,27 @@ void UnitHandler::update()
 
 		playerUnit->update();
 	}
-	// Update for enemies
-	for (auto& enemyUnit : enemyUnits)
-	{
-		enemyUnit->update();
-	}
 
+	// Groups update
+	for (auto& group : groups)
+	{
+		if (group.getTarget() != nullptr &&
+			group.getTargetLastCellID() != group.getTarget()->cellID)
+		{
+			group.refreshLastCellID();
+
+			mainFlowField->resetField();
+			mainFlowField->setDestinationCell(selectCell());
+			mainFlowField->createIntegrationField();
+			mainFlowField->createFlowField();
+
+			for (auto& units : group.getUnits())
+			{
+				mainFlowField->setDestinationPosition(group.getTarget()->getPos());
+				units->setFlowField(*mainFlowField);
+			}
+		}
+	}
 }
 
 void UnitHandler::render(sf::RenderWindow& t_window)
@@ -74,7 +112,7 @@ void UnitHandler::spawnUnit()
 	playerUnits.back()->setPos(Mouse::getInstance().getPosition());
 }
 
-std::vector<sf::Vector2f> UnitHandler::unitMoveOrder()
+std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 {
 	mainFlowField->resetField();
 	mainFlowField->setDestinationCell(selectCell());
@@ -102,11 +140,33 @@ std::vector<sf::Vector2f> UnitHandler::unitMoveOrder()
 	{
 		mainFlowField->setDestinationPosition(formationPositions[i]);
 		selected->setFlowField(*mainFlowField);
-		selected->moving = true;
 		i++;
 	}
 
+	createNewGroupFromSelectedUnits(selectedUnits);
+
 	return formationPositions;
+}
+
+sf::Vector2f UnitHandler::attackMoveOrder()
+{
+	mainFlowField->resetField();
+	mainFlowField->setDestinationCell(selectCell());
+	mainFlowField->createIntegrationField();
+	mainFlowField->createFlowField();
+
+	sf::Vector2f mousePosition = Mouse::getInstance().getPosition();
+
+	for (auto& selected : UnitHandler::getInstance().selectedUnits)
+	{
+		mainFlowField->setDestinationPosition(mousePosition);
+		selected->setFlowField(*mainFlowField);
+		selected->moving = true;
+	}
+
+	createNewGroupFromSelectedUnits(selectedUnits, Mouse::getInstance().getHovered());
+
+	return mousePosition;
 }
 
 
@@ -114,7 +174,7 @@ std::vector<Units*> UnitHandler::getUnitsInCellAndNeighbors(int cellID)
 {
 	std::vector<Units*> result;
 
-	// Neighboring cell offsets (including the current cell)
+	// Neighboring cell offsets including the current cell
 	std::vector<int> offsets = 
 	{ -FlowField::GRID_WIDTH - 1, -FlowField::GRID_WIDTH, -FlowField::GRID_WIDTH + 1,
 	  -1, 0, 1,
@@ -134,49 +194,95 @@ std::vector<Units*> UnitHandler::getUnitsInCellAndNeighbors(int cellID)
 	return result;
 }
 
-void UnitHandler::applyAlignmentAndCohesion(Units* t_self)
+void UnitHandler::createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits)
 {
-	// Alignment Weights
-	const float ALIGNMENT_WEIGHT = 0.5f;   // Influence of alignment
-	const float FLOWFIELD_WEIGHT = 0.5f;   // Influence of the flow field
-	// Cohesion Weights
-	const float COHESION_WEIGHT = 0.005f;   // Influence of cohesion
+	UnitGroup newGroup;
 
-	sf::Vector2f alignmentVector = { 0, 0 };
-	sf::Vector2f cohesionVector = { 0.f, 0.f };
-
-	// Selected Unit count
-	int selectedCount = 0;
-
-	for (auto& unit : selectedUnits)
+	if (groups.size() != 0) 
 	{
-		if (unit == t_self) continue; // Skips  itself
-
-		alignmentVector += unit->velocity;
-		cohesionVector += unit->getPos();
-		selectedCount++;
+		// Remove the selected units from their original groups
+		for (auto& unit : selectedUnits)
+		{
+			// Find the group that contains the unit
+			for (auto& group : groups)
+			{
+				// Remove the unit from the group if it exists
+				if (std::find(group.getUnits().begin(), group.getUnits().end(), unit) != group.getUnits().end()) {
+					group.removeUnit(unit);
+					break;
+				}
+			}
+			newGroup.addUnit(unit);
+		}
+		groups.push_back(std::move(newGroup));
+	}
+	else // If there are no groups available skip searching
+	{
+		for (auto& unit : selectedUnits)
+		{
+			newGroup.addUnit(unit);
+		}
+		groups.push_back(std::move(newGroup));
 	}
 
-	// Average the vectors
-	alignmentVector /= static_cast<float>(selectedCount);
-	cohesionVector /= static_cast<float>(selectedCount);
-	cohesionVector = cohesionVector - t_self->getPos();
-
-	// Combine alignment, cohesion and flow field vectors
-	sf::Vector2f combinedVector = 
-		(ALIGNMENT_WEIGHT * alignmentVector) + 
-		(COHESION_WEIGHT * cohesionVector) +
-		(FLOWFIELD_WEIGHT * t_self->velocity);
-
-	// Normalize
-	float length = std::sqrt(combinedVector.x * combinedVector.x + combinedVector.y * combinedVector.y);
-	if (length > 0) 
+	// Check for empty groups and remove them
+	for (auto it = groups.begin(); it != groups.end();) 
 	{
-		combinedVector /= length; 
+		if (it->getUnits().empty()) 
+		{
+			it = groups.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+void UnitHandler::createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Units* t_target)
+{
+	UnitGroup newGroup;
+
+	// Set Target to follow for group
+	newGroup.targetUnit(t_target);
+
+	if (groups.size() != 0)
+	{
+		// Remove the selected units from their original groups
+		for (auto& unit : selectedUnits)
+		{
+			// Find the group that contains the unit
+			for (auto& group : groups)
+			{
+				// Remove the unit from the group if it exists
+				if (std::find(group.getUnits().begin(), group.getUnits().end(), unit) != group.getUnits().end()) {
+					group.removeUnit(unit);
+					break;
+				}
+			}
+			newGroup.addUnit(unit);
+		}
+		groups.push_back(std::move(newGroup));
+	}
+	else // If there are no groups available skip searching
+	{
+		for (auto& unit : selectedUnits)
+		{
+			newGroup.addUnit(unit);
+		}
+		groups.push_back(std::move(newGroup));
 	}
 
-	// Update the unit's velocity
-	t_self->velocity = combinedVector;
+	// Check for empty groups and remove them
+	for (auto it = groups.begin(); it != groups.end();)
+	{
+		if (it->getUnits().empty())
+		{
+			it = groups.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 }
 
 Cell* UnitHandler::selectCell()

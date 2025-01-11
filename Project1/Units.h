@@ -17,7 +17,7 @@ public:
 
 	void update();
 	void draw(sf::RenderWindow& t_window);
-	void setFlowField(FlowField t_field) { flowfield = t_field; }
+	void setFlowField(FlowField t_field) { flowfield = t_field, moving = true; }
 	void select();
 	void deselect();
 	bool isInsideSelection(const sf::FloatRect& selection) const;

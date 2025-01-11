@@ -72,7 +72,7 @@ void Cell::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(shape);
 	t_window.draw(lines, 2, sf::Lines);
-	t_window.draw(text);
+	//t_window.draw(text);
 }
 
 
