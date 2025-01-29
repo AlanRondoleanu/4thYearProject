@@ -7,6 +7,14 @@
 #include "UnitStats.h"
 #include "FlowField.h"
 
+enum class UnitState {
+	Moving,
+	Following,
+	AttackMove,
+	AttackFollow,
+	Idle
+};
+
 class Units
 {
 public:
@@ -17,7 +25,7 @@ public:
 
 	void update();
 	void draw(sf::RenderWindow& t_window);
-	void setFlowField(FlowField t_field) { flowfield = t_field, moving = true; }
+	void setFlowField(FlowField t_field, UnitState t_state) { flowfield = t_field, state = t_state; }
 	void select();
 	void deselect();
 	bool isInsideSelection(const sf::FloatRect& selection) const;
@@ -28,6 +36,7 @@ public:
 
 	// Statistic values for unit
 	UnitStats stats;
+	UnitState state = { UnitState::Idle };
 
 	int cellID;
 	sf::CircleShape body;
@@ -38,7 +47,6 @@ public:
 	bool enemy{ false };
 	bool alive{ true };
 	bool foundTarget{ false };
-	bool moving{ false };
 
 
 	//Getters-Setters

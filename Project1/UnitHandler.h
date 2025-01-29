@@ -27,8 +27,9 @@ public:
 	void render(sf::RenderWindow& t_window);
 	void spawnUnit();
 	Cell* selectCell();
+	Cell* selectCell(sf::Vector2f t_position);
 	std::vector<sf::Vector2f> formationMoveOrder();
-	sf::Vector2f attackMoveOrder();
+	sf::Vector2f attackFollowMoveOrder();
 	std::vector<Units*> getUnitsInCellAndNeighbors(int cellID);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Units* t_target);

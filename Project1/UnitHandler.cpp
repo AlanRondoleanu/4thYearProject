@@ -15,7 +15,7 @@ void UnitHandler::update()
 		playerUnit->setCellID(mainFlowField);
 
 		// Movement Update
-		if (playerUnit->moving)
+		if (playerUnit->state != UnitState::Idle)
 		{
 			// Applies movement to unit using flowchart directions
 			sf::Vector2f currentPostion = playerUnit->getPos();
@@ -50,7 +50,7 @@ void UnitHandler::update()
 			// Stop movement when destination is reached
 			if (movementManager.isDestinationReached(playerUnit->getPos(), &playerUnit->flowfield))
 			{
-				playerUnit->moving = false;
+				playerUnit->state = UnitState::Idle;
 			}		
 		}
 		else {
@@ -73,20 +73,21 @@ void UnitHandler::update()
 	// Groups update
 	for (auto& group : groups)
 	{
+		// Checks if the target of the group has moved from it's current cell to create another flowfield to follow
 		if (group.getTarget() != nullptr &&
 			group.getTargetLastCellID() != group.getTarget()->cellID)
 		{
 			group.refreshLastCellID();
 
 			mainFlowField->resetField();
-			mainFlowField->setDestinationCell(selectCell());
+			mainFlowField->setDestinationCell(selectCell(group.getTarget()->getPos()));
 			mainFlowField->createIntegrationField();
 			mainFlowField->createFlowField();
 
 			for (auto& units : group.getUnits())
 			{
 				mainFlowField->setDestinationPosition(group.getTarget()->getPos());
-				units->setFlowField(*mainFlowField);
+				units->setFlowField(*mainFlowField, UnitState::AttackFollow);
 			}
 		}
 	}
@@ -120,7 +121,7 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	mainFlowField->createFlowField();
 
 	// Create formation
-	const int numUnits = selectedUnits.size();
+	auto numUnits = selectedUnits.size();
 	const float radius = 75;
 	const sf::Vector2f center = Mouse::getInstance().getPosition();
 
@@ -136,10 +137,11 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	}
 
 	int i = 0;
+	// Gives the units flowfields for each position
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
 	{
 		mainFlowField->setDestinationPosition(formationPositions[i]);
-		selected->setFlowField(*mainFlowField);
+		selected->setFlowField(*mainFlowField, UnitState::Moving);
 		i++;
 	}
 
@@ -148,20 +150,19 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	return formationPositions;
 }
 
-sf::Vector2f UnitHandler::attackMoveOrder()
+sf::Vector2f UnitHandler::attackFollowMoveOrder()
 {
+	sf::Vector2f mousePosition = Mouse::getInstance().getPosition();
+
 	mainFlowField->resetField();
 	mainFlowField->setDestinationCell(selectCell());
 	mainFlowField->createIntegrationField();
 	mainFlowField->createFlowField();
-
-	sf::Vector2f mousePosition = Mouse::getInstance().getPosition();
+	mainFlowField->setDestinationPosition(mousePosition);
 
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
 	{
-		mainFlowField->setDestinationPosition(mousePosition);
-		selected->setFlowField(*mainFlowField);
-		selected->moving = true;
+		selected->setFlowField(*mainFlowField, UnitState::AttackFollow);
 	}
 
 	createNewGroupFromSelectedUnits(selectedUnits, Mouse::getInstance().getHovered());
@@ -292,6 +293,20 @@ Cell* UnitHandler::selectCell()
 		for (Cell& cell : row)
 		{
 			if (cell.shape.getGlobalBounds().contains(Mouse::getInstance().getPosition()))
+			{
+				return &cell;
+			}
+		}
+	}
+}
+
+Cell* UnitHandler::selectCell(sf::Vector2f t_position)
+{
+	for (auto& row : mainFlowField->Grid)
+	{
+		for (Cell& cell : row)
+		{
+			if (cell.shape.getGlobalBounds().contains(t_position))
 			{
 				return &cell;
 			}
