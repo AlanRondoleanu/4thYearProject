@@ -65,7 +65,7 @@ void UnitHandler::update()
 			{
 				// Repulsion
 				sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
-				//playerUnit->push(repulsion);
+				playerUnit->push(repulsion);
 			}
 		}
 
@@ -83,7 +83,16 @@ void UnitHandler::update()
 					unitsToAvoid.push_back(avoiding);
 				}
 			}
-			playerUnit->velocity = raycasting.avoidObstacle(raycastingUnit, unitsToAvoid, playerUnit->flowfieldDirection);
+
+			// WIP
+			std::vector<Unit> unitsBlocked = raycasting.getBlockingUnits(raycastingUnit, unitsToAvoid);
+
+			bool isBlocked = unitsBlocked.size() > 0;
+			if (isBlocked)
+			{
+				playerUnit->velocity = raycasting.calculateAvoidanceDirection(raycastingUnit, unitsBlocked);
+				std::cout << "Avoidance Velocity: " << playerUnit->velocity.x << ", " << playerUnit->velocity.y << std::endl;
+			}
 		}
 
 		playerUnit->update();
@@ -124,8 +133,6 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 	{
 		enemyUnit->draw(t_window);
 	}
-
-	raycasting.render(t_window);
 }
 
 void UnitHandler::spawnUnit()
