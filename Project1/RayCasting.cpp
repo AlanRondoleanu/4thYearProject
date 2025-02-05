@@ -1,25 +1,13 @@
 #include "RayCasting.h"
 
-
-void RayCasting::render(sf::RenderWindow& t_window)
-{
-    t_window.draw(lines, 2, sf::Lines);
-}
-
 std::vector<Unit> RayCasting::getBlockingUnits(Unit movingUnit, std::vector<Unit> otherUnits)
 {
     std::vector<Unit> blockingUnits;  // List to store blocking units
 
     sf::Vector2f A = movingUnit.position;
-    sf::Vector2f B = A + movingUnit.velocity * 10.f;
+    sf::Vector2f B = A + movingUnit.velocity * (movingUnit.radius / 2);
     float r1 = movingUnit.radius;
-    
-    //Debug
-    lines[0].position = A;
-    lines[0].color = sf::Color::Blue;
-
-    lines[1].position = B;
-    lines[1].color = sf::Color::Blue;
+  
 
     // Check for collision with any other unit
     for (const Unit& otherUnit : otherUnits)
@@ -37,57 +25,43 @@ std::vector<Unit> RayCasting::getBlockingUnits(Unit movingUnit, std::vector<Unit
     return blockingUnits;
 }
 
-sf::Vector2f RayCasting::avoidObstacle(Unit movingUnit, std::vector<Unit> obstacleUnits, sf::Vector2f flowFieldDirection)
+sf::Vector2f RayCasting::calculateAvoidanceDirection(const Unit movingUnit, const std::vector<Unit> blockingUnits)
 {
-    std::vector<Unit> blockingUnits = getBlockingUnits(movingUnit, obstacleUnits);
-
-    if (!blockingUnits.empty())
+    if (blockingUnits.empty()) 
     {
-        // Calculate an avoidance direction based on blocking units
-        sf::Vector2f avoidanceDirection = calculateAvoidanceDirection(movingUnit, blockingUnits);
-
-        return avoidanceDirection;
+        return movingUnit.velocity;  // No blocking units, keep current velocity
     }
-    else {
-        return movingUnit.velocity;
-    }
-}
 
-sf::Vector2f RayCasting::calculateAvoidanceDirection(Unit& movingUnit, const std::vector<Unit>& blockingUnits)
-{
-    sf::Vector2f avoidanceVector(0.f, 0.f);
+    // Calculate the average position and combined radius of all blocking units
+    sf::Vector2f averagePosition(0, 0);
+    float combinedRadius = 0.0f;
 
-    for (const Unit& blocker : blockingUnits)
+    for (Unit unit : blockingUnits) 
     {
-        std::cout << blockingUnits.size() << std::endl;
-        sf::Vector2f toBlocker = movingUnit.position - blocker.position;
-        float distance = std::sqrt(toBlocker.x * toBlocker.x + toBlocker.y * toBlocker.y);
+        averagePosition += unit.position;
+        combinedRadius += unit.radius;
+    }
+    averagePosition /= static_cast<float>(blockingUnits.size());
 
-        if (distance > 0.0f)
-        {
-            // Normalize and scale inversely proportional to distance
-            toBlocker /= distance;
-            avoidanceVector += toBlocker / distance;
-        }
+    // Check if the moving unit is inside the combined circle
+    sf::Vector2f toCenter = averagePosition - movingUnit.position;
+    float distanceToCenterSq = toCenter.x * toCenter.x + toCenter.y * toCenter.y;
+    float combinedRadiusSq = combinedRadius * combinedRadius;
+    float length = std::sqrt(movingUnit.velocity.x * movingUnit.velocity.x + movingUnit.velocity.y * movingUnit.velocity.y);
+
+    if (distanceToCenterSq < combinedRadiusSq) {
+        // Move away from the center until outside the combined circle
+        float distanceToCenter = std::sqrt(distanceToCenterSq);
+        sf::Vector2f direction = toCenter / distanceToCenter;  // Normalized direction away from center
+
+        return direction * length;  // Move away at the same speed
     }
 
-    // Normalize the avoidance vector
-    float length = std::sqrt(avoidanceVector.x * avoidanceVector.x + avoidanceVector.y * avoidanceVector.y);
-    if (length > 0.0f)
-    {
-        avoidanceVector /= length;
-    }
+    // Calculate a tangent direction to move around the combined circle
+    sf::Vector2f tangentDirection(-toCenter.y, toCenter.x);  // Perpendicular to the direction to the center
+    tangentDirection /= std::sqrt(tangentDirection.x * tangentDirection.x + tangentDirection.y * tangentDirection.y);  // Normalize
 
-    // Determine the side to steer (left or right) based on the unit's current velocity
-    sf::Vector2f perpendicular(-movingUnit.velocity.y, movingUnit.velocity.x);
-    float dotProduct = avoidanceVector.x * perpendicular.x + avoidanceVector.y * perpendicular.y;
-
-    if (dotProduct < 0)
-    {
-        perpendicular = -perpendicular; // Steer to the opposite side
-    }
-
-    return perpendicular;
+    return tangentDirection * length;  // Move tangentially at the same speed
 }
 
 bool RayCasting::rayIntersectsCircle(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, float totalRadius) 
