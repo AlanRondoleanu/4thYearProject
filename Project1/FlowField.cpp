@@ -112,7 +112,7 @@ void FlowField::createFlowField()
 				if (neighbor->bestCost < bestCost)
 				{
 					bestCost = neighbor->bestCost;
-					sf::Vector2f direction = directionBetweenTwoPoints(neighbor->getPostion(), cell.getPostion());
+					sf::Vector2f direction = directionBetweenTwoPoints(neighbor->getPosition(), cell.getPosition());
 					cell.setDirection(direction);
 				}
 			}

@@ -9,7 +9,7 @@ void UnitHandler::update()
 		partitionedMap[playerUnit->cellID].push_back(playerUnit.get());
 	}
 
-	// Update for players
+	// Update for player units
 	for (auto& playerUnit : playerUnits)
 	{
 		playerUnit->setCellID(mainFlowField);
@@ -24,8 +24,9 @@ void UnitHandler::update()
 
 			Cell currentCell = playerUnit->flowfield.Grid[gridY][gridX];
 			sf::Vector2f direction = currentCell.getDirection();
-			playerUnit->velocity = movementManager.applyFlowFieldDirection(currentPostion, direction, playerUnit->flowfield.destinationPosition, playerUnit->flowfield.destination->getPostion());
-			
+			playerUnit->velocity = movementManager.applyFlowFieldDirection(currentPostion, direction, playerUnit->flowfield.destinationPosition, playerUnit->flowfield.destination->getPosition());
+			playerUnit->flowfieldDirection = direction;
+
 			// Compile all needed variables for adding flocking/swarm weights
 			std::vector<sf::Vector2f> unitVelocities;
 			std::vector<sf::Vector2f> unitPositions;
@@ -57,14 +58,32 @@ void UnitHandler::update()
 			playerUnit->velocity = { 0,0 };
 		}
 
-		// Repulsion
+		// Partitioned Update
 		for (auto& otherUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
 		{
 			if (playerUnit.get() != otherUnit)
 			{
+				// Repulsion
 				sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
-				playerUnit->push(repulsion);
+				//playerUnit->push(repulsion);
 			}
+		}
+
+		// Raycasting Avoidance
+		if (playerUnit->state == UnitState::Moving)
+		{
+			Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
+			std::vector<Unit> unitsToAvoid;
+
+			for (auto& otherUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
+			{
+				if (playerUnit.get() != otherUnit)
+				{
+					Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
+					unitsToAvoid.push_back(avoiding);
+				}
+			}
+			playerUnit->velocity = raycasting.avoidObstacle(raycastingUnit, unitsToAvoid, playerUnit->flowfieldDirection);
 		}
 
 		playerUnit->update();
@@ -105,6 +124,8 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 	{
 		enemyUnit->draw(t_window);
 	}
+
+	raycasting.render(t_window);
 }
 
 void UnitHandler::spawnUnit()
@@ -115,6 +136,11 @@ void UnitHandler::spawnUnit()
 
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 {
+	std::vector<sf::Vector2f> formationPositions;
+
+	if (selectedUnits.size() <= 0)
+		return formationPositions;
+
 	mainFlowField->resetField();
 	mainFlowField->setDestinationCell(selectCell());
 	mainFlowField->createIntegrationField();
@@ -125,7 +151,6 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	const float radius = 75;
 	const sf::Vector2f center = Mouse::getInstance().getPosition();
 
-	std::vector<sf::Vector2f> formationPositions;
 	formationPositions.push_back(center);
 
 	// Creates the formation circle
@@ -152,6 +177,9 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 
 sf::Vector2f UnitHandler::attackFollowMoveOrder()
 {
+	if (selectedUnits.size() <= 0)
+		return { 0,0 };
+
 	sf::Vector2f mousePosition = Mouse::getInstance().getPosition();
 
 	mainFlowField->resetField();

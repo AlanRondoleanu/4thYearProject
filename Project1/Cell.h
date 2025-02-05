@@ -26,7 +26,7 @@ public:
 	std::vector<Cell*> diagonalCells;
 
 	// Getters and Setters
-	sf::Vector2f getPostion() { return shape.getPosition(); }
+	sf::Vector2f getPosition() { return { shape.getPosition().x + 25, shape.getPosition().y + 25 }; }
 	void setPosition(sf::Vector2f t_position) { shape.setPosition(t_position); }
 	void setDirection(sf::Vector2f t_direction);
 	float getWidth() { return width; }

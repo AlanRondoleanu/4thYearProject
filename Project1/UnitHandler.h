@@ -10,6 +10,7 @@
 #include "Mouse.h"
 #include "MovementManager.h"
 #include "UnitGroup.h"
+#include "RayCasting.h"
 
 class UnitHandler
 {
@@ -39,6 +40,7 @@ public:
 
 	MovementManager movementManager;
 	FlowField* mainFlowField;
+	RayCasting raycasting;
 	std::unordered_map<int, std::vector<Units*>> partitionedMap;
 	std::vector<std::shared_ptr<Units>> playerUnits;
 	std::vector<std::shared_ptr<Units>> enemyUnits;
