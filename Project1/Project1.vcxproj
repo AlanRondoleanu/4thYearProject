@@ -120,6 +120,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SFML_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +153,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementManager.cpp" />
     <ClCompile Include="PlaceMarkers.cpp" />
+    <ClCompile Include="RayCasting.cpp" />
     <ClCompile Include="SelectorTool.cpp" />
     <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="Spawner.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementManager.h" />
     <ClInclude Include="PlaceMarkers.h" />
+    <ClInclude Include="RayCasting.h" />
     <ClInclude Include="SelectorTool.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="Spawner.h" />

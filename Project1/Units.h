@@ -33,6 +33,8 @@ public:
 
 	// Movement Manager
 	FlowField flowfield;
+	sf::Vector2f flowfieldDirection;
+	sf::Vector2f velocity;
 
 	// Statistic values for unit
 	UnitStats stats;
@@ -40,7 +42,6 @@ public:
 
 	int cellID;
 	sf::CircleShape body;
-	sf::Vector2f velocity;
 	Units* currentTarget = nullptr;
 
 	//Booleans
@@ -48,9 +49,9 @@ public:
 	bool alive{ true };
 	bool foundTarget{ false };
 
-
 	//Getters-Setters
 	sf::Vector2f getPos() { return pos; }
+	float getRadius() { return body.getRadius(); }
 	bool getAlive() { return alive; }
 
 	void setPos(sf::Vector2f t_position) { pos = t_position, body.setPosition(pos); }

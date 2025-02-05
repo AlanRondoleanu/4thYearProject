@@ -6,11 +6,8 @@ sf::Vector2f MovementManager::applyFlowFieldDirection(sf::Vector2f t_position, s
 	sf::Vector2f currentPosition = t_position;
 	sf::Vector2f direction = t_flowfield_direction;
 
-	sf::Vector2f radiusSize = t_destination - t_cell_location;
-	float distance = length(radiusSize);
-
 	// Swaps to direct movement when near destination cell
-	if (isNearDestination(currentPosition, t_cell_location, distance + 10))
+	if (isNearDestination(currentPosition, t_cell_location, 50))
 	{
 		direction = t_destination - currentPosition;
 		direction = normalize(direction);
