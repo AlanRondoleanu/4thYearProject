@@ -1,8 +1,10 @@
 #include "Units.h"
 
-Units::Units() 
+Units::Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement) :
+	pos(t_startPosition), flowfieldMovement(t_flowfieldMovement)
 {
-	//movement.stats = &stats;
+	movementStrategy = &flowfieldMovement;
+	setPos(pos);
 }
 Units::~Units() {}
 
@@ -40,11 +42,16 @@ void Units::push(sf::Vector2f t_direction)
 	body.move(t_direction);
 }
 
-void Units::setCellID(FlowField* t_flowfield)
+void Units::setMovementStrategy()
+{
+	
+}
+
+void Units::setCellID()
 {
 	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
 	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
 
-	Cell cell = t_flowfield->Grid[gridY][gridX];
+	Cell cell = flowfield.Grid[gridY][gridX];
 	cellID = cell.getID();
 }

@@ -1,6 +1,7 @@
 #include "Soldier.h"
 
-Soldier::Soldier()
+Soldier::Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement )
+	: Units(t_startPosition, t_flowfieldMovement)
 {
 	initialize();
 }

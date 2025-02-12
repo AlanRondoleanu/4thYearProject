@@ -12,20 +12,23 @@ void UnitHandler::update()
 	// Update for player units
 	for (auto& playerUnit : playerUnits)
 	{
-		playerUnit->setCellID(mainFlowField);
+		playerUnit->setCellID();
 
 		// Movement Update
 		if (playerUnit->state != UnitState::Idle)
 		{
 			// Applies movement to unit using flowchart directions
 			sf::Vector2f currentPostion = playerUnit->getPos();
-			int gridX = static_cast<int>(currentPostion.x / FlowField::GRID_WIDTH);
+			/*int gridX = static_cast<int>(currentPostion.x / FlowField::GRID_WIDTH);
 			int gridY = static_cast<int>(currentPostion.y / FlowField::GRID_HEIGHT);
 
 			Cell currentCell = playerUnit->flowfield.Grid[gridY][gridX];
 			sf::Vector2f direction = currentCell.getDirection();
 			playerUnit->velocity = movementManager.applyFlowFieldDirection(currentPostion, direction, playerUnit->flowfield.destinationPosition, playerUnit->flowfield.destination->getPosition());
-			playerUnit->flowfieldDirection = direction;
+			playerUnit->flowfieldDirection = direction;*/
+
+			// NEW SYSTEM
+			playerUnit->velocity = playerUnit->flowfieldMovement.MoveTo(currentPostion);
 
 			// Compile all needed variables for adding flocking/swarm weights
 			std::vector<sf::Vector2f> unitVelocities;
@@ -70,30 +73,30 @@ void UnitHandler::update()
 		}
 
 		// Raycasting Avoidance
-		if (playerUnit->state == UnitState::Moving)
-		{
-			Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
-			std::vector<Unit> unitsToAvoid;
+		//if (playerUnit->state == UnitState::Moving)
+		//{
+		//	Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
+		//	std::vector<Unit> unitsToAvoid;
 
-			for (auto& otherUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
-			{
-				if (playerUnit.get() != otherUnit)
-				{
-					Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
-					unitsToAvoid.push_back(avoiding);
-				}
-			}
+		//	for (auto& otherUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
+		//	{
+		//		if (playerUnit.get() != otherUnit)
+		//		{
+		//			Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
+		//			unitsToAvoid.push_back(avoiding);
+		//		}
+		//	}
 
-			// WIP
-			std::vector<Unit> unitsBlocked = raycasting.getBlockingUnits(raycastingUnit, unitsToAvoid);
+		//	// WIP
+		//	std::vector<Unit> unitsBlocked = raycasting.getBlockingUnits(raycastingUnit, unitsToAvoid);
 
-			bool isBlocked = unitsBlocked.size() > 0;
-			if (isBlocked)
-			{
-				playerUnit->velocity = raycasting.calculateAvoidanceDirection(raycastingUnit, unitsBlocked);
-				std::cout << "Avoidance Velocity: " << playerUnit->velocity.x << ", " << playerUnit->velocity.y << std::endl;
-			}
-		}
+		//	bool isBlocked = unitsBlocked.size() > 0;
+		//	if (isBlocked)
+		//	{
+		//		playerUnit->velocity = raycasting.calculateAvoidanceDirection(raycastingUnit, unitsBlocked);
+		//		std::cout << "Avoidance Velocity: " << playerUnit->velocity.x << ", " << playerUnit->velocity.y << std::endl;
+		//	}
+		//}
 
 		playerUnit->update();
 	}
@@ -107,10 +110,7 @@ void UnitHandler::update()
 		{
 			group.refreshLastCellID();
 
-			mainFlowField->resetField();
-			mainFlowField->setDestinationCell(selectCell(group.getTarget()->getPos()));
-			mainFlowField->createIntegrationField();
-			mainFlowField->createFlowField();
+			mainFlowField->computePath(group.getTarget()->getPos());
 
 			for (auto& units : group.getUnits())
 			{
@@ -137,8 +137,8 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 
 void UnitHandler::spawnUnit()
 {
-	playerUnits.push_back(std::make_unique<Soldier>());
-	playerUnits.back()->setPos(Mouse::getInstance().getPosition());
+	FlowfieldMovement flowfieldMovement(*mainFlowField);
+	playerUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement));
 }
 
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
@@ -148,10 +148,7 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	if (selectedUnits.size() <= 0)
 		return formationPositions;
 
-	mainFlowField->resetField();
-	mainFlowField->setDestinationCell(selectCell());
-	mainFlowField->createIntegrationField();
-	mainFlowField->createFlowField();
+	mainFlowField->computePath(Mouse::getInstance().getPosition());
 
 	// Create formation
 	auto numUnits = selectedUnits.size();
@@ -189,10 +186,7 @@ sf::Vector2f UnitHandler::attackFollowMoveOrder()
 
 	sf::Vector2f mousePosition = Mouse::getInstance().getPosition();
 
-	mainFlowField->resetField();
-	mainFlowField->setDestinationCell(selectCell());
-	mainFlowField->createIntegrationField();
-	mainFlowField->createFlowField();
+	mainFlowField->computePath(mousePosition);
 	mainFlowField->setDestinationPosition(mousePosition);
 
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
