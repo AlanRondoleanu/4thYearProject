@@ -63,6 +63,12 @@
     <ClCompile Include="RayCasting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MovementStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowfieldMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -108,6 +114,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayCasting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowfieldMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

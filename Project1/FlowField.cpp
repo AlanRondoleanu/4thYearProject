@@ -3,8 +3,6 @@
 
 FlowField::FlowField() 
 {
-	loadFont();
-
 	float x = 0;
 	float y = 0;
 	int cellNumber = 0;
@@ -21,7 +19,6 @@ FlowField::FlowField()
 			cell.setID(cellNumber);
 			cell.setSize({ CELL_WIDTH, CELL_HEIGHT });
 			cell.initialize();
-			cell.setFont(font);
 
 			Grid[o][i] = cell;
 
@@ -96,6 +93,21 @@ void FlowField::setDestinationPosition(sf::Vector2f t_destination)
 	destinationPosition = t_destination;
 }
 
+sf::Vector2f FlowField::getDirection(sf::Vector2f t_position)
+{
+	Cell* currentCell = getCellAtPosition(t_position);
+
+	return currentCell->getDirection();
+}
+
+Cell* FlowField::getCellAtPosition(sf::Vector2f t_position)
+{
+	auto gridX = static_cast<int>(t_position.x / FlowField::GRID_WIDTH);
+	auto gridY = static_cast<int>(t_position.y / FlowField::GRID_HEIGHT);
+
+	return &Grid[gridY][gridX];
+}
+
 void FlowField::createFlowField()
 {
 	for (auto& row : Grid)
@@ -129,6 +141,14 @@ void FlowField::render(sf::RenderWindow& t_window)
 			cell.render(t_window);
 		}
 	}
+}
+
+void FlowField::computePath(sf::Vector2f t_position)
+{
+	resetField();
+	setDestinationCell(getCellAtPosition(t_position));
+	createIntegrationField();
+	createFlowField();
 }
 
 void FlowField::resetField()
@@ -190,14 +210,5 @@ void FlowField::createIntegrationField()
 				cellsToCheck.push(neighbor);
 			}
 		}
-	}
-}
-
-void FlowField::loadFont()
-{
-	//Font Loading
-	if (!font.loadFromFile("ariblk.ttf"))
-	{
-		std::cout << "problem loading arial black font" << std::endl;
 	}
 }

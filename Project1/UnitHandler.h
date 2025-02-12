@@ -11,6 +11,8 @@
 #include "MovementManager.h"
 #include "UnitGroup.h"
 #include "RayCasting.h"
+#include "FlowfieldMovement.h"
+#include "MovementStrategy.h"
 
 class UnitHandler
 {

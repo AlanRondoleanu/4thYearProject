@@ -6,6 +6,8 @@
 #include "VectorAlgebra2D.inl"
 #include "UnitStats.h"
 #include "FlowField.h"
+#include "MovementStrategy.h"
+#include "FlowfieldMovement.h"
 
 enum class UnitState {
 	Moving,
@@ -18,7 +20,7 @@ enum class UnitState {
 class Units
 {
 public:
-	Units();
+	Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement);
 	~Units();
 
 	static const int MAX_UNITS{ 100 };
@@ -35,6 +37,12 @@ public:
 	FlowField flowfield;
 	sf::Vector2f flowfieldDirection;
 	sf::Vector2f velocity;
+
+	// Movement Strategy
+	MovementStrategy* movementStrategy;
+	FlowfieldMovement& flowfieldMovement;
+
+	void setMovementStrategy();
 
 	// Statistic values for unit
 	UnitStats stats;
@@ -56,7 +64,7 @@ public:
 
 	void setPos(sf::Vector2f t_position) { pos = t_position, body.setPosition(pos); }
 	void setAlive(bool t_status) { alive = true; }
-	void setCellID(FlowField* t_flowfield);
+	void setCellID();
 
 private:
 	virtual void initialize() = 0;
