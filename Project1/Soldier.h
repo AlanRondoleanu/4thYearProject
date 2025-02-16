@@ -6,7 +6,7 @@
 class Soldier : public Units
 {
 public:
-	Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement);
+	Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AStarMovement t_astarMovement);
 	
 private:
 	void initialize();

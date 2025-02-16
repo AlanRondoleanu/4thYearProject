@@ -1,15 +1,15 @@
 #include "MovementManager.h"
 
 
-sf::Vector2f MovementManager::applyFlowFieldDirection(sf::Vector2f t_position, sf::Vector2f t_flowfield_direction, sf::Vector2f t_destination, sf::Vector2f t_cell_location)
+sf::Vector2f MovementManager::useDirectMovement(sf::Vector2f t_position, sf::Vector2f t_velocity, sf::Vector2f t_destination, sf::Vector2f t_cell_location)
 {
 	sf::Vector2f currentPosition = t_position;
-	sf::Vector2f direction = t_flowfield_direction;
+	sf::Vector2f direction = t_velocity;
 
 	// Swaps to direct movement when near destination cell
-	if (isNearDestination(currentPosition, t_cell_location, 50))
+	if (isNearDestination(currentPosition, t_cell_location, 40))
 	{
-		direction = t_destination - currentPosition;
+		sf::Vector2f direction = t_destination - currentPosition;
 		direction = normalize(direction);
 		return direction;
 	}

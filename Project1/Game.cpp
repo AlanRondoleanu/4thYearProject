@@ -286,7 +286,7 @@ void Game::initialize()
 	sf::View cameraView(sf::FloatRect(0, 0, 1200, 600));
 
 	// Giving the flowfield to the unit handler
-	UnitHandler::getInstance().setFlowField(&flowfield);
+	UnitHandler::getInstance().setMovementFields(&flowfield, &astar);
 }
 
 void Game::placeBuilding()

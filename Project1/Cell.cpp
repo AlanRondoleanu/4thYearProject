@@ -72,16 +72,5 @@ void Cell::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(shape);
 	t_window.draw(lines, 2, sf::Lines);
-	//t_window.draw(text);
 }
 
-
-void Cell::debugColor()
-{
-	neighbouringCells;
-
-	for (Cell* cell : neighbouringCells)
-	{
-		cell->shape.setFillColor(sf::Color::Red);
-	}
-}
