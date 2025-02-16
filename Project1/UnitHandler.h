@@ -12,7 +12,6 @@
 #include "UnitGroup.h"
 #include "RayCasting.h"
 #include "FlowfieldMovement.h"
-#include "MovementStrategy.h"
 
 class UnitHandler
 {
@@ -38,11 +37,15 @@ public:
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Units* t_target);
 
 
-	void setFlowField(FlowField* t_flowfield) { mainFlowField = t_flowfield; }
+	void setMovementFields(FlowField* t_flowfield, Astar* t_astar) { mainFlowField = t_flowfield, mainAstar = t_astar; }
 
+	// Movement
 	MovementManager movementManager;
 	FlowField* mainFlowField;
+	Astar* mainAstar;
+	//Raycasting
 	RayCasting raycasting;
+
 	std::unordered_map<int, std::vector<Units*>> partitionedMap;
 	std::vector<std::shared_ptr<Units>> playerUnits;
 	std::vector<std::shared_ptr<Units>> enemyUnits;

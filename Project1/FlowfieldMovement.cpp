@@ -13,3 +13,8 @@ void FlowfieldMovement::ComputePath(sf::Vector2f t_position)
 {
     flowField.computePath(t_position);
 }
+
+void FlowfieldMovement::SetFlowfield(FlowField t_flowfield)
+{
+    flowField = t_flowfield;
+}

@@ -35,8 +35,9 @@ private:
 	void initialize();
 	void placeBuilding();
 
-	// Grid
+	// Flowfield and Astar fields
 	FlowField flowfield;
+	Astar astar;
 
 	//Selector Tool
 	SelectorTool selector;

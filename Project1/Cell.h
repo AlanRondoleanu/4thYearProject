@@ -10,7 +10,6 @@ public:
 
 	// Functions
 	void render(sf::RenderWindow& t_window);
-	void debugColor();
 	void initialize();
 
 	// Const Vars
@@ -42,8 +41,6 @@ public:
 
 	sf::RectangleShape shape;
 	sf::Vertex lines[2];
-
-	//std::vector<Units*> unitsInCell;
 
 private:
 

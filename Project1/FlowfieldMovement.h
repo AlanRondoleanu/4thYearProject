@@ -1,24 +1,22 @@
 #ifndef FLOWFIELDMOVEMENT_H
 #define FLOWFIELDMOVEMENT_H
 
-#include "MovementStrategy.h"
 #include <SFML/Graphics.hpp>
 #include "FlowField.h"
 
-class FlowfieldMovement : public MovementStrategy
+class FlowfieldMovement
 {
 public:
-    // Constructor: Takes a reference to a FlowField
-    FlowfieldMovement(FlowField& flowField) : flowField(flowField) {}
+    FlowfieldMovement(FlowField flowField) : flowField(flowField) {}
 
-    // MoveTo implementation for FlowField movement
-    sf::Vector2f MoveTo(sf::Vector2f currentPosition) override;
+    sf::Vector2f MoveTo(sf::Vector2f currentPosition);
 
-    // Optional: Override ComputePath if needed
-    void ComputePath(sf::Vector2f t_position) override;
+    void ComputePath(sf::Vector2f t_position);
+    void SetFlowfield(FlowField t_flowfield);
+    FlowField* getFlowfield() { return &flowField; }
 
 private:
-    FlowField& flowField; // Reference to the flow field
+    FlowField flowField;
 };
 
 #endif

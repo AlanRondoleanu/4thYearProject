@@ -1,9 +1,8 @@
 #include "Units.h"
 
-Units::Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement) :
-	pos(t_startPosition), flowfieldMovement(t_flowfieldMovement)
+Units::Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AStarMovement t_astarMovement) :
+	pos(t_startPosition), flowfieldMovement(t_flowfieldMovement), astarMovement(t_astarMovement)
 {
-	movementStrategy = &flowfieldMovement;
 	setPos(pos);
 }
 Units::~Units() {}
@@ -20,6 +19,12 @@ void Units::update()
 void Units::draw(sf::RenderWindow& t_window)
 {
 	t_window.draw(body);
+}
+
+void Units::setFlowField(FlowField t_field, UnitState t_state)
+{
+	flowfieldMovement.SetFlowfield(t_field);
+	state = t_state;
 }
 
 void Units::select()
@@ -42,16 +47,11 @@ void Units::push(sf::Vector2f t_direction)
 	body.move(t_direction);
 }
 
-void Units::setMovementStrategy()
-{
-	
-}
-
 void Units::setCellID()
 {
 	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
 	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
 
-	Cell cell = flowfield.Grid[gridY][gridX];
+	Cell cell = flowfieldMovement.getFlowfield()->Grid[gridY][gridX];
 	cellID = cell.getID();
 }

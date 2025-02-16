@@ -17,18 +17,17 @@ void UnitHandler::update()
 		// Movement Update
 		if (playerUnit->state != UnitState::Idle)
 		{
-			// Applies movement to unit using flowchart directions
-			sf::Vector2f currentPostion = playerUnit->getPos();
-			/*int gridX = static_cast<int>(currentPostion.x / FlowField::GRID_WIDTH);
-			int gridY = static_cast<int>(currentPostion.y / FlowField::GRID_HEIGHT);
-
+			/*
 			Cell currentCell = playerUnit->flowfield.Grid[gridY][gridX];
 			sf::Vector2f direction = currentCell.getDirection();
 			playerUnit->velocity = movementManager.applyFlowFieldDirection(currentPostion, direction, playerUnit->flowfield.destinationPosition, playerUnit->flowfield.destination->getPosition());
 			playerUnit->flowfieldDirection = direction;*/
 
 			// NEW SYSTEM
+			sf::Vector2f currentPostion = playerUnit->getPos();
 			playerUnit->velocity = playerUnit->flowfieldMovement.MoveTo(currentPostion);
+			playerUnit->velocity = movementManager.useDirectMovement(currentPostion, playerUnit->velocity, playerUnit->flowfieldMovement.getFlowfield()->destinationPosition, playerUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
+
 
 			// Compile all needed variables for adding flocking/swarm weights
 			std::vector<sf::Vector2f> unitVelocities;
@@ -52,7 +51,7 @@ void UnitHandler::update()
 			}
 
 			// Stop movement when destination is reached
-			if (movementManager.isDestinationReached(playerUnit->getPos(), &playerUnit->flowfield))
+			if (movementManager.isDestinationReached(playerUnit->getPos(), playerUnit->flowfieldMovement.getFlowfield()))
 			{
 				playerUnit->state = UnitState::Idle;
 			}		
@@ -138,7 +137,9 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 void UnitHandler::spawnUnit()
 {
 	FlowfieldMovement flowfieldMovement(*mainFlowField);
-	playerUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement));
+	AStarMovement astarMovement(*mainAstar);
+
+	playerUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement, astarMovement));
 }
 
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
@@ -147,8 +148,6 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 
 	if (selectedUnits.size() <= 0)
 		return formationPositions;
-
-	mainFlowField->computePath(Mouse::getInstance().getPosition());
 
 	// Create formation
 	auto numUnits = selectedUnits.size();
@@ -169,8 +168,24 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder()
 	// Gives the units flowfields for each position
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
 	{
-		mainFlowField->setDestinationPosition(formationPositions[i]);
+		// Flowfield Handout
+		mainFlowField->computePath(formationPositions[i]);
 		selected->setFlowField(*mainFlowField, UnitState::Moving);
+
+		// Astar Handout
+		selected->astarMovement.getAstar()->setTarget(formationPositions[i]);
+		std::vector<AstarUnit> astarUnits;
+		for (auto& playerUnit : playerUnits)
+		{
+			if (playerUnit->getPos() != selected->getPos())
+			{
+				AstarUnit astarUnit(playerUnit->getPos(), playerUnit->getDiameter());
+				astarUnits.push_back(astarUnit);
+			}
+		}
+		selected->astarMovement.getAstar()->setUnitPositions(astarUnits);
+
+		// Increment
 		i++;
 	}
 

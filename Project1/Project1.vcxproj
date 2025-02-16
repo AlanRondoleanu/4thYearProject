@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="AstarMovement.cpp" />
     <ClCompile Include="Buildings.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="FlowField.cpp" />
@@ -153,7 +155,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementManager.cpp" />
-    <ClCompile Include="MovementStrategy.cpp" />
     <ClCompile Include="PlaceMarkers.cpp" />
     <ClCompile Include="RayCasting.cpp" />
     <ClCompile Include="SelectorTool.cpp" />
@@ -165,6 +166,8 @@
     <ClCompile Include="UnitStats.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Astar.h" />
+    <ClInclude Include="AstarMovement.h" />
     <ClInclude Include="Buildings.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="FlowField.h" />
@@ -172,7 +175,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementManager.h" />
-    <ClInclude Include="MovementStrategy.h" />
     <ClInclude Include="PlaceMarkers.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="SelectorTool.h" />

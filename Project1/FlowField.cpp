@@ -146,6 +146,7 @@ void FlowField::render(sf::RenderWindow& t_window)
 void FlowField::computePath(sf::Vector2f t_position)
 {
 	resetField();
+	setDestinationPosition(t_position);
 	setDestinationCell(getCellAtPosition(t_position));
 	createIntegrationField();
 	createFlowField();
