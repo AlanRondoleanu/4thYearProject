@@ -8,8 +8,12 @@ class Soldier : public Units
 public:
 	Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AStarMovement t_astarMovement);
 	
+	std::string GetUnitType() const override {
+		return "Soldier";
+	}
+
 private:
-	void initialize();
+
 };
 #endif
 

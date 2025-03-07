@@ -26,7 +26,7 @@ public:
 		return instance;
 	}	
 
-	void update();
+	void update(float t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void spawnUnit(bool t_friendly);
 	void setMovementFields(FlowField* t_flowfield, Astar* t_astar) { mainFlowField = t_flowfield, mainAstar = t_astar; }

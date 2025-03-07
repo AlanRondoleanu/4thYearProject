@@ -26,13 +26,15 @@ public:
 
 	static const int MAX_UNITS{ 100 };
 
-	void update();
+	void update(float t_deltaTime);
 	void draw(sf::RenderWindow& t_window);
 	void setFlowField(FlowField t_field, UnitState t_state);
 	void select();
 	void deselect();
 	bool isInsideSelection(const sf::FloatRect& selection) const;
 	void push(sf::Vector2f t_direction);
+	bool canAttack();
+	void resetAttackTimer();
 
 	// Flowfield Movement
 	sf::Vector2f flowfieldDirection;
@@ -45,10 +47,10 @@ public:
 	// Statistic values for unit
 	UnitStats stats;
 	UnitState state = { UnitState::Idle };
-
+	
 	int cellID;
 	sf::CircleShape body;
-	Units* currentTarget = nullptr;
+	std::shared_ptr<Units> currentTarget;
 
 	//Booleans
 	bool enemy{ false };
@@ -61,14 +63,16 @@ public:
 	float getRadius() { return body.getRadius(); }
 	float getDiameter() { return body.getRadius() * 2; }
 	bool getAlive() { return alive; }
+	virtual std::string GetUnitType() const = 0;
 
 	void setPos(sf::Vector2f t_position) { pos = t_position, body.setPosition(pos); }
 	void setAlive(bool t_status) { alive = true; }
 	void setCellID();
 
 private:
-	virtual void initialize() = 0;
 
 	sf::Vector2f pos{ -100, -100 };
+	float attackCooldown = 0.0f;
+
 };
 #endif

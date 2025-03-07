@@ -231,7 +231,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	
 	// Update Units
-	UnitHandler::getInstance().update();
+	UnitHandler::getInstance().update(t_deltaTime.asSeconds());
 
 	// Temp stuff
 	placementTemp->setPos(Mouse::getInstance().getPositionWithGrid());

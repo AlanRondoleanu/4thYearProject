@@ -1,6 +1,6 @@
 #include "UnitHandler.h"
 
-void UnitHandler::update()
+void UnitHandler::update(float t_deltaTime)
 {
 	// Spacial Partition
 	partitionedMap.clear();
@@ -21,7 +21,6 @@ void UnitHandler::update()
 		if (playerUnit->state == UnitState::Attacking)
 		{
 			playerUnit->velocity = { 0,0 };
-			std::cout << "attack" << std::endl;
 		}
 
 		// Movement Update
@@ -102,7 +101,7 @@ void UnitHandler::update()
 			playerUnit->velocity = { 0,0 };
 		}
 
-		playerUnit->update();
+		playerUnit->update(t_deltaTime);
 	}
 
 	// Update for enemy units
@@ -188,7 +187,7 @@ void UnitHandler::update()
 			enemyUnit->velocity = { 0,0 };
 		}
 
-		enemyUnit->update();
+		enemyUnit->update(t_deltaTime);
 	}
 
 	// Groups update
@@ -210,7 +209,7 @@ void UnitHandler::update()
 		}
 	}
 
-	combat.update(playerUnits, enemyUnits);
+	combat.update(playerUnits, enemyUnits, t_deltaTime);
 }
 
 void UnitHandler::render(sf::RenderWindow& t_window)
@@ -225,11 +224,13 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 	{
 		enemyUnit->draw(t_window);
 	}
+	// Render for projectiles
+	combat.renderProjectiles(t_window);
 }
 
 void UnitHandler::spawnUnit(bool t_friendly)
 {
-	FlowfieldMovement flowfieldMovement(*mainFlowField);
+ 	FlowfieldMovement flowfieldMovement(*mainFlowField);
 	AStarMovement astarMovement(*mainAstar);
 
 	if (t_friendly)
