@@ -59,7 +59,7 @@ private:
     float Heuristic(sf::Vector2i a, sf::Vector2i b);
 
     // Check if a grid position is walkable
-    bool IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit> units, float pathfindingUnitSize);
+    bool IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit>& units, float pathfindingUnitSize);
 
     // Reconstruct the path from the goal node
     std::vector<sf::Vector2f> ReconstructPath(Node node);

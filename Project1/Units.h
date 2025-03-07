@@ -14,6 +14,7 @@ enum class UnitState {
 	Following,
 	AttackMove,
 	AttackFollow,
+	Attacking,
 	Idle
 };
 
@@ -53,6 +54,7 @@ public:
 	bool enemy{ false };
 	bool alive{ true };
 	bool foundTarget{ false };
+	bool blocked{ false };
 
 	//Getters-Setters
 	sf::Vector2f getPos() { return pos; }

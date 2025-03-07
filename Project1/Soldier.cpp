@@ -14,7 +14,7 @@ void Soldier::initialize()
 	body.setOrigin({ size, size});
 	body.setFillColor(sf::Color::Blue);
 
-	stats.range = 50;
+	stats.range = 200;
 }
 
 

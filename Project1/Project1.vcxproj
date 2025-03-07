@@ -149,6 +149,7 @@
     <ClCompile Include="AstarMovement.cpp" />
     <ClCompile Include="Buildings.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="CombatHandler.cpp" />
     <ClCompile Include="FlowField.cpp" />
     <ClCompile Include="FlowfieldMovement.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="AstarMovement.h" />
     <ClInclude Include="Buildings.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="CombatHandler.h" />
     <ClInclude Include="FlowField.h" />
     <ClInclude Include="FlowfieldMovement.h" />
     <ClInclude Include="Game.h" />
