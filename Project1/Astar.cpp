@@ -45,7 +45,8 @@ std::vector<sf::Vector2f> Astar::FindPath(sf::Vector2f start, float pathfindingU
 
             // Check if this node is already in allNodes
             int neighborIndex = GridToIndex(neighborPos);
-            if (allNodes.find(neighborIndex) == allNodes.end() || tentativeGCost < allNodes[neighborIndex].gCost) {
+            if (allNodes.find(neighborIndex) == allNodes.end() || tentativeGCost < allNodes[neighborIndex].gCost) 
+            {
                 Node neighborNode = {
                     neighborPos,
                     tentativeGCost,
@@ -82,27 +83,32 @@ float Astar::Heuristic(sf::Vector2i a, sf::Vector2i b)
     return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
-bool Astar::IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit> units, float pathfindingUnitSize)
+bool Astar::IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit>& units, float pathfindingUnitSize)
 {
     // Check bounds
-    if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= gridSize.x || gridPos.y >= gridSize.y) return false;
+    if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= gridSize.x || gridPos.y >= gridSize.y)
+        return false;
 
     float pathfindingUnitGridSize = pathfindingUnitSize / cellSize;
+    float pathfindingUnitRadius = pathfindingUnitGridSize / 2;
+    float pathfindingUnitRadiusSq = pathfindingUnitRadius * pathfindingUnitRadius; // Precompute squared radius
 
     // Check if the unit's area overlaps with any other unit
-    for (const auto& unit : units) 
+    for (const auto& unit : units)
     {
         sf::Vector2i unitGridPos = WorldToGrid(unit.position);
-        float unitGridSize = unit.size / cellSize; // Convert unit size to grid cells
+        float unitGridSize = unit.size / cellSize;
+        float unitRadius = unitGridSize / 2;
+        float radiusSumSq = (unitRadius + pathfindingUnitRadius) * (unitRadius + pathfindingUnitRadius); // Squared sum of radii
 
-        // Calculate the distance between the current cell and the unit's center
-        float distance = std::sqrt(std::pow(gridPos.x - unitGridPos.x, 2) + std::pow(gridPos.y - unitGridPos.y, 2));
+        // Calculate squared distance (avoids sqrt)
+        float dx = gridPos.x - unitGridPos.x;
+        float dy = gridPos.y - unitGridPos.y;
+        float distSq = dx * dx + dy * dy;
 
-        // If the distance is less than the sum of their radii, the cell is blocked
-        if (distance < (unitGridSize / 2 + pathfindingUnitGridSize / 2))
-        {
+        // If squared distance is less than squared radius sum, the cell is blocked
+        if (distSq < radiusSumSq)
             return false;
-        }
     }
 
     return true;

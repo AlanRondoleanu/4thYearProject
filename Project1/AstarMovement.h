@@ -13,7 +13,7 @@ public:
     Astar* getAstar() { return &astar; }
 
 private:
-    Astar& astar;
+    Astar astar;
 };
 
 #endif

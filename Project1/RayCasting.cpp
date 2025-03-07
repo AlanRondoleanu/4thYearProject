@@ -1,9 +1,7 @@
 #include "RayCasting.h"
 
-std::vector<Unit> RayCasting::getBlockingUnits(Unit movingUnit, std::vector<Unit> otherUnits)
+bool RayCasting::isBlocked(Unit movingUnit, std::vector<Unit> otherUnits)
 {
-    std::vector<Unit> blockingUnits;  // List to store blocking units
-
     sf::Vector2f A = movingUnit.position;
     sf::Vector2f B = A + movingUnit.velocity * (movingUnit.radius / 2);
     float r1 = movingUnit.radius;
@@ -17,51 +15,11 @@ std::vector<Unit> RayCasting::getBlockingUnits(Unit movingUnit, std::vector<Unit
 
         if (rayIntersectsCircle(A, B, C, r1 + r2))
         {
-            // If a collision is detected, add the unit to the blockingUnits list
-            blockingUnits.push_back(otherUnit);
+            return true;
         }
     }
 
-    return blockingUnits;
-}
-
-sf::Vector2f RayCasting::calculateAvoidanceDirection(const Unit movingUnit, const std::vector<Unit> blockingUnits)
-{
-    if (blockingUnits.empty()) 
-    {
-        return movingUnit.velocity;  // No blocking units, keep current velocity
-    }
-
-    // Calculate the average position and combined radius of all blocking units
-    sf::Vector2f averagePosition(0, 0);
-    float combinedRadius = 0.0f;
-
-    for (Unit unit : blockingUnits) 
-    {
-        averagePosition += unit.position;
-        combinedRadius += unit.radius;
-    }
-    averagePosition /= static_cast<float>(blockingUnits.size());
-
-    // Check if the moving unit is inside the combined circle
-    sf::Vector2f toCenter = averagePosition - movingUnit.position;
-    float distanceToCenterSq = toCenter.x * toCenter.x + toCenter.y * toCenter.y;
-    float combinedRadiusSq = combinedRadius * combinedRadius;
-    float length = std::sqrt(movingUnit.velocity.x * movingUnit.velocity.x + movingUnit.velocity.y * movingUnit.velocity.y);
-
-    if (distanceToCenterSq < combinedRadiusSq) {
-        // Move away from the center until outside the combined circle
-        float distanceToCenter = std::sqrt(distanceToCenterSq);
-        sf::Vector2f direction = toCenter / distanceToCenter;  // Normalized direction away from center
-
-        return direction * length;  // Move away at the same speed
-    }
-
-    // Calculate a tangent direction to move around the combined circle
-    sf::Vector2f tangentDirection(-toCenter.y, toCenter.x);  // Perpendicular to the direction to the center
-    tangentDirection /= std::sqrt(tangentDirection.x * tangentDirection.x + tangentDirection.y * tangentDirection.y);  // Normalize
-
-    return tangentDirection * length;  // Move tangentially at the same speed
+    return false;
 }
 
 bool RayCasting::rayIntersectsCircle(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, float totalRadius) 

@@ -17,8 +17,7 @@ public:
 class RayCasting
 {
 public:
-    std::vector<Unit> getBlockingUnits(Unit movingUnit, std::vector<Unit> otherUnits);
-    sf::Vector2f calculateAvoidanceDirection(const Unit movingUnit, const std::vector<Unit> blockingUnits);
+    bool isBlocked(Unit movingUnit, std::vector<Unit> otherUnits);
 
 private:
     bool rayIntersectsCircle(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, float totalRadius);

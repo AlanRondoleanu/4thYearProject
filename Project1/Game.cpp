@@ -111,23 +111,35 @@ void Game::processKeys(sf::Event t_event)
 	}
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
-		UnitHandler::getInstance().spawnUnit();
+		UnitHandler::getInstance().spawnUnit(true);
 	}
-
-	// Camera movement
-	if (sf::Keyboard::W == t_event.key.code)
+	if (sf::Keyboard::E == t_event.key.code)
 	{
-		cameraMovement = { cameraMovement.x, -cameraSpeed };
+		UnitHandler::getInstance().spawnUnit(false);
 	}
 	if (sf::Keyboard::A == t_event.key.code)
 	{
+		for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder(UnitState::AttackMove))
+		{
+			PlaceMarkers newMarker(markerLocation);
+			moveMarkers.push_back(newMarker);
+		}
+	}
+
+	// Camera movement
+	if (sf::Keyboard::Up == t_event.key.code)
+	{
+		cameraMovement = { cameraMovement.x, -cameraSpeed };
+	}
+	if (sf::Keyboard::Left == t_event.key.code)
+	{
 		cameraMovement = { -cameraSpeed, cameraMovement.y };
 	}
-	if (sf::Keyboard::S == t_event.key.code)
+	if (sf::Keyboard::Down == t_event.key.code)
 	{
 		cameraMovement = { cameraMovement.x, cameraSpeed };
 	}
-	if (sf::Keyboard::D == t_event.key.code)
+	if (sf::Keyboard::Right == t_event.key.code)
 	{
 		cameraMovement = { cameraSpeed, cameraMovement.y };
 	}
@@ -140,19 +152,19 @@ void Game::processKeys(sf::Event t_event)
 void Game::processKeyReleases(sf::Event t_event)
 {
 	// Camera movement
-	if (sf::Keyboard::W == t_event.key.code)
+	if (sf::Keyboard::Up == t_event.key.code)
 	{
 		cameraMovement = { cameraMovement.x, 0 };
 	}
-	if (sf::Keyboard::A == t_event.key.code)
+	if (sf::Keyboard::Left == t_event.key.code)
 	{
 		cameraMovement = { 0, cameraMovement.y };
 	}
-	if (sf::Keyboard::S == t_event.key.code)
+	if (sf::Keyboard::Down == t_event.key.code)
 	{
 		cameraMovement = { cameraMovement.x, 0 };
 	}
-	if (sf::Keyboard::D == t_event.key.code)
+	if (sf::Keyboard::Right == t_event.key.code)
 	{
 		cameraMovement = { 0, cameraMovement.y };
 	}
@@ -171,7 +183,7 @@ void Game::processMouse(sf::Event t_event)
 		{
 			if (currentHover == Nothing)
 			{
-				for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder())
+				for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder(UnitState::Moving))
 				{
 					PlaceMarkers newMarker(markerLocation);
 					moveMarkers.push_back(newMarker);
