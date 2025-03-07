@@ -25,24 +25,24 @@
     <Filter Include="Source Files\Units">
       <UniqueIdentifier>{d93b80eb-e73e-4459-823c-05854f6e62fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Buildings">
+      <UniqueIdentifier>{91d424ce-6960-4953-bfa6-f230dbb70fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Buildings">
+      <UniqueIdentifier>{8d01a496-2e6a-4e0f-9f18-009318c17349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MovementSystems">
+      <UniqueIdentifier>{aa82611b-2c63-4dc2-ac71-8cb9d167f71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MovementSystems">
+      <UniqueIdentifier>{0b274ace-d3d8-4893-b561-11f32fb12298}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Buildings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SelectorTool.cpp">
@@ -54,12 +54,6 @@
     <ClCompile Include="UnitHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MovementManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitStats.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlaceMarkers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,15 +61,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RayCasting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowfieldMovement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Astar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AstarMovement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CombatHandler.cpp">
@@ -93,21 +78,39 @@
     <ClCompile Include="Soldier_Bullet.cpp">
       <Filter>Source Files\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="UnitStats.cpp">
+      <Filter>Source Files\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Buildings.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="AstarMovement.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowField.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowfieldMovement.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementManager.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Source Files\MovementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Buildings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Spawner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowField.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SelectorTool.h">
@@ -119,9 +122,6 @@
     <ClInclude Include="UnitHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MovementManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlaceMarkers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -129,15 +129,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayCasting.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowfieldMovement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Astar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AstarMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CombatHandler.h">
@@ -157,6 +148,33 @@
     </ClInclude>
     <ClInclude Include="Soldier_Bullet.h">
       <Filter>Header Files\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Header Files\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings.h">
+      <Filter>Header Files\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowfieldMovement.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowField.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="AstarMovement.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementManager.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files\MovementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

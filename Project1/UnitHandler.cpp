@@ -239,6 +239,23 @@ void UnitHandler::spawnUnit(bool t_friendly)
 		enemyUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement, astarMovement));
 }
 
+std::shared_ptr<Units> UnitHandler::getFirstUnitInList()
+{
+	if (!selectedUnits.empty()) {
+		Units* rawUnit = *selectedUnits.begin();
+
+		// Find the corresponding shared_ptr in allUnits
+		for (const auto& sharedUnit : playerUnits) 
+		{
+			if (sharedUnit.get() == rawUnit) 
+			{
+				return sharedUnit; // Return the existing shared_ptr
+			}
+		}
+	}
+	return nullptr;
+}
+
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
 {
 	std::vector<sf::Vector2f> formationPositions;

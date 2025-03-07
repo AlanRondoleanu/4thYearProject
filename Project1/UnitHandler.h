@@ -30,6 +30,7 @@ public:
 	void render(sf::RenderWindow& t_window);
 	void spawnUnit(bool t_friendly);
 	void setMovementFields(FlowField* t_flowfield, Astar* t_astar) { mainFlowField = t_flowfield, mainAstar = t_astar; }
+	std::shared_ptr<Units> getFirstUnitInList();
 
 	std::vector<sf::Vector2f> formationMoveOrder(UnitState t_state);
 	sf::Vector2f attackFollowMoveOrder();
