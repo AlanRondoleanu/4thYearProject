@@ -7,12 +7,17 @@ Units::Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement
 }
 Units::~Units() {}
 
-void Units::update()
+void Units::update(float t_deltaTime)
 {
 	if (getAlive() == true)
 	{
 		pos = body.getPosition();
 		body.move(velocity * stats.speed);
+
+		// Update attack timer
+		if (attackCooldown > 0.0f) {
+			attackCooldown -= t_deltaTime;
+		}
 	}
 }
 
@@ -45,6 +50,16 @@ bool Units::isInsideSelection(const sf::FloatRect& selection) const
 void Units::push(sf::Vector2f t_direction)
 {
 	body.move(t_direction);
+}
+
+bool Units::canAttack()
+{
+	return attackCooldown <= 0.0f;
+}
+
+void Units::resetAttackTimer()
+{
+	attackCooldown = 1.0f / stats.attackSpeed;
 }
 
 void Units::setCellID()

@@ -157,9 +157,11 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementManager.cpp" />
     <ClCompile Include="PlaceMarkers.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RayCasting.cpp" />
     <ClCompile Include="SelectorTool.cpp" />
     <ClCompile Include="Soldier.cpp" />
+    <ClCompile Include="Soldier_Bullet.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="UnitGroup.cpp" />
     <ClCompile Include="UnitHandler.cpp" />
@@ -178,9 +180,11 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementManager.h" />
     <ClInclude Include="PlaceMarkers.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="SelectorTool.h" />
     <ClInclude Include="Soldier.h" />
+    <ClInclude Include="Soldier_Bullet.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="UnitGroup.h" />
     <ClInclude Include="UnitHandler.h" />
