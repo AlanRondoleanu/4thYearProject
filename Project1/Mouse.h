@@ -21,6 +21,8 @@ public:
         return mousePosition;
     }
 
+    sf::Vector2f getPositionOnScreen() const { return mousePositionOnScreen; }
+
     sf::Vector2f getPositionWithGrid()
     {
         sf::Vector2f mousePosition_Gridded = mousePosition;
@@ -32,6 +34,7 @@ public:
     void UpdateMousePostion(const sf::RenderWindow& t_window, sf::View t_camera) 
     {
         sf::Vector2i mouseTemp = sf::Mouse::getPosition(t_window);
+        mousePositionOnScreen = sf::Vector2f(static_cast<float>(mouseTemp.x), static_cast<float>(mouseTemp.y));
         mousePosition = t_window.mapPixelToCoords(mouseTemp, t_camera);
     }
     bool isHoveringEnemy(const std::vector<std::shared_ptr<Units>>& t_enemies);
@@ -40,6 +43,7 @@ public:
 
 private:
     sf::Vector2f mousePosition;
+    sf::Vector2f mousePositionOnScreen;
     Units* hoveredUnit;
 
     Mouse() = default;

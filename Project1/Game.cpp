@@ -13,10 +13,21 @@ int Buildings::ENEMY_BUILDING_AMOUNT = 0;
 /// </summary>
 Game::Game() :
 	m_window{ sf::VideoMode{ 1600U, 1200U, 32U }, "SFML Game" },
+	unitUI(m_window),
 	m_exitGame{ false } //when true game will exit
-
 {
-	initialize();
+	// WIP
+	placementTemp = new Spawner;
+	for (int i = 0; i < 10; i++)
+	{
+		enemyBuildings[i] = new Spawner;
+	}
+
+	// Ui View
+	uiView = m_window.getDefaultView();
+
+	// Giving the flowfield to the unit handler
+	UnitHandler::getInstance().setMovementFields(&flowfield, &astar);
 }
 
 /// <summary>
@@ -86,7 +97,8 @@ void Game::processEvents()
 			m_window.setView(camera);
 		}
 
-		selector.handleEvent(newEvent);
+		
+		selector.handleEvent(newEvent, unitUI.isInsideUI(Mouse::getInstance().getPositionOnScreen()));
 	}
 }
 
@@ -174,26 +186,35 @@ void Game::processMouse(sf::Event t_event)
 {
 	if (sf::Mouse::Left == t_event.mouseButton.button)
 	{
-		if (currentMode == Building)
-			placeBuilding();
+		if (!unitUI.isInsideUI(Mouse::getInstance().getPosition()))
+		{
+			if (currentMode == Building)
+				placeBuilding();
+
+			// UI Clicking
+			unitUI.HandleClick(Mouse::getInstance().getPositionOnScreen());
+		}
 	}
 	if (sf::Mouse::Right == t_event.mouseButton.button)
 	{
-		if (currentMode == Selecting)
+		if (!unitUI.isInsideUI(Mouse::getInstance().getPositionOnScreen()))
 		{
-			if (currentHover == Nothing)
+			if (currentMode == Selecting)
 			{
-				for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder(UnitState::Moving))
+				if (currentHover == Nothing)
 				{
+					for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder(UnitState::Moving))
+					{
+						PlaceMarkers newMarker(markerLocation);
+						moveMarkers.push_back(newMarker);
+					}
+				}
+				else if (currentHover == Enemy)
+				{
+					sf::Vector2f markerLocation = UnitHandler::getInstance().attackFollowMoveOrder();
 					PlaceMarkers newMarker(markerLocation);
 					moveMarkers.push_back(newMarker);
 				}
-			}
-			else if (currentHover == Enemy)
-			{
-				sf::Vector2f markerLocation = UnitHandler::getInstance().attackFollowMoveOrder();
-				PlaceMarkers newMarker(markerLocation);
-				moveMarkers.push_back(newMarker);
 			}
 		}
 	}
@@ -232,6 +253,9 @@ void Game::update(sf::Time t_deltaTime)
 	
 	// Update Units
 	UnitHandler::getInstance().update(t_deltaTime.asSeconds());
+
+	// Update UI
+	unitUI.SetSelectedUnit(UnitHandler::getInstance().getFirstUnitInList());
 
 	// Temp stuff
 	placementTemp->setPos(Mouse::getInstance().getPositionWithGrid());
@@ -277,28 +301,18 @@ void Game::render()
 	// Unit rendering
 	UnitHandler::getInstance().render(m_window);
 
-	//Draws the selected building on mouse location
+	// Draws the selected building on mouse location
 	if (currentMode == Building)
 		placementTemp->draw(m_window);
 
-	m_window.setView(camera);
-	m_window.display();
-}
-
-void Game::initialize()
-{
-	placementTemp = new Spawner;
-
-	for (int i = 0; i < 10; i++)
-	{
-		enemyBuildings[i] = new Spawner;
-	}
+	// Draw UI
+	unitUI.Render(m_window, uiView);
 
 	// Camera
-	sf::View cameraView(sf::FloatRect(0, 0, 1200, 600));
+	m_window.setView(camera);
 
-	// Giving the flowfield to the unit handler
-	UnitHandler::getInstance().setMovementFields(&flowfield, &astar);
+	// Display window
+	m_window.display();
 }
 
 void Game::placeBuilding()

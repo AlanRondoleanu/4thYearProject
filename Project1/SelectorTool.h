@@ -9,7 +9,7 @@ class SelectorTool
 public:
     SelectorTool();
     void render(sf::RenderWindow& t_window);
-    void handleEvent(const sf::Event& event);
+    void handleEvent(const sf::Event& event, bool insideUI);
     void selectUnits();
 
 private:

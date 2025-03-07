@@ -30,32 +30,35 @@ void SelectorTool::resetBounds()
     selectionBox.setSize({ 0,0 });
 }
 
-void SelectorTool::handleEvent(const sf::Event& event)
+void SelectorTool::handleEvent(const sf::Event& event, bool insideUI)
 {
-    if (event.type == sf::Event::MouseButtonPressed && 
-        event.mouseButton.button == sf::Mouse::Left) 
+    if (!insideUI)
     {
-        isSelecting = true;
-        resetBounds();
-        startPos = Mouse::getInstance().getPosition();
-
-        // Deselect Units
-        for (auto& unit : UnitHandler::getInstance().selectedUnits)
+        if (event.type == sf::Event::MouseButtonPressed &&
+            event.mouseButton.button == sf::Mouse::Left)
         {
-            unit->deselect();
+            isSelecting = true;
+            resetBounds();
+            startPos = Mouse::getInstance().getPosition();
+
+            // Deselect Units
+            for (auto& unit : UnitHandler::getInstance().selectedUnits)
+            {
+                unit->deselect();
+            }
+            UnitHandler::getInstance().selectedUnits.clear();
         }
-        UnitHandler::getInstance().selectedUnits.clear();    
-    }
-    else if (event.type == sf::Event::MouseButtonReleased && 
-             event.mouseButton.button == sf::Mouse::Left) 
-    {
-        isSelecting = false;
-        selectUnits();
-    }
-    else if (event.type == sf::Event::MouseMoved && isSelecting) 
-    {
-        endPos = Mouse::getInstance().getPosition();
-        updateSelectionBox();
+        else if (event.type == sf::Event::MouseButtonReleased &&
+            event.mouseButton.button == sf::Mouse::Left)
+        {
+            isSelecting = false;
+            selectUnits();
+        }
+        else if (event.type == sf::Event::MouseMoved && isSelecting)
+        {
+            endPos = Mouse::getInstance().getPosition();
+            updateSelectionBox();
+        }
     }
 }
 

@@ -15,6 +15,7 @@
 #include "Mouse.h"
 #include "UnitHandler.h"
 #include "PlaceMarkers.h"
+#include "UnitUI.h"
 
 class Game
 {
@@ -32,7 +33,6 @@ private:
 	void processMouse(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
-	void initialize();
 	void placeBuilding();
 
 	// Flowfield and Astar fields
@@ -49,10 +49,15 @@ private:
 	std::vector<Buildings*> playerBuildings;
 	Buildings* enemyBuildings[10];
 
+	// UI Stuff
 	sf::RenderWindow m_window; // main SFML window
 	sf::Sprite backgroundSprite; // the sprite for the background
 	sf::Texture gameBackground; // The background for the game
 	
+	// Unit UI
+	UnitUI unitUI;
+	sf::View uiView;
+
 	enum modes {
 		Building,
 		Selecting
