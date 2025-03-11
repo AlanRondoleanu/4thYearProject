@@ -21,7 +21,7 @@ public:
 	bool isDestinationReached(sf::Vector2f t_position, FlowField* t_flowfield);
 	bool isNearDestination(sf::Vector2f t_position, sf::Vector2f t_destination, float t_radius);
 	
-
+	bool destinationReached{ false };
 	UnitStats* stats;
 	MoveType moveType{FlowFieldMovement};
 

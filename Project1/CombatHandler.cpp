@@ -17,14 +17,22 @@ void CombatHandler::update(const std::vector<std::shared_ptr<Units>>& t_units, c
 			{
 				playerUnit->state = UnitState::Attacking;
 				playerUnit->currentTarget = enemyUnit;
-				std::cout << "setting to attack" << std::endl;
 				break;
 			}
 		}
 
 		if (playerUnit->state == UnitState::Attacking)
 		{
-			if (playerUnit->canAttack())
+			if (playerUnit->currentTarget->alive == false)
+			{
+				if (playerUnit->destinationReached)
+					playerUnit->state = UnitState::Idle;
+				else
+					playerUnit->state = UnitState::AttackMove;
+
+				playerUnit->currentTarget = nullptr;
+			}
+			else if (playerUnit->canAttack())
 			{
 				// Creates a projectile
 				handleAttack(*playerUnit.get(), playerUnit->currentTarget);

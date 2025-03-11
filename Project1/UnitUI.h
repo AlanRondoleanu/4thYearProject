@@ -16,13 +16,22 @@ public:
     void HandleClick(sf::Vector2f mousePos);
     bool isInsideUI(sf::Vector2f mousePos);
 
+
 private:
+    // Portrait Handling
+    void loadPortrait(const std::string& unitName, const std::string& filePath);
+    const sf::Texture& getPortrait(const std::string& unitName);
+
     sf::RectangleShape panel;
+    sf::RectangleShape portraitPanel;
+    sf::Sprite portraitSprite;
     std::vector<sf::RectangleShape> buttons;
     std::vector<sf::Text> buttonLabels;
     sf::Font font;
     std::shared_ptr<Units> selectedUnit;
     sf::Vector2f uiScale;
+
+    std::unordered_map<std::string, sf::Texture> portraits;
 };
 
 #endif

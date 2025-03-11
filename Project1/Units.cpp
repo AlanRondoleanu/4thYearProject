@@ -11,19 +11,32 @@ void Units::update(float t_deltaTime)
 {
 	if (getAlive() == true)
 	{
-		pos = body.getPosition();
 		body.move(velocity * stats.speed);
+		pos = body.getPosition();
+
+		// Health Set
+		healthBar.setHealth(stats.health, stats.max_health);
+		healthBar.setPosition(pos, getRadius());
 
 		// Update attack timer
 		if (attackCooldown > 0.0f) {
 			attackCooldown -= t_deltaTime;
+		}
+
+		// Kill unit
+		if (stats.health <= 0)
+		{
+			setAlive(false);
 		}
 	}
 }
 
 void Units::draw(sf::RenderWindow& t_window)
 {
-	t_window.draw(body);
+	if (getAlive() == true)
+	{
+		t_window.draw(body);
+	}
 }
 
 void Units::setFlowField(FlowField t_field, UnitState t_state)
@@ -60,6 +73,21 @@ bool Units::canAttack()
 void Units::resetAttackTimer()
 {
 	attackCooldown = 1.0f / stats.attackSpeed;
+}
+
+std::string Units::stateToString()
+{
+	switch (state)
+	{
+	case UnitState::Moving:        return "Moving";
+	case UnitState::Following:     return "Following";
+	case UnitState::AttackMove:    return "AttackMove";
+	case UnitState::AttackFollow:  return "AttackFollow";
+	case UnitState::Attacking:     return "Attacking";
+	case UnitState::Idle:          return "Idle";
+	default:                       return "Unknown";
+	}
+	
 }
 
 void Units::setCellID()

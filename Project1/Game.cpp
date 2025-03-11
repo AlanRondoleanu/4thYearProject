@@ -201,20 +201,20 @@ void Game::processMouse(sf::Event t_event)
 		{
 			if (currentMode == Selecting)
 			{
-				if (currentHover == Nothing)
+				if (Mouse::getInstance().hoveredState == MouseHover::Enemy)
+				{
+					sf::Vector2f markerLocation = UnitHandler::getInstance().attackFollowMoveOrder(Mouse::getInstance().getHoveredUnit());
+					PlaceMarkers newMarker(markerLocation);
+					moveMarkers.push_back(newMarker);
+				}
+				else
 				{
 					for (auto& markerLocation : UnitHandler::getInstance().formationMoveOrder(UnitState::Moving))
 					{
 						PlaceMarkers newMarker(markerLocation);
 						moveMarkers.push_back(newMarker);
 					}
-				}
-				else if (currentHover == Enemy)
-				{
-					sf::Vector2f markerLocation = UnitHandler::getInstance().attackFollowMoveOrder();
-					PlaceMarkers newMarker(markerLocation);
-					moveMarkers.push_back(newMarker);
-				}
+				}				
 			}
 		}
 	}
@@ -235,8 +235,7 @@ void Game::update(sf::Time t_deltaTime)
 	Mouse::getInstance().UpdateMousePostion(m_window, camera);
 
 	// Mouse Hover Events
-	bool hoveringEnemy = Mouse::getInstance().isHoveringEnemy(UnitHandler::getInstance().playerUnits);
-	currentHover = hoveringEnemy ? Enemy : Nothing;
+	Mouse::getInstance().updateHovering(UnitHandler::getInstance().enemyUnits, UnitHandler::getInstance().playerUnits);
 
 	// Move Marker
 	for (auto it = moveMarkers.begin(); it != moveMarkers.end(); )

@@ -13,5 +13,6 @@ Soldier_Bullet::Soldier_Bullet(sf::Vector2f startPos, sf::Vector2f dir, std::sha
 
 void Soldier_Bullet::OnImpact()
 {
+    currentTarget->stats.health -= 10;
     Deactivate();
 }

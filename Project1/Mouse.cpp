@@ -1,17 +1,39 @@
 #include "Mouse.h"
 
-bool Mouse::isHoveringEnemy(const std::vector<std::shared_ptr<Units>>& t_enemies)
+void Mouse::updateHovering(const std::vector<std::shared_ptr<Units>>& t_enemies, const std::vector<std::shared_ptr<Units>>& t_player)
 {
 	for (const auto& unit : t_enemies)
 	{
 		if (unit->body.getGlobalBounds().contains(mousePosition))
 		{
 			hoveredUnit = unit.get();
-			return true;
+			hoveredState = MouseHover::Enemy;
+			return;
 		}
-		else {
-			return false;
+	}
+
+	for (const auto& unit : t_player)
+	{
+		if (unit->body.getGlobalBounds().contains(mousePosition))
+		{
+			hoveredUnit = unit.get();
+			hoveredState = MouseHover::Player;
+			return;
 		}
+	}
+
+	hoveredUnit = nullptr;
+	hoveredState = MouseHover::Nothing;
+}
+
+Units* Mouse::getHoveredUnit()
+{
+	if (hoveredUnit != nullptr)
+	{
+		return hoveredUnit;
+	}
+	else {
+		return nullptr;
 	}
 }
 

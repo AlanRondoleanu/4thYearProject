@@ -2,6 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include "Units.h"
 
+enum class MouseHover {
+    Nothing,
+    Enemy,
+    Player
+};
+
 class Mouse
 {
 public:
@@ -37,9 +43,10 @@ public:
         mousePositionOnScreen = sf::Vector2f(static_cast<float>(mouseTemp.x), static_cast<float>(mouseTemp.y));
         mousePosition = t_window.mapPixelToCoords(mouseTemp, t_camera);
     }
-    bool isHoveringEnemy(const std::vector<std::shared_ptr<Units>>& t_enemies);
+    void updateHovering(const std::vector<std::shared_ptr<Units>>& t_enemies, const std::vector<std::shared_ptr<Units>>& t_player);
 
-    Units* getHovered() { return hoveredUnit; }
+    Units* getHoveredUnit();
+    MouseHover hoveredState{ MouseHover::Nothing };
 
 private:
     sf::Vector2f mousePosition;

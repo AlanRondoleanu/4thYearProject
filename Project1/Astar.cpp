@@ -21,6 +21,12 @@ std::vector<sf::Vector2f> Astar::FindPath(sf::Vector2f start, float pathfindingU
     openSet.push(startNode);
     allNodes[GridToIndex(startGrid)] = startNode;
 
+    // Stop Astar if no path is found
+    if (!IsWalkable(targetGrid, unitPositions, pathfindingUnitSize))
+    {
+        return {};
+    }
+
     while (!openSet.empty()) 
     {
         Node currentNode = openSet.top();
@@ -123,8 +129,8 @@ std::vector<sf::Vector2f> Astar::ReconstructPath(Node node)
         path.push_back(GridToWorld(node.position));
         node = *node.parent;
     }
-    std::reverse(path.begin(), path.end())
-        ;
+    std::reverse(path.begin(), path.end());
+
     return path;
 }
 
