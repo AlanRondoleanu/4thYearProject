@@ -1,20 +1,5 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Project1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Game.cpp
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(29,89): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(29,89): warning C4244:         with
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(29,89): warning C4244:         [
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(29,89): warning C4244:             T=float
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(29,89): warning C4244:         ]
-  (compiling source file 'Game.cpp')
-  
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(30,89): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(30,89): warning C4244:         with
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(30,89): warning C4244:         [
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(30,89): warning C4244:             T=float
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Mouse.h(30,89): warning C4244:         ]
-  (compiling source file 'Game.cpp')
-  
-C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\Project1\Game.cpp(266,14): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
   UnitUI.cpp
-  Generating Code...
-  Project1.vcxproj -> C:\Users\gameuser\Desktop\Final Year Project\4thYearProject\x64\Debug\CowStrike.exe
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitUI.cpp(29,33): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitUI.cpp(29,29): warning C4305: 'argument': truncation from 'double' to 'float'
+  Project1.vcxproj -> C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\x64\Debug\CowStrike.exe

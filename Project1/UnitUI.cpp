@@ -4,17 +4,32 @@ UnitUI::UnitUI(sf::RenderWindow& window)
 {
     font.loadFromFile("ariblk.ttf");
 
-    // Get window size at game start
     sf::Vector2u windowSize = window.getSize();
     uiScale.x = windowSize.x / 1920.0f;
     uiScale.y = windowSize.y / 1080.0f;
 
-    // Set UI panel size and position
+    // Set UI panel
     sf::Vector2f panelSize{ 400, 300 };
 
     panel.setSize(sf::Vector2f(panelSize.x * uiScale.x, panelSize.y * uiScale.y));
     panel.setPosition(windowSize.x - panel.getSize().x - 20, windowSize.y - panel.getSize().y - 20);
     panel.setFillColor(sf::Color(50, 50, 50));
+
+    // Portrait Panel
+    sf::Vector2f protraitPanelSize{ 250, 300 };
+
+    portraitPanel.setSize(sf::Vector2f(protraitPanelSize.x * uiScale.x, protraitPanelSize.y * uiScale.y));
+    portraitPanel.setPosition(windowSize.x - portraitPanel.getSize().x - 350, windowSize.y - portraitPanel.getSize().y - 20);
+    portraitPanel.setFillColor(sf::Color(0, 0, 0));
+
+    // Portrait Sprite
+    sf::Vector2f protraitSpriteSize{ 250, 300 };
+
+    portraitSprite.setPosition(windowSize.x - portraitPanel.getSize().x - 340, windowSize.y - portraitPanel.getSize().y - 10);
+    portraitSprite.setScale(0.4,0.4);
+
+    // Portrait loading
+    loadPortrait("Soldier", "Assets/Portraits/Soldier.png");
 
     // Create buttons
     for (int i = 0; i < 3; i++) 
@@ -44,12 +59,17 @@ void UnitUI::SetSelectedUnit(std::shared_ptr<Units> unit)
     // Update button labels based on unit type
     if (selectedUnit) 
     {
-        if (selectedUnit->GetUnitType() == "Soldier") {
+        if (selectedUnit->GetUnitType() == "Soldier") 
+        {
             buttonLabels[0].setString("Attack");
             buttonLabels[1].setString("Move");
             buttonLabels[2].setString("Hold");
+
+            portraitSprite.setTexture(getPortrait("Soldier"));
         }
     }
+
+
 }
 
 void UnitUI::Render(sf::RenderWindow& window, sf::View& uiView) const
@@ -58,10 +78,14 @@ void UnitUI::Render(sf::RenderWindow& window, sf::View& uiView) const
     window.setView(uiView); // Switch to UI view
 
     window.draw(panel);
+    window.draw(portraitPanel);
+
     if (selectedUnit != nullptr)
     {
         for (auto& button : buttons) window.draw(button);
         for (auto& label : buttonLabels) window.draw(label);
+
+        window.draw(portraitSprite);
     }
 
     window.setView(originalView);
@@ -90,6 +114,23 @@ bool UnitUI::isInsideUI(sf::Vector2f mousePos)
     {
         return true;
     }
-
+    
     return false;
+}
+
+void UnitUI::loadPortrait(const std::string& unitName, const std::string& filePath)
+{
+    sf::Texture texture;
+    if (texture.loadFromFile(filePath)) 
+    {
+        portraits[unitName] = texture;
+    }
+    else {
+        std::cout << "Failed to load portrait for " << unitName << std::endl;
+    }
+}
+
+const sf::Texture& UnitUI::getPortrait(const std::string& unitName)
+{
+    return portraits.at(unitName);
 }

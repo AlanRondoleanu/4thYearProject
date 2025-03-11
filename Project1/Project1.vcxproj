@@ -153,6 +153,7 @@
     <ClCompile Include="FlowField.cpp" />
     <ClCompile Include="FlowfieldMovement.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HealthBars.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementManager.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="FlowField.h" />
     <ClInclude Include="FlowfieldMovement.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HealthBars.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementManager.h" />
     <ClInclude Include="PlaceMarkers.h" />

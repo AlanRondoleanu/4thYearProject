@@ -64,13 +64,6 @@ private:
 	};
 	modes currentMode{ Selecting };
 
-	enum mouseHover {
-		Nothing,
-		UI,
-		Enemy
-	};
-	mouseHover currentHover{ Nothing };
-
 	//Camera
 	sf::View camera;
 	sf::Vector2f cameraMovement;

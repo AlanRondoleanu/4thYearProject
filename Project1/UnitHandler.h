@@ -33,7 +33,7 @@ public:
 	std::shared_ptr<Units> getFirstUnitInList();
 
 	std::vector<sf::Vector2f> formationMoveOrder(UnitState t_state);
-	sf::Vector2f attackFollowMoveOrder();
+	sf::Vector2f attackFollowMoveOrder(Units* t_target);
 
 
 	// Movement
@@ -60,7 +60,8 @@ private:
 	std::vector<Units*> getUnitsInCellAndNeighbors(int cellID);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Units* t_target);
-
+	void aStarHandout(sf::Vector2f postion, Units* unit);
+	std::shared_ptr<Units> findSharedPtrFromRaw(Units* rawPtr);
 
 	int const MAX_UNITS{ 100 };
 

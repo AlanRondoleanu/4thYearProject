@@ -2,6 +2,45 @@
 
 void UnitHandler::update(float t_deltaTime)
 {
+	// Remove dead player units
+	playerUnits.erase(
+		std::remove_if(playerUnits.begin(), playerUnits.end(),
+			[&](std::shared_ptr<Units>& unit) 
+			{
+				if (!unit->alive) 
+				{
+					// Remove from selected units if present
+					selectedUnits.erase(unit.get());
+
+					// Remove from groups
+					for (auto& group : groups)
+						group.removeUnit(unit.get());
+
+					return true; // remove from playerUnits
+				}
+				return false;
+			}),
+		playerUnits.end()
+	);
+
+	// Remove dead enemy units
+	enemyUnits.erase(
+		std::remove_if(enemyUnits.begin(), enemyUnits.end(),
+			[&](std::shared_ptr<Units>& unit) 
+			{
+				// Remove from groups if needed (if you have groups for enemies)
+				if (!unit->alive) 
+				{
+					for (auto& group : groups)
+						group.removeUnit(unit.get());
+
+					return true;
+				}
+				return false;
+			}),
+		enemyUnits.end()
+	);
+
 	// Spacial Partition
 	partitionedMap.clear();
 	for (auto& playerUnit : playerUnits) // Player Units
@@ -28,15 +67,21 @@ void UnitHandler::update(float t_deltaTime)
 		{
 			sf::Vector2f currentPostion = playerUnit->getPos();
 
-			// Flowfield Movement
-			if (playerUnit->blocked == false) 
+			if (playerUnit->blocked == false) // Flowfield Movement
 			{
 				playerUnit->velocity = playerUnit->flowfieldMovement.MoveTo(currentPostion);
 			}
-			else // Astar Movement
+			else if (playerUnit->blocked == true) // Astar Movement
 			{ 
 				playerUnit->velocity = playerUnit->astarMovement.MoveTo(currentPostion, playerUnit->getRadius());
+
+				if (playerUnit->velocity == sf::Vector2{0.f,0.f}) // NEEDED TO STOP LAG
+				{
+					playerUnit->state = UnitState::Idle;
+				}
 			}
+			std::cout << playerUnit->stateToString() << std::endl;
+
 			// Direct movement 
 			playerUnit->velocity = movementManager.useDirectMovement(currentPostion, playerUnit->velocity, playerUnit->flowfieldMovement.getFlowfield()->destinationPosition, playerUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
 
@@ -69,6 +114,7 @@ void UnitHandler::update(float t_deltaTime)
 			{
 				playerUnit->state = UnitState::Idle;
 				playerUnit->blocked = false;
+				playerUnit->destinationReached = true;
 			}		
 
 			// Preparing Raycasting
@@ -122,6 +168,11 @@ void UnitHandler::update(float t_deltaTime)
 			else // Astar Movement
 			{
 				enemyUnit->velocity = enemyUnit->astarMovement.MoveTo(currentPostion, enemyUnit->getRadius());
+			
+				if (enemyUnit->velocity == sf::Vector2{ 0.f,0.f }) // NEEDED TO STOP LAG
+				{
+					enemyUnit->state = UnitState::Idle;
+				}
 			}
 			// Direct movement 
 			enemyUnit->velocity = movementManager.useDirectMovement(currentPostion, enemyUnit->velocity, enemyUnit->flowfieldMovement.getFlowfield()->destinationPosition, enemyUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
@@ -155,6 +206,7 @@ void UnitHandler::update(float t_deltaTime)
 			{
 				enemyUnit->state = UnitState::Idle;
 				enemyUnit->blocked = false;
+				enemyUnit->destinationReached = true;
 			}
 
 			// Preparing Raycasting
@@ -194,18 +246,21 @@ void UnitHandler::update(float t_deltaTime)
 	for (auto& group : groups)
 	{
 		// Checks if the target of the group has moved from it's current cell to create another flowfield to follow
-		if (group.getTarget() != nullptr &&
-			group.getTargetLastCellID() != group.getTarget()->cellID)
+		if (group.getTarget().lock() &&
+			group.getTargetLastCellID() != group.getTarget().lock()->cellID)
 		{
 			group.refreshLastCellID();
 
-			mainFlowField->computePath(group.getTarget()->getPos());
+			mainFlowField->computePath(group.getTarget().lock()->getPos());
 
 			for (auto& units : group.getUnits())
 			{
-				mainFlowField->setDestinationPosition(group.getTarget()->getPos());
+				mainFlowField->setDestinationPosition(group.getTarget().lock()->getPos());
 				units->setFlowField(*mainFlowField, UnitState::AttackFollow);
 			}
+		}
+		else {
+			group.getTarget().reset();
 		}
 	}
 
@@ -226,6 +281,13 @@ void UnitHandler::render(sf::RenderWindow& t_window)
 	}
 	// Render for projectiles
 	combat.renderProjectiles(t_window);
+
+	// Render for hovered unit
+	Units* hovered = Mouse::getInstance().getHoveredUnit();
+	if (hovered != nullptr)
+	{
+		hovered->healthBar.render(t_window);
+	}
 }
 
 void UnitHandler::spawnUnit(bool t_friendly)
@@ -282,6 +344,9 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
 	// Gives the units flowfields for each position
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
 	{
+		// Boolean to make sure units continue moving after attacking
+		selected->destinationReached = false;
+
 		// Flowfield Handout
 		mainFlowField->computePath(formationPositions[i]);
 		selected->setFlowField(*mainFlowField, t_state);
@@ -316,7 +381,7 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
 	return formationPositions;
 }
 
-sf::Vector2f UnitHandler::attackFollowMoveOrder()
+sf::Vector2f UnitHandler::attackFollowMoveOrder(Units* t_target)
 {
 	if (selectedUnits.size() <= 0)
 		return { 0,0 };
@@ -326,12 +391,20 @@ sf::Vector2f UnitHandler::attackFollowMoveOrder()
 	mainFlowField->computePath(mousePosition);
 	mainFlowField->setDestinationPosition(mousePosition);
 
+	// Handouts
 	for (auto& selected : UnitHandler::getInstance().selectedUnits)
 	{
+		// Boolean to make sure units continue moving after attacking
+		selected->destinationReached = false;
+
+		// Flowfield Handout
 		selected->setFlowField(*mainFlowField, UnitState::AttackFollow);
+
+		// AStarHandout
+		aStarHandout(mousePosition, selected);
 	}
 
-	createNewGroupFromSelectedUnits(selectedUnits, Mouse::getInstance().getHovered());
+	createNewGroupFromSelectedUnits(selectedUnits, t_target);
 
 	return mousePosition;
 }
@@ -410,7 +483,7 @@ void UnitHandler::createNewGroupFromSelectedUnits(const std::unordered_set<Units
 	UnitGroup newGroup;
 
 	// Set Target to follow for group
-	newGroup.targetUnit(t_target);
+	newGroup.targetUnit(findSharedPtrFromRaw(t_target));
 
 	if (groups.size() != 0)
 	{
@@ -450,6 +523,44 @@ void UnitHandler::createNewGroupFromSelectedUnits(const std::unordered_set<Units
 			++it;
 		}
 	}
+}
+
+void UnitHandler::aStarHandout(sf::Vector2f postion, Units* unit)
+{
+	// Astar Handout
+	unit->astarMovement.getAstar()->setTarget(postion);
+	std::vector<AstarUnit> astarUnits;
+	for (auto& playerUnit : playerUnits)
+	{
+		if (playerUnit->getPos() != unit->getPos())
+		{
+			AstarUnit astarUnit(playerUnit->getPos(), playerUnit->getDiameter());
+			astarUnits.push_back(astarUnit);
+		}
+	}
+	for (auto& enemyUnit : enemyUnits)
+	{
+		if (enemyUnit->getPos() != unit->getPos())
+		{
+			AstarUnit astarUnit(enemyUnit->getPos(), enemyUnit->getDiameter());
+			astarUnits.push_back(astarUnit);
+		}
+	}
+}
+
+std::shared_ptr<Units> UnitHandler::findSharedPtrFromRaw(Units* rawPtr)
+{
+	for (auto& unit : playerUnits) 
+	{
+		if (unit.get() == rawPtr) return unit; // Found in player units		
+	}
+
+	for (auto& unit : enemyUnits) 
+	{
+		if (unit.get() == rawPtr) return unit; // Found in enemy units		
+	}
+
+	return nullptr; // Not found
 }
 
 Cell* UnitHandler::selectCell()

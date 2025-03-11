@@ -13,17 +13,17 @@ public:
 
     void addUnit(Units* t_unit);
     void removeUnit(Units* t_unit);
-    void targetUnit(Units* t_unit);
+    void targetUnit(std::weak_ptr<Units> t_unit);
 
     const std::vector<Units*>& getUnits() const;
     bool containsUnit(const Units* unit) const;
-    Units* getTarget() { return targetedUnit; }
+    std::weak_ptr<Units> getTarget() { return targetedUnit; }
     int getTargetLastCellID() { return targetLastCellID; }
-    void refreshLastCellID() { targetLastCellID = targetedUnit->cellID; }
+    void refreshLastCellID() { targetLastCellID = targetedUnit.lock()->cellID; }
 
 private:
     std::vector<Units*> units;
-    Units* targetedUnit;
+    std::weak_ptr<Units> targetedUnit;
     int targetLastCellID;
 };
 

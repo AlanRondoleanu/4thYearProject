@@ -5,6 +5,8 @@ class UnitStats
 {
 public:
 	//Stat variables
+	float health{ 100 };
+	float max_health{ 100 };
 	float speed{ 1 };
 	float aggroRange{ 250 };
 	float range{ 100 };

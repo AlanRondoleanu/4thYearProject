@@ -14,10 +14,10 @@ void UnitGroup::removeUnit(Units* t_unit)
     }
 }
 
-void UnitGroup::targetUnit(Units* t_unit)
+void UnitGroup::targetUnit(std::weak_ptr<Units> t_unit)
 {
     targetedUnit = t_unit;
-    targetLastCellID = t_unit->cellID;
+    targetLastCellID = t_unit.lock()->cellID;
 }
 
 const std::vector<Units*>& UnitGroup::getUnits() const
