@@ -18,7 +18,6 @@ FlowField::FlowField()
 			cell.setPosition(newPosition);
 			cell.setID(cellNumber);
 			cell.setSize({ CELL_WIDTH, CELL_HEIGHT });
-			cell.initialize();
 
 			Grid[o][i] = cell;
 
@@ -102,8 +101,8 @@ sf::Vector2f FlowField::getDirection(sf::Vector2f t_position)
 
 Cell* FlowField::getCellAtPosition(sf::Vector2f t_position)
 {
-	auto gridX = static_cast<int>(t_position.x / FlowField::GRID_WIDTH);
-	auto gridY = static_cast<int>(t_position.y / FlowField::GRID_HEIGHT);
+	auto gridX = static_cast<int>(t_position.x / FlowField::CELL_WIDTH);
+	auto gridY = static_cast<int>(t_position.y / FlowField::CELL_HEIGHT);
 
 	return &Grid[gridY][gridX];
 }

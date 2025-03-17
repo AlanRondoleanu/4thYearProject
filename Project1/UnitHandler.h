@@ -7,12 +7,12 @@
 #include <vector>
 #include "Units.h"
 #include "Soldier.h"
+#include "Orc.h"
 #include "Mouse.h"
 #include "MovementManager.h"
 #include "UnitGroup.h"
 #include "RayCasting.h"
 #include "FlowfieldMovement.h"
-#include "CombatHandler.h"
 
 class UnitHandler
 {
@@ -28,10 +28,12 @@ public:
 
 	void update(float t_deltaTime);
 	void render(sf::RenderWindow& t_window);
-	void spawnUnit(bool t_friendly);
+	void spawnUnit(std::string t_type, sf::Vector2f t_position, bool t_friendly);
+	void spawnUnitFromBuilding(std::string t_type, sf::Vector2f t_position, sf::Vector2f t_target, bool t_friendly);
 	void setMovementFields(FlowField* t_flowfield, Astar* t_astar) { mainFlowField = t_flowfield, mainAstar = t_astar; }
 	std::shared_ptr<Units> getFirstUnitInList();
 
+	void singleMoveOrder(Units* t_unit, sf::Vector2f t_position);
 	std::vector<sf::Vector2f> formationMoveOrder(UnitState t_state);
 	sf::Vector2f attackFollowMoveOrder(Units* t_target);
 
@@ -40,9 +42,6 @@ public:
 	MovementManager movementManager;
 	FlowField* mainFlowField;
 	Astar* mainAstar;
-
-	// Combat
-	CombatHandler combat;
 
 	// Raycasting
 	RayCasting raycasting;
@@ -54,7 +53,9 @@ public:
 	std::vector<UnitGroup> groups;
 
 private:
-
+	
+	void updateUnits(std::vector<std::shared_ptr<Units>>& t_units, float t_deltaTime);
+	void eraseDeadUnits(std::vector<std::shared_ptr<Units>>& t_units);
 	Cell* selectCell();
 	Cell* selectCell(sf::Vector2f t_position);
 	std::vector<Units*> getUnitsInCellAndNeighbors(int cellID);

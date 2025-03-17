@@ -10,7 +10,6 @@ public:
 
 	// Functions
 	void render(sf::RenderWindow& t_window);
-	void initialize();
 
 	// Const Vars
 	static int const MAX_COST{ 99999 };
@@ -32,7 +31,6 @@ public:
 	float getHeight() { return height; }
 	int getID() { return cellID; }
 	std::vector<Cell*> getNeighbors() { return neighbouringCells; }
-	void setFont(sf::Font& t_font);
 	void setCost(int t_cost);
 	void setBestCost(int t_cost);
 	void setID(int t_ID) { cellID = t_ID; }
@@ -48,7 +46,6 @@ private:
 	float width{ 0 };
 	float height{ 0 };
 	int cellID{ 0 }; 
-	sf::Text text;
 };
 
 #endif

@@ -1,5 +1,6 @@
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Astar.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Astar.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\AstarMovement.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\AstarMovement.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\BuildingManager.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\BuildingManager.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Buildings.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Buildings.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Cell.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Cell.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\CombatHandler.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\CombatHandler.obj
@@ -10,13 +11,19 @@ C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\HealthBars.cp
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\main.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\main.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Mouse.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Mouse.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\MovementManager.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\MovementManager.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Orc.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Orc.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Orc_Building.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Orc_Building.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\PlaceMarkers.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\PlaceMarkers.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Projectile.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Projectile.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\RayCasting.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\RayCasting.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\SelectorTool.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\SelectorTool.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Soldier.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Soldier.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Soldier_Bullet.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Soldier_Bullet.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Soldier_Building.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Soldier_Building.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Spawner.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Spawner.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\TileMap.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\TileMap.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Turret.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Turret.obj
+C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Turret_Bullet.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Turret_Bullet.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitGroup.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\UnitGroup.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitHandler.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\UnitHandler.obj
 C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\Units.cpp;C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\x64\Debug\Units.obj

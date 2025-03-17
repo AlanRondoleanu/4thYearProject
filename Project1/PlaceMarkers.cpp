@@ -2,13 +2,14 @@
 
 PlaceMarkers::PlaceMarkers(sf::Vector2f t_postion)
 {
+	color = sf::Color::Green;
+
 	shape.setRadius(10);
 	shape.setOrigin(10, 10);
-	shape.setOutlineColor(sf::Color::Red);
+	shape.setOutlineColor(color);
 	shape.setOutlineThickness(3);
 	shape.setPosition(t_postion);
-
-	color = sf::Color::Red;
+	shape.setFillColor(sf::Color(0, 0, 0, 0));	
 }
 
 void PlaceMarkers::render(sf::RenderWindow& t_window)

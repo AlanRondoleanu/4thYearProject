@@ -16,6 +16,9 @@
 #include "UnitHandler.h"
 #include "PlaceMarkers.h"
 #include "UnitUI.h"
+#include "BuildingManager.h"
+#include "CombatHandler.h"
+#include "TileMap.h"
 
 class Game
 {
@@ -33,7 +36,9 @@ private:
 	void processMouse(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
-	void placeBuilding();
+
+	// Map Texture Tiling
+	TileMap tileMap;
 
 	// Flowfield and Astar fields
 	FlowField flowfield;
@@ -42,12 +47,6 @@ private:
 	//Selector Tool
 	SelectorTool selector;
 	std::vector<PlaceMarkers> moveMarkers;
-
-	Buildings* playerMainBuilding;
-	Buildings* enemyMainBuilding;
-	Buildings* placementTemp;
-	std::vector<Buildings*> playerBuildings;
-	Buildings* enemyBuildings[10];
 
 	// UI Stuff
 	sf::RenderWindow m_window; // main SFML window
@@ -58,16 +57,20 @@ private:
 	UnitUI unitUI;
 	sf::View uiView;
 
-	enum modes {
-		Building,
-		Selecting
-	};
-	modes currentMode{ Selecting };
+	// Combat
+	CombatHandler combat;
+
+	// Building
+	BuildingManager buildingManager;
+	bool buildingMode{ false };
 
 	//Camera
 	sf::View camera;
 	sf::Vector2f cameraMovement;
 	float cameraSpeed{ 0.5 };
+
+	// Debug Mod
+	bool debug{ false };
 
 	bool m_exitGame; // control exiting game
 

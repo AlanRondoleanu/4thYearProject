@@ -1,48 +1,78 @@
 #include "Buildings.h"
+#include "Units.h"
 
-Buildings::Buildings()
+Buildings::Buildings(const sf::Vector2f& position, bool isEnemy)
 {
-	
+	setPos(position);
+	body.setPosition(position);
+	body.setFillColor(sf::Color::Black);
+	placed = true;
+	enemy = isEnemy;
 }
-
-Buildings::~Buildings(){}
 
 void Buildings::draw(sf::RenderWindow& t_window)
 {
-	t_window.draw(body);
+	//t_window.draw(body);
+    t_window.draw(sprite);
+    healthBar.render(t_window);
+}
+
+void Buildings::resetAttackTimer()
+{
+    attackCooldown = 1.0f / stats.attackSpeed;
+}
+
+void Buildings::loadTileTexture(const std::string& filePath)
+{
+    if (!texture.loadFromFile(filePath))
+    {
+        std::cerr << "Failed to load texture from " << filePath << std::endl;
+        return;
+    }
+
+    //float scaleFactor = 50.0f / 64.0f;
+    //sprite.setScale(scaleFactor, scaleFactor);
+    sprite.setTexture(texture);
+
+    sf::Vector2u textureSize = texture.getSize();
+    sprite.setOrigin(textureSize.x / 2.f, textureSize.y / 2.f);
+    sprite.setPosition(body.getPosition());  
+}
+
+sf::Vector2f Buildings::getSpawnPoint()
+{
+    sf::Vector2f position = getPos();
+    sf::Vector2f size = body.getSize();
+
+    const float spawnOffset = 25.f;
+
+    if (enemy) 
+    {
+        // Spawn below the building
+        position.y += size.y + spawnOffset;
+    }
+    else {
+        // Spawn above the building
+        position.y -= size.y + spawnOffset;
+    }
+
+    return position;
+}
+
+bool Buildings::canAttack()
+{
+    if (aggressive)
+    {
+        return attackCooldown <= 0.0f;
+    }
+    else {
+        return false;
+    }
 }
 
 void Buildings::setPos(sf::Vector2f t_position)
 {
 	body.setPosition(t_position);
-	spawnPoint = body.getPosition();
-	spawnPoint.y -= 225 / 2;
+    sprite.setPosition(t_position);
 }
 
-void Buildings::setEnemy(bool t_enemy)
-{ 
-	enemy = t_enemy; 
-	if (t_enemy == true)
-	{
-		Buildings::ENEMY_BUILDING_AMOUNT++;
-	}
-	else if (t_enemy == false)
-	{
-		Buildings::PLAYER_BUILDING_AMOUNT++;
-	}
-}
-
-
-void Buildings::placementCollision(std::vector<Buildings*> t_buildings)
-{
-	body.setFillColor(sf::Color::Green);
-	blocked = false;
-	for (int i = 0; i < t_buildings.size(); i++)
-	{
-		if (body.getGlobalBounds().intersects(t_buildings[i]->body.getGlobalBounds()))
-		{
-			body.setFillColor(sf::Color::Red);
-			blocked = true;
-		}
-	}
-}

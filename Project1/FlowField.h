@@ -14,7 +14,7 @@ public:
 	static int const CELL_WIDTH{ 50 };
 	static int const CELL_HEIGHT{ 50 };
 	static int const GRID_HEIGHT{ 50 };
-	static int const GRID_WIDTH{ 50 };
+	static int const GRID_WIDTH{ 25 };
 
 	Cell* destination;
 	sf::Vector2f destinationPosition;

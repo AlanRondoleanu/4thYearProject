@@ -9,6 +9,22 @@ Soldier::Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMove
 	body.setFillColor(sf::Color::Blue);
 
 	stats.range = 200;
+
+	// Texture
+	loadTexture("Assets/Textures/Sci-fi/Soldier_Back_.png");
+	loadTexture("Assets/Textures/Sci-fi/Soldier_Front_.png");
+	swapTexture(0);
+
+	// Scaling Solution
+	sf::FloatRect spriteBounds = sprite.getLocalBounds();
+	float spriteWidth = spriteBounds.width;
+	float spriteHeight = spriteBounds.height;
+
+	float circleDiameter = size * 2.f;
+	float largestDimension = std::max(spriteWidth, spriteHeight);
+	float scaleFactor = circleDiameter / largestDimension;
+
+	sprite.setScale(scaleFactor, scaleFactor);
 }
 
 

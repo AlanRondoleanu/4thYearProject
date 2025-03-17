@@ -1,5 +1,3 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Project1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  UnitUI.cpp
-C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitUI.cpp(29,33): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\Project1\UnitUI.cpp(29,29): warning C4305: 'argument': truncation from 'double' to 'float'
+  Buildings.cpp
   Project1.vcxproj -> C:\Users\Archi\Desktop\College Work\Year 4\4thYearProject\x64\Debug\CowStrike.exe

@@ -6,10 +6,9 @@
 class Spawner : public Buildings
 {
 public:
-	Spawner();
-	void update();
-
+	Spawner(const sf::Vector2f& position, bool isEnemy);
+	void update(float t_deltaTime) override;
+	std::string GetUnitType() const override;
 private:
-	void initialize();
 };
 #endif

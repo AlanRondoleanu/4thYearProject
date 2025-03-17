@@ -5,24 +5,15 @@
 
 #include "Game.h"
 
-int Buildings::PLAYER_BUILDING_AMOUNT = 0;
-int Buildings::ENEMY_BUILDING_AMOUNT = 0;
-
 /// <summary>
 /// default constructor
 /// </summary>
 Game::Game() :
 	m_window{ sf::VideoMode{ 1600U, 1200U, 32U }, "SFML Game" },
 	unitUI(m_window),
-	m_exitGame{ false } //when true game will exit
+	m_exitGame{ false },
+	tileMap(flowfield.GRID_WIDTH, flowfield.GRID_HEIGHT, flowfield.CELL_WIDTH)
 {
-	// WIP
-	placementTemp = new Spawner;
-	for (int i = 0; i < 10; i++)
-	{
-		enemyBuildings[i] = new Spawner;
-	}
-
 	// Ui View
 	uiView = m_window.getDefaultView();
 
@@ -115,19 +106,19 @@ void Game::processKeys(sf::Event t_event)
 	}
 	if (sf::Keyboard::Num1 == t_event.key.code)
 	{
-		currentMode = Selecting;
+		buildingMode = false;
 	}
 	if (sf::Keyboard::Num2 == t_event.key.code)
 	{
-		currentMode = Building;
+		buildingMode = true;
 	}
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
-		UnitHandler::getInstance().spawnUnit(true);
+		UnitHandler::getInstance().spawnUnit("Orc", Mouse::getInstance().getPosition(), true);
 	}
 	if (sf::Keyboard::E == t_event.key.code)
 	{
-		UnitHandler::getInstance().spawnUnit(false);
+		UnitHandler::getInstance().spawnUnit("Soldier", Mouse::getInstance().getPosition(), false);
 	}
 	if (sf::Keyboard::A == t_event.key.code)
 	{
@@ -136,6 +127,10 @@ void Game::processKeys(sf::Event t_event)
 			PlaceMarkers newMarker(markerLocation);
 			moveMarkers.push_back(newMarker);
 		}
+	}
+	if (sf::Keyboard::P == t_event.key.code)
+	{
+		debug = !debug;
 	}
 
 	// Camera movement
@@ -188,8 +183,8 @@ void Game::processMouse(sf::Event t_event)
 	{
 		if (!unitUI.isInsideUI(Mouse::getInstance().getPosition()))
 		{
-			if (currentMode == Building)
-				placeBuilding();
+			if (buildingMode)
+				buildingManager.addBuilding("Orc_Building", Mouse::getInstance().getPositionWithGrid(), false);
 
 			// UI Clicking
 			unitUI.HandleClick(Mouse::getInstance().getPositionOnScreen());
@@ -199,7 +194,7 @@ void Game::processMouse(sf::Event t_event)
 	{
 		if (!unitUI.isInsideUI(Mouse::getInstance().getPositionOnScreen()))
 		{
-			if (currentMode == Selecting)
+			if (!buildingMode)
 			{
 				if (Mouse::getInstance().hoveredState == MouseHover::Enemy)
 				{
@@ -253,13 +248,14 @@ void Game::update(sf::Time t_deltaTime)
 	// Update Units
 	UnitHandler::getInstance().update(t_deltaTime.asSeconds());
 
+	// Combat Update
+	combat.update(UnitHandler::getInstance().playerUnits, UnitHandler::getInstance().enemyUnits, buildingManager.playerBuildings, buildingManager.enemyBuildings, t_deltaTime.asSeconds());
+
 	// Update UI
 	unitUI.SetSelectedUnit(UnitHandler::getInstance().getFirstUnitInList());
 
-	// Temp stuff
-	placementTemp->setPos(Mouse::getInstance().getPositionWithGrid());
-	placementTemp->update();
-	placementTemp->placementCollision(playerBuildings);
+	// Building Update
+	buildingManager.update(t_deltaTime.asSeconds(), buildingMode);
 
 	// Camera
 	float delta = t_deltaTime.asMilliseconds();
@@ -274,8 +270,12 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
+	// Map Texture
+	tileMap.draw(m_window);
+
 	// Grid Render
-	flowfield.render(m_window);
+	if (debug)
+		flowfield.render(m_window);
 
 	// Move Markers
 	for (auto& marker : moveMarkers)
@@ -283,26 +283,17 @@ void Game::render()
 		marker.render(m_window);
 	}
 
+	// Render for projectiles
+	combat.renderProjectiles(m_window);
+
 	// Selector Render
 	selector.render(m_window);
 
-	// Player Building Render
-	for (size_t i = 0; i < playerBuildings.size(); i++)
-	{
-		playerBuildings[i]->draw(m_window);
-	}
-	// Enemy Building Render
-	for (size_t i = 0; i < Buildings::ENEMY_BUILDING_AMOUNT; i++)
-	{
-		enemyBuildings[i]->draw(m_window);
-	}
+	// Building Render
+	buildingManager.draw(m_window, buildingMode);
 
 	// Unit rendering
 	UnitHandler::getInstance().render(m_window);
-
-	// Draws the selected building on mouse location
-	if (currentMode == Building)
-		placementTemp->draw(m_window);
 
 	// Draw UI
 	unitUI.Render(m_window, uiView);
@@ -314,63 +305,3 @@ void Game::render()
 	m_window.display();
 }
 
-void Game::placeBuilding()
-{
-	if (placementTemp->getBlocked() == false)
-	{
-		placementTemp->setEnemy(false);
-
-		Buildings* building = new Spawner;
-		building->setPos(Mouse::getInstance().getPositionWithGrid());
-		building->body.setPosition(Mouse::getInstance().getPositionWithGrid());
-		building->body.setFillColor(sf::Color::Black);
-		building->placed = true;
-		building->setEnemy(false);
-		playerBuildings.push_back(building);
-	}
-}
-
-/// <summary>
-/// loads the background for the game
-/// </summary>
-//void Game::loadTextures()
-//{
-//	//Robot
-//	if (!robotTexture.loadFromFile("robot.png"))
-//	{
-//		std::cout << "problem loading robot" << std::endl;
-//	}
-//	robot.setTexture(robotTexture);
-//	robot.setTextureRect(sf::IntRect{ 0,0,width,height });
-//	robot.setOrigin(width/2, height/2);
-//	robot.setScale(0.5f, 0.5f);
-//	robot.setPosition(startPos);
-//	
-//	//Flower
-//	if (!flowerTexture.loadFromFile("plant.png"))
-//	{
-//		std::cout << "problem loading flower" << std::endl;
-//	}
-//	flower.setTexture(flowerTexture);
-//	flower.setTextureRect(sf::IntRect{ 0,0,100,229 });
-//	flower.setScale(0.2f, 0.2f);
-//	flower.setPosition(startPos.x + 570, startPos.y - 10);
-//
-//	//Background
-//	if (!gameBackground.loadFromFile("background.jpg"))
-//	{
-//		std::cout << "problem loading background" << std::endl;
-//	}
-//	backgroundSprite.setTexture(gameBackground);
-//	backgroundSprite.setTextureRect(sf::IntRect{ 0,0,819,175 });
-//}
-//void Game::loadMusic()
-//{
-//	if (!music.openFromFile("music.wav"))
-//	{
-//		std::cout << "problem loading music" << std::endl;
-//	}
-//	music.play();
-//	music.setVolume(10.0f);
-//}
-//

@@ -12,14 +12,15 @@ void Units::update(float t_deltaTime)
 	if (getAlive() == true)
 	{
 		body.move(velocity * stats.speed);
-		pos = body.getPosition();
+		setPos(body.getPosition());
 
 		// Health Set
 		healthBar.setHealth(stats.health, stats.max_health);
 		healthBar.setPosition(pos, getRadius());
 
 		// Update attack timer
-		if (attackCooldown > 0.0f) {
+		if (attackCooldown > 0.0f) 
+		{
 			attackCooldown -= t_deltaTime;
 		}
 
@@ -28,7 +29,40 @@ void Units::update(float t_deltaTime)
 		{
 			setAlive(false);
 		}
+
+		if (velocity.y < 0 && currentFacing != UnitFacing::Back) 
+		{
+			swapTexture(0);
+			currentFacing = UnitFacing::Back;
+		}
+		else if (velocity.y > 0 && currentFacing != UnitFacing::Front) 
+		{
+
+			swapTexture(1);
+			currentFacing = UnitFacing::Front;
+		}
 	}
+}
+
+void Units::loadTexture(const std::string& filePath)
+{
+	sf::Texture t_texture;
+
+	if (!t_texture.loadFromFile(filePath))
+	{
+		std::cerr << "Failed to load texture from " << filePath << std::endl;
+		return;
+	}
+
+	textures.push_back(t_texture);
+	sprite.setPosition(body.getPosition());
+}
+
+void Units::swapTexture(int t_value)
+{
+	sprite.setTexture(textures[t_value]);
+	sf::Vector2u textureSize = textures[t_value].getSize();
+	sprite.setOrigin(textureSize.x / 2.f, textureSize.y / 2.f);
 }
 
 void Units::draw(sf::RenderWindow& t_window)
@@ -36,6 +70,7 @@ void Units::draw(sf::RenderWindow& t_window)
 	if (getAlive() == true)
 	{
 		t_window.draw(body);
+		t_window.draw(sprite);
 	}
 }
 
@@ -90,10 +125,17 @@ std::string Units::stateToString()
 	
 }
 
+void Units::setPos(sf::Vector2f t_position)
+{
+	pos = t_position;
+	body.setPosition(pos); 
+	sprite.setPosition(pos);
+}
+
 void Units::setCellID()
 {
-	int gridX = static_cast<int>(pos.x / FlowField::GRID_WIDTH);
-	int gridY = static_cast<int>(pos.y / FlowField::GRID_HEIGHT);
+	int gridX = static_cast<int>(pos.x / FlowField::CELL_WIDTH);
+	int gridY = static_cast<int>(pos.y / FlowField::CELL_HEIGHT);
 
 	Cell cell = flowfieldMovement.getFlowfield()->Grid[gridY][gridX];
 	cellID = cell.getID();

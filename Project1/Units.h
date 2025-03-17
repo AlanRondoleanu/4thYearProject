@@ -19,6 +19,11 @@ enum class UnitState {
 	Idle
 };
 
+enum class UnitFacing {
+	Front,
+	Back
+};
+
 class Units
 {
 public:
@@ -28,6 +33,8 @@ public:
 	static const int MAX_UNITS{ 100 };
 
 	void update(float t_deltaTime);
+	void loadTexture(const std::string& filePath);
+	void swapTexture(int t_value);
 	void draw(sf::RenderWindow& t_window);
 	void setFlowField(FlowField t_field, UnitState t_state);
 	void select();
@@ -57,6 +64,11 @@ public:
 	sf::CircleShape body;
 	std::shared_ptr<Units> currentTarget;
 
+	// Texture
+	std::vector<sf::Texture> textures;
+	sf::Sprite sprite;
+	UnitFacing currentFacing{UnitFacing::Front};
+
 	//Booleans
 	bool enemy{ false };
 	bool alive{ true };
@@ -71,7 +83,7 @@ public:
 	bool getAlive() { return alive; }
 	virtual std::string GetUnitType() const = 0;
 
-	void setPos(sf::Vector2f t_position) { pos = t_position, body.setPosition(pos); }
+	void setPos(sf::Vector2f t_position);
 	void setAlive(bool t_status) { alive = t_status; }
 	void setCellID();
 

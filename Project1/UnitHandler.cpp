@@ -2,44 +2,9 @@
 
 void UnitHandler::update(float t_deltaTime)
 {
-	// Remove dead player units
-	playerUnits.erase(
-		std::remove_if(playerUnits.begin(), playerUnits.end(),
-			[&](std::shared_ptr<Units>& unit) 
-			{
-				if (!unit->alive) 
-				{
-					// Remove from selected units if present
-					selectedUnits.erase(unit.get());
-
-					// Remove from groups
-					for (auto& group : groups)
-						group.removeUnit(unit.get());
-
-					return true; // remove from playerUnits
-				}
-				return false;
-			}),
-		playerUnits.end()
-	);
-
-	// Remove dead enemy units
-	enemyUnits.erase(
-		std::remove_if(enemyUnits.begin(), enemyUnits.end(),
-			[&](std::shared_ptr<Units>& unit) 
-			{
-				// Remove from groups if needed (if you have groups for enemies)
-				if (!unit->alive) 
-				{
-					for (auto& group : groups)
-						group.removeUnit(unit.get());
-
-					return true;
-				}
-				return false;
-			}),
-		enemyUnits.end()
-	);
+	// Erase Dead Units
+	eraseDeadUnits(playerUnits);
+	eraseDeadUnits(enemyUnits);
 
 	// Spacial Partition
 	partitionedMap.clear();
@@ -52,8 +17,248 @@ void UnitHandler::update(float t_deltaTime)
 		partitionedMap[enemyUnit->cellID].push_back(enemyUnit.get());
 	}
 
+	// Update for units
+	updateUnits(playerUnits, t_deltaTime);
+	updateUnits(enemyUnits, t_deltaTime);
+
 	// Update for player units
+	//for (auto& playerUnit : playerUnits)
+	//{
+	//	playerUnit->setCellID();
+
+	//	if (playerUnit->state == UnitState::Attacking)
+	//	{
+	//		playerUnit->velocity = { 0,0 };
+	//	}
+
+	//	// Movement Update
+	//	if (playerUnit->state != UnitState::Idle && playerUnit->state != UnitState::Attacking)
+	//	{
+	//		sf::Vector2f currentPostion = playerUnit->getPos();
+
+	//		if (playerUnit->blocked == false) // Flowfield Movement
+	//		{
+	//			playerUnit->velocity = playerUnit->flowfieldMovement.MoveTo(currentPostion);
+	//		}
+	//		else if (playerUnit->blocked == true) // Astar Movement
+	//		{ 
+	//			playerUnit->velocity = playerUnit->astarMovement.MoveTo(currentPostion, playerUnit->getRadius());
+
+	//			if (playerUnit->velocity == sf::Vector2{0.f,0.f}) // NEEDED TO STOP LAG
+	//			{
+	//				playerUnit->state = UnitState::Idle;
+	//			}
+	//		}
+	//		std::cout << playerUnit->stateToString() << std::endl;
+
+	//		// Direct movement 
+	//		playerUnit->velocity = movementManager.useDirectMovement(currentPostion, playerUnit->velocity, playerUnit->flowfieldMovement.getFlowfield()->destinationPosition, playerUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
+
+
+	//		// Compile all needed variables for adding flocking/swarm weights
+	//		std::vector<sf::Vector2f> unitVelocities;
+	//		std::vector<sf::Vector2f> unitPositions;
+
+	//		// If selected units is larger than 1 and contains current this unit
+	//		for (auto& group : groups)
+	//		{
+	//			if (group.getUnits().size() > 1 &&
+	//				group.containsUnit(playerUnit.get()))
+	//			{
+	//				for (auto& unit : group.getUnits())
+	//				{
+	//					if (unit == playerUnit.get()) continue; // Skips  itself
+
+	//					unitVelocities.push_back(unit->velocity);
+	//					unitPositions.push_back(unit->getPos());
+	//				}
+
+	//				if (playerUnit->blocked == false)
+	//					playerUnit->velocity = movementManager.applyAlignmentAndCohesion(playerUnit->getPos(), playerUnit->velocity, unitVelocities, unitPositions);
+	//			}	
+	//		}
+
+	//		// Stop movement when destination is reached
+	//		if (movementManager.isDestinationReached(playerUnit->getPos(), playerUnit->flowfieldMovement.getFlowfield()))
+	//		{
+	//			playerUnit->state = UnitState::Idle;
+	//			playerUnit->blocked = false;
+	//			playerUnit->destinationReached = true;
+	//		}		
+
+	//		// Preparing Raycasting
+	//		Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
+	//		std::vector<Unit> unitsToAvoid;
+
+	//		// Partitioned Units Update
+	//		for (auto& otherUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
+	//		{
+	//			if (playerUnit.get() != otherUnit)
+	//			{
+	//				// Repulsion
+	//				sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
+	//				otherUnit->push(-repulsion);
+	//				playerUnit->push(repulsion);
+
+	//				// Raycasting Check
+	//				Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
+	//				unitsToAvoid.push_back(avoiding);
+	//			}
+	//		}
+	//		// Raycasting finds any units blocking current unit
+	//		if (unitsToAvoid.size() > 0 && playerUnit->blocked == false)
+	//		{
+	//			Unit mainUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->velocity };
+	//			playerUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
+	//		}
+	//	}
+	//	else {
+	//		playerUnit->velocity = { 0,0 };
+	//	}
+
+	//	playerUnit->update(t_deltaTime);
+	//}
+
+	//// Update for enemy units
+	//for (auto& enemyUnit : enemyUnits)
+	//{
+	//	enemyUnit->setCellID();
+
+	//	// Movement Update
+	//	if (enemyUnit->state != UnitState::Idle && enemyUnit->state != UnitState::Attacking)
+	//	{
+	//		sf::Vector2f currentPostion = enemyUnit->getPos();
+
+	//		// Flowfield Movement
+	//		if (enemyUnit->blocked == false)
+	//		{
+	//			enemyUnit->velocity = enemyUnit->flowfieldMovement.MoveTo(currentPostion);
+	//		}
+	//		else // Astar Movement
+	//		{
+	//			enemyUnit->velocity = enemyUnit->astarMovement.MoveTo(currentPostion, enemyUnit->getRadius());
+	//		
+	//			if (enemyUnit->velocity == sf::Vector2{ 0.f,0.f }) // NEEDED TO STOP LAG
+	//			{
+	//				enemyUnit->state = UnitState::Idle;
+	//			}
+	//		}
+	//		// Direct movement 
+	//		enemyUnit->velocity = movementManager.useDirectMovement(currentPostion, enemyUnit->velocity, enemyUnit->flowfieldMovement.getFlowfield()->destinationPosition, enemyUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
+
+
+	//		// Compile all needed variables for adding flocking/swarm weights
+	//		std::vector<sf::Vector2f> unitVelocities;
+	//		std::vector<sf::Vector2f> unitPositions;
+
+	//		// If selected units is larger than 1 and contains current this unit
+	//		for (auto& group : groups)
+	//		{
+	//			if (group.getUnits().size() > 1 &&
+	//				group.containsUnit(enemyUnit.get()))
+	//			{
+	//				for (auto& unit : group.getUnits())
+	//				{
+	//					if (unit == enemyUnit.get()) continue; // Skips  itself
+
+	//					unitVelocities.push_back(unit->velocity);
+	//					unitPositions.push_back(unit->getPos());
+	//				}
+
+	//				if (enemyUnit->blocked == false)
+	//					enemyUnit->velocity = movementManager.applyAlignmentAndCohesion(enemyUnit->getPos(), enemyUnit->velocity, unitVelocities, unitPositions);
+	//			}
+	//		}
+
+	//		// Stop movement when destination is reached
+	//		if (movementManager.isDestinationReached(enemyUnit->getPos(), enemyUnit->flowfieldMovement.getFlowfield()))
+	//		{
+	//			enemyUnit->state = UnitState::Idle;
+	//			enemyUnit->blocked = false;
+	//			enemyUnit->destinationReached = true;
+	//		}
+
+	//		// Preparing Raycasting
+	//		Unit raycastingUnit = { enemyUnit->getPos(), enemyUnit->getRadius(), enemyUnit->flowfieldDirection };
+	//		std::vector<Unit> unitsToAvoid;
+
+	//		// Partitioned Units Update
+	//		for (auto& otherUnit : getUnitsInCellAndNeighbors(enemyUnit->cellID))
+	//		{
+	//			if (enemyUnit.get() != otherUnit)
+	//			{
+	//				// Repulsion
+	//				sf::Vector2f repulsion = movementManager.repulsion(enemyUnit->getPos(), otherUnit->getPos(), enemyUnit->body.getRadius(), otherUnit->body.getRadius());
+	//				otherUnit->push(-repulsion);
+	//				enemyUnit->push(repulsion);
+
+	//				// Raycasting Check
+	//				Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
+	//				unitsToAvoid.push_back(avoiding);
+	//			}
+	//		}
+	//		// Raycasting finds any units blocking current unit
+	//		if (unitsToAvoid.size() > 0 && enemyUnit->blocked == false)
+	//		{
+	//			Unit mainUnit = { enemyUnit->getPos(), enemyUnit->getRadius(), enemyUnit->velocity };
+	//			enemyUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
+	//		}
+	//	}
+	//	else {
+	//		enemyUnit->velocity = { 0,0 };
+	//	}
+
+	//	enemyUnit->update(t_deltaTime);
+	//}
+
+	// Groups update
+	for (auto& group : groups)
+	{
+		// Checks if the target of the group has moved from it's current cell to create another flowfield to follow
+		if (group.getTarget().lock() &&
+			group.getTargetLastCellID() != group.getTarget().lock()->cellID)
+		{
+			group.refreshLastCellID();
+
+			mainFlowField->computePath(group.getTarget().lock()->getPos());
+
+			for (auto& units : group.getUnits())
+			{
+				mainFlowField->setDestinationPosition(group.getTarget().lock()->getPos());
+				units->setFlowField(*mainFlowField, UnitState::AttackFollow);
+			}
+		}
+		else {
+			group.getTarget().reset();
+		}
+	}
+}
+
+void UnitHandler::render(sf::RenderWindow& t_window)
+{
+	// Render for players
 	for (auto& playerUnit : playerUnits)
+	{
+		playerUnit->draw(t_window);
+	}
+	// Render for enemies
+	for (auto& enemyUnit : enemyUnits)
+	{
+		enemyUnit->draw(t_window);
+	}
+
+	// Render for hovered unit
+	Units* hovered = Mouse::getInstance().getHoveredUnit();
+	if (hovered != nullptr && hovered->alive == true)
+	{
+		hovered->healthBar.render(t_window);
+	}
+}
+
+void UnitHandler::updateUnits(std::vector<std::shared_ptr<Units>>& t_units, float t_deltaTime)
+{
+	// Update for player units
+	for (auto& playerUnit : t_units)
 	{
 		playerUnit->setCellID();
 
@@ -72,10 +277,10 @@ void UnitHandler::update(float t_deltaTime)
 				playerUnit->velocity = playerUnit->flowfieldMovement.MoveTo(currentPostion);
 			}
 			else if (playerUnit->blocked == true) // Astar Movement
-			{ 
+			{
 				playerUnit->velocity = playerUnit->astarMovement.MoveTo(currentPostion, playerUnit->getRadius());
 
-				if (playerUnit->velocity == sf::Vector2{0.f,0.f}) // NEEDED TO STOP LAG
+				if (playerUnit->velocity == sf::Vector2{ 0.f,0.f }) // NEEDED TO STOP LAG
 				{
 					playerUnit->state = UnitState::Idle;
 				}
@@ -106,7 +311,7 @@ void UnitHandler::update(float t_deltaTime)
 
 					if (playerUnit->blocked == false)
 						playerUnit->velocity = movementManager.applyAlignmentAndCohesion(playerUnit->getPos(), playerUnit->velocity, unitVelocities, unitPositions);
-				}	
+				}
 			}
 
 			// Stop movement when destination is reached
@@ -115,7 +320,7 @@ void UnitHandler::update(float t_deltaTime)
 				playerUnit->state = UnitState::Idle;
 				playerUnit->blocked = false;
 				playerUnit->destinationReached = true;
-			}		
+			}
 
 			// Preparing Raycasting
 			Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
@@ -149,156 +354,75 @@ void UnitHandler::update(float t_deltaTime)
 
 		playerUnit->update(t_deltaTime);
 	}
-
-	// Update for enemy units
-	for (auto& enemyUnit : enemyUnits)
-	{
-		enemyUnit->setCellID();
-
-		// Movement Update
-		if (enemyUnit->state != UnitState::Idle)
-		{
-			sf::Vector2f currentPostion = enemyUnit->getPos();
-
-			// Flowfield Movement
-			if (enemyUnit->blocked == false)
-			{
-				enemyUnit->velocity = enemyUnit->flowfieldMovement.MoveTo(currentPostion);
-			}
-			else // Astar Movement
-			{
-				enemyUnit->velocity = enemyUnit->astarMovement.MoveTo(currentPostion, enemyUnit->getRadius());
-			
-				if (enemyUnit->velocity == sf::Vector2{ 0.f,0.f }) // NEEDED TO STOP LAG
-				{
-					enemyUnit->state = UnitState::Idle;
-				}
-			}
-			// Direct movement 
-			enemyUnit->velocity = movementManager.useDirectMovement(currentPostion, enemyUnit->velocity, enemyUnit->flowfieldMovement.getFlowfield()->destinationPosition, enemyUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
-
-
-			// Compile all needed variables for adding flocking/swarm weights
-			std::vector<sf::Vector2f> unitVelocities;
-			std::vector<sf::Vector2f> unitPositions;
-
-			// If selected units is larger than 1 and contains current this unit
-			for (auto& group : groups)
-			{
-				if (group.getUnits().size() > 1 &&
-					group.containsUnit(enemyUnit.get()))
-				{
-					for (auto& unit : group.getUnits())
-					{
-						if (unit == enemyUnit.get()) continue; // Skips  itself
-
-						unitVelocities.push_back(unit->velocity);
-						unitPositions.push_back(unit->getPos());
-					}
-
-					if (enemyUnit->blocked == false)
-						enemyUnit->velocity = movementManager.applyAlignmentAndCohesion(enemyUnit->getPos(), enemyUnit->velocity, unitVelocities, unitPositions);
-				}
-			}
-
-			// Stop movement when destination is reached
-			if (movementManager.isDestinationReached(enemyUnit->getPos(), enemyUnit->flowfieldMovement.getFlowfield()))
-			{
-				enemyUnit->state = UnitState::Idle;
-				enemyUnit->blocked = false;
-				enemyUnit->destinationReached = true;
-			}
-
-			// Preparing Raycasting
-			Unit raycastingUnit = { enemyUnit->getPos(), enemyUnit->getRadius(), enemyUnit->flowfieldDirection };
-			std::vector<Unit> unitsToAvoid;
-
-			// Partitioned Units Update
-			for (auto& otherUnit : getUnitsInCellAndNeighbors(enemyUnit->cellID))
-			{
-				if (enemyUnit.get() != otherUnit)
-				{
-					// Repulsion
-					sf::Vector2f repulsion = movementManager.repulsion(enemyUnit->getPos(), otherUnit->getPos(), enemyUnit->body.getRadius(), otherUnit->body.getRadius());
-					otherUnit->push(-repulsion);
-					enemyUnit->push(repulsion);
-
-					// Raycasting Check
-					Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
-					unitsToAvoid.push_back(avoiding);
-				}
-			}
-			// Raycasting finds any units blocking current unit
-			if (unitsToAvoid.size() > 0 && enemyUnit->blocked == false)
-			{
-				Unit mainUnit = { enemyUnit->getPos(), enemyUnit->getRadius(), enemyUnit->velocity };
-				enemyUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
-			}
-		}
-		else {
-			enemyUnit->velocity = { 0,0 };
-		}
-
-		enemyUnit->update(t_deltaTime);
-	}
-
-	// Groups update
-	for (auto& group : groups)
-	{
-		// Checks if the target of the group has moved from it's current cell to create another flowfield to follow
-		if (group.getTarget().lock() &&
-			group.getTargetLastCellID() != group.getTarget().lock()->cellID)
-		{
-			group.refreshLastCellID();
-
-			mainFlowField->computePath(group.getTarget().lock()->getPos());
-
-			for (auto& units : group.getUnits())
-			{
-				mainFlowField->setDestinationPosition(group.getTarget().lock()->getPos());
-				units->setFlowField(*mainFlowField, UnitState::AttackFollow);
-			}
-		}
-		else {
-			group.getTarget().reset();
-		}
-	}
-
-	combat.update(playerUnits, enemyUnits, t_deltaTime);
 }
 
-void UnitHandler::render(sf::RenderWindow& t_window)
+void UnitHandler::eraseDeadUnits(std::vector<std::shared_ptr<Units>>& t_units)
 {
-	// Render for players
-	for (auto& playerUnit : playerUnits)
-	{
-		playerUnit->draw(t_window);
-	}
-	// Render for enemies
-	for (auto& enemyUnit : enemyUnits)
-	{
-		enemyUnit->draw(t_window);
-	}
-	// Render for projectiles
-	combat.renderProjectiles(t_window);
+	t_units.erase(
+		std::remove_if(t_units.begin(), t_units.end(),
+			[&](std::shared_ptr<Units>& unit)
+			{
+				// Remove from groups if needed (if you have groups for enemies)
+				if (!unit->alive)
+				{
+					for (auto& group : groups)
+						group.removeUnit(unit.get());
 
-	// Render for hovered unit
-	Units* hovered = Mouse::getInstance().getHoveredUnit();
-	if (hovered != nullptr)
-	{
-		hovered->healthBar.render(t_window);
-	}
+					return true;
+				}
+				return false;
+			}),
+		t_units.end()
+	);
 }
 
-void UnitHandler::spawnUnit(bool t_friendly)
+void UnitHandler::spawnUnit(std::string t_type, sf::Vector2f t_position, bool t_friendly)
 {
- 	FlowfieldMovement flowfieldMovement(*mainFlowField);
+	FlowfieldMovement flowfieldMovement(*mainFlowField);
 	AStarMovement astarMovement(*mainAstar);
 
+	if (t_type == "Soldier")
+	{
+		if (t_friendly)
+			playerUnits.push_back(std::make_unique<Soldier>(t_position, flowfieldMovement, astarMovement));
+		else
+			enemyUnits.push_back(std::make_unique<Soldier>(t_position, flowfieldMovement, astarMovement));
+	}
+	else if (t_type == "Orc")
+	{
+		if (t_friendly)
+			playerUnits.push_back(std::make_unique<Orc>(t_position, flowfieldMovement, astarMovement));
+		else
+			enemyUnits.push_back(std::make_unique<Orc>(t_position, flowfieldMovement, astarMovement));
+
+	}
+}
+
+void UnitHandler::spawnUnitFromBuilding(std::string t_type, sf::Vector2f t_position, sf::Vector2f t_target, bool t_friendly)
+{
+	FlowfieldMovement flowfieldMovement(*mainFlowField);
+	AStarMovement astarMovement(*mainAstar);
+
+	// Pointer to the newly spawned unit
+	std::unique_ptr<Units> newUnit;
+
+	if (t_type == "Soldier")
+	{
+		newUnit = std::make_unique<Soldier>(t_position, flowfieldMovement, astarMovement);
+	}
+	else if (t_type == "Orc")
+	{
+		newUnit = std::make_unique<Orc>(t_position, flowfieldMovement, astarMovement);
+	}
+
+	// Move Order
+	singleMoveOrder(newUnit.get(), t_target);
+
+	// Now push it into the container
 	if (t_friendly)
-		playerUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement, astarMovement));
+		playerUnits.push_back(std::move(newUnit));
 	else
-		enemyUnits.push_back(std::make_unique<Soldier>(Mouse::getInstance().getPosition(), flowfieldMovement, astarMovement));
+		enemyUnits.push_back(std::move(newUnit));
 }
 
 std::shared_ptr<Units> UnitHandler::getFirstUnitInList()
@@ -316,6 +440,37 @@ std::shared_ptr<Units> UnitHandler::getFirstUnitInList()
 		}
 	}
 	return nullptr;
+}
+
+void UnitHandler::singleMoveOrder(Units* t_unit, sf::Vector2f t_position)
+{
+	// Boolean to make sure units continue moving after attacking
+	t_unit->destinationReached = false;
+
+	// Flowfield Handout
+	mainFlowField->computePath(t_position);
+	t_unit->setFlowField(*mainFlowField, UnitState::AttackMove);
+
+	// Astar Handout
+	t_unit->astarMovement.getAstar()->setTarget(t_position);
+	std::vector<AstarUnit> astarUnits;
+	for (auto& playerUnit : playerUnits)
+	{
+		if (playerUnit->getPos() != t_unit->getPos())
+		{
+			AstarUnit astarUnit(playerUnit->getPos(), playerUnit->getDiameter());
+			astarUnits.push_back(astarUnit);
+		}
+	}
+	for (auto& enemyUnit : enemyUnits)
+	{
+		if (enemyUnit->getPos() != t_unit->getPos())
+		{
+			AstarUnit astarUnit(enemyUnit->getPos(), enemyUnit->getDiameter());
+			astarUnits.push_back(astarUnit);
+		}
+	}
+	t_unit->astarMovement.getAstar()->setUnitPositions(astarUnits);
 }
 
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
