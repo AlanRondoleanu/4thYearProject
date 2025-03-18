@@ -4,11 +4,12 @@
 #include "Trigonometry.hpp"
 #include "VectorAlgebra2D.h"
 #include "VectorAlgebra2D.inl"
-#include "UnitStats.h"
+#include "Targetable.h"
 #include "FlowField.h"
 #include "FlowfieldMovement.h"
 #include "AstarMovement.h"
 #include "HealthBars.h"
+
 
 enum class UnitState {
 	Moving,
@@ -24,7 +25,7 @@ enum class UnitFacing {
 	Back
 };
 
-class Units
+class Units : public Targetable
 {
 public:
 	Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AStarMovement t_astarMovement);
@@ -44,6 +45,7 @@ public:
 	bool canAttack();
 	void resetAttackTimer();
 	std::string stateToString();
+	void takeDamage(float amount) override;
 
 	// Health Bars
 	HealthBars healthBar;
@@ -62,7 +64,7 @@ public:
 	
 	int cellID;
 	sf::CircleShape body;
-	std::shared_ptr<Units> currentTarget;
+	std::shared_ptr<Targetable> currentTarget;
 
 	// Texture
 	std::vector<sf::Texture> textures;
@@ -77,19 +79,31 @@ public:
 	bool destinationReached{ true };
 
 	//Getters-Setters
-	sf::Vector2f getPos() { return pos; }
-	float getRadius() { return body.getRadius(); }
+	std::string GetUnitType() const override {
+		return "None";
+	}
+	sf::Vector2f getPos() const override { return pos; }
+	float getRadius() const override{ return body.getRadius(); }
 	float getDiameter() { return body.getRadius() * 2; }
-	bool getAlive() { return alive; }
-	virtual std::string GetUnitType() const = 0;
+	bool getAlive() const override { return alive; }
+	std::shared_ptr<Targetable> getTarget();
+	UnitState getState();
+	UnitStats getUnitStats() const override;
+	int getCellID() const override;
 
 	void setPos(sf::Vector2f t_position);
 	void setAlive(bool t_status) { alive = t_status; }
 	void setCellID();
+	void setState(UnitState t_state);
+	void setTarget(std::shared_ptr<Targetable> t_target);
+
 
 private:
 
 	sf::Vector2f pos{ -100, -100 };
 	float attackCooldown = 0.0f;
+
+protected:
+	int i = 9;
 };
 #endif

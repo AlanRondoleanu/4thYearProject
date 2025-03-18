@@ -1,9 +1,10 @@
 #include "Mouse.h"
 
-void Mouse::updateHovering(const std::vector<std::shared_ptr<Units>>& t_enemies, const std::vector<std::shared_ptr<Units>>& t_player)
+void Mouse::updateHovering(const std::vector<std::shared_ptr<Targetable>>& t_enemies, const std::vector<std::shared_ptr<Targetable>>& t_player)
 {
-	for (const auto& unit : t_enemies)
+	for (const auto& enemy : t_enemies)
 	{
+		std::shared_ptr<Units> unit = std::dynamic_pointer_cast<Units>(enemy);
 		if (unit->body.getGlobalBounds().contains(mousePosition))
 		{
 			hoveredUnit = unit.get();
@@ -12,8 +13,9 @@ void Mouse::updateHovering(const std::vector<std::shared_ptr<Units>>& t_enemies,
 		}
 	}
 
-	for (const auto& unit : t_player)
+	for (const auto& player : t_player)
 	{
+		std::shared_ptr<Units> unit = std::dynamic_pointer_cast<Units>(player);
 		if (unit->body.getGlobalBounds().contains(mousePosition))
 		{
 			hoveredUnit = unit.get();

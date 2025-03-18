@@ -3,7 +3,7 @@
 Orc_Building::Orc_Building(const sf::Vector2f& position, bool isEnemy)
 	: Buildings(position, isEnemy)
 {
-	float size = 64;
+	float size = 100;
 	body.setSize(sf::Vector2f{ size,size });
 	body.setOrigin(size / 2, size / 2);
 	body.setFillColor(sf::Color::Black);
@@ -15,7 +15,7 @@ Orc_Building::Orc_Building(const sf::Vector2f& position, bool isEnemy)
 	sf::FloatRect spriteBounds = sprite.getLocalBounds();
 	float spriteWidth = spriteBounds.width;
 	float spriteHeight = spriteBounds.height;
-	float targetWidth = 64;
+	float targetWidth = size;
 
 	float scaleFactor = targetWidth / spriteWidth;
 	sprite.setScale(scaleFactor, scaleFactor);
@@ -23,7 +23,7 @@ Orc_Building::Orc_Building(const sf::Vector2f& position, bool isEnemy)
 
 void Orc_Building::update(float t_deltaTime)
 {
-	if (isAlive())
+	if (getAlive())
 	{
 		// Health Set
 		healthBar.setHealth(stats.health, stats.max_health);

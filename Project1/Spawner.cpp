@@ -14,7 +14,7 @@ Spawner::Spawner(const sf::Vector2f& position, bool isEnemy)
 
 void Spawner::update(float t_deltaTime)
 {
-	if (isAlive())
+	if (getAlive())
 	{
 		// Health Set
 		healthBar.setHealth(stats.health, stats.max_health);

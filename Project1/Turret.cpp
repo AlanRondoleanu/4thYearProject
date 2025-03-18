@@ -19,7 +19,7 @@ Turret::Turret(const sf::Vector2f& position, bool isEnemy)
 
 void Turret::update(float t_deltaTime)
 {
-	if (isAlive())
+	if (getAlive())
 	{
 		// Health Set
 		healthBar.setHealth(stats.health, stats.max_health);

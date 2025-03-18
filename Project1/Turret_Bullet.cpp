@@ -1,6 +1,6 @@
 #include "Turret_Bullet.h"
 
-Turret_Bullet::Turret_Bullet(sf::Vector2f startPos, sf::Vector2f dir, std::shared_ptr<Units> targetUnit)
+Turret_Bullet::Turret_Bullet(sf::Vector2f startPos, sf::Vector2f dir, std::shared_ptr<Targetable> targetUnit)
 	: Projectile(startPos, dir, 300.0f, 10.0f, targetUnit)
 {
     body.setSize(sf::Vector2f(15.0f, 15.0f));
@@ -13,6 +13,6 @@ Turret_Bullet::Turret_Bullet(sf::Vector2f startPos, sf::Vector2f dir, std::share
 
 void Turret_Bullet::OnImpact()
 {
-    currentTarget->stats.health -= 50;
+    currentTarget->takeDamage(50);
     Deactivate();
 }

@@ -43,7 +43,7 @@ public:
         mousePositionOnScreen = sf::Vector2f(static_cast<float>(mouseTemp.x), static_cast<float>(mouseTemp.y));
         mousePosition = t_window.mapPixelToCoords(mouseTemp, t_camera);
     }
-    void updateHovering(const std::vector<std::shared_ptr<Units>>& t_enemies, const std::vector<std::shared_ptr<Units>>& t_player);
+    void updateHovering(const std::vector<std::shared_ptr<Targetable>>& t_enemies, const std::vector<std::shared_ptr<Targetable>>& t_player);
 
     Units* getHoveredUnit();
     MouseHover hoveredState{ MouseHover::Nothing };

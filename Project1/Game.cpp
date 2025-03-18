@@ -11,14 +11,18 @@
 Game::Game() :
 	m_window{ sf::VideoMode{ 1600U, 1200U, 32U }, "SFML Game" },
 	unitUI(m_window),
+	resourceManager(m_window),
 	m_exitGame{ false },
-	tileMap(flowfield.GRID_WIDTH, flowfield.GRID_HEIGHT, flowfield.CELL_WIDTH)
+	tileMap(flowfield.GRID_WIDTH, flowfield.GRID_HEIGHT, flowfield.CELL_WIDTH),
+	buildingManager(sf::Vector2f{ flowfield.GRID_WIDTH * flowfield.CELL_WIDTH, flowfield.GRID_HEIGHT * flowfield.CELL_WIDTH })
 {
 	// Ui View
 	uiView = m_window.getDefaultView();
 
 	// Giving the flowfield to the unit handler
 	UnitHandler::getInstance().setMovementFields(&flowfield, &astar);
+
+	createCallbacks();
 }
 
 /// <summary>
@@ -100,21 +104,17 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
+	if (sf::Keyboard::F1 == t_event.key.code)
 	{
 		m_exitGame = true;
 	}
-	if (sf::Keyboard::Num1 == t_event.key.code)
+	if (sf::Keyboard::Escape == t_event.key.code)
 	{
 		buildingMode = false;
 	}
-	if (sf::Keyboard::Num2 == t_event.key.code)
-	{
-		buildingMode = true;
-	}
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
-		UnitHandler::getInstance().spawnUnit("Orc", Mouse::getInstance().getPosition(), true);
+		UnitHandler::getInstance().spawnUnit("NightElf", Mouse::getInstance().getPosition(), true);
 	}
 	if (sf::Keyboard::E == t_event.key.code)
 	{
@@ -181,18 +181,25 @@ void Game::processMouse(sf::Event t_event)
 {
 	if (sf::Mouse::Left == t_event.mouseButton.button)
 	{
-		if (!unitUI.isInsideUI(Mouse::getInstance().getPosition()))
+		if (unitUI.insideUI == true)
 		{
-			if (buildingMode)
-				buildingManager.addBuilding("Orc_Building", Mouse::getInstance().getPositionWithGrid(), false);
-
 			// UI Clicking
 			unitUI.HandleClick(Mouse::getInstance().getPositionOnScreen());
+		}
+		else {
+			if (buildingMode && !selectedBuildingType.empty() &&
+				resourceManager.spendResource("Gold", resourceManager.getCost(selectedBuildingType)))
+			{
+				buildingManager.addBuilding(selectedBuildingType, Mouse::getInstance().getPositionWithGrid(), false);
+
+				buildingMode = false;
+				selectedBuildingType = "";
+			}
 		}
 	}
 	if (sf::Mouse::Right == t_event.mouseButton.button)
 	{
-		if (!unitUI.isInsideUI(Mouse::getInstance().getPositionOnScreen()))
+		if (unitUI.insideUI == false)
 		{
 			if (!buildingMode)
 			{
@@ -261,6 +268,13 @@ void Game::update(sf::Time t_deltaTime)
 	float delta = t_deltaTime.asMilliseconds();
 	sf::Vector2f cameraOffset = { cameraMovement.x * delta , cameraMovement.y * delta };
 	camera.move(cameraOffset);
+
+
+	// Every other second update
+	if (tickEverySecond())
+	{
+		resourceManager.addResource("Gold", 1);
+	}
 }
 
 /// <summary>
@@ -286,17 +300,20 @@ void Game::render()
 	// Render for projectiles
 	combat.renderProjectiles(m_window);
 
-	// Selector Render
-	selector.render(m_window);
-
 	// Building Render
 	buildingManager.draw(m_window, buildingMode);
 
 	// Unit rendering
 	UnitHandler::getInstance().render(m_window);
 
-	// Draw UI
+	// Selector Render
+	selector.render(m_window);
+
+	// Draw Unit UI
 	unitUI.Render(m_window, uiView);
+
+	// Draw Resources
+	resourceManager.Render(m_window, uiView);
 
 	// Camera
 	m_window.setView(camera);
@@ -305,3 +322,59 @@ void Game::render()
 	m_window.display();
 }
 
+void Game::createCallbacks()
+{
+	unitUI.SetDefaultButtonAction(0, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "Orc_Building";
+		});
+
+	unitUI.SetDefaultButtonAction(1, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "Soldier_Building";
+		});
+
+	unitUI.SetDefaultButtonAction(2, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "NightElf_Building";
+		});
+
+	unitUI.SetDefaultButtonAction(3, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "4";
+		});
+
+	unitUI.SetDefaultButtonAction(4, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "5";
+		});
+
+	unitUI.SetDefaultButtonAction(5, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "6";
+		});
+
+	unitUI.SetDefaultButtonAction(6, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "7";
+		});
+
+	unitUI.SetDefaultButtonAction(7, [&]() {
+		buildingMode = true;
+		selectedBuildingType = "8";
+		});
+}
+
+bool Game::tickEverySecond()
+{
+	static sf::Clock clock;
+	static float interval = 1.0f; // Seconds
+
+	if (clock.getElapsedTime().asSeconds() >= interval)
+	{
+		clock.restart();
+		return true;
+	}
+
+	return false;
+}

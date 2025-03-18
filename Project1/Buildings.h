@@ -4,11 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include "HealthBars.h"
 #include "UnitStats.h"
-//#include "Units.h"
+#include "Targetable.h"
 
 class Units;
 
-class Buildings
+class Buildings : public Targetable
 {
 public:
 	Buildings(const sf::Vector2f& position, bool isEnemy);
@@ -17,12 +17,13 @@ public:
 	void draw(sf::RenderWindow& t_window);
 	void resetAttackTimer();
 	void loadTileTexture(const std::string& filePath);
+	void takeDamage(float amount) override;
 
 	sf::RectangleShape body;
 	bool placed{ false };
 
 	// Target
-	std::shared_ptr<Units> currentTarget;
+	std::shared_ptr<Targetable> currentTarget;
 
 	// Health Bar
 	HealthBars healthBar;
@@ -35,17 +36,23 @@ public:
 	sf::Sprite sprite;
 
 	//Getters-Setters
-	sf::Vector2f getPos() { return body.getPosition(); }
+	std::string GetUnitType() const override {
+		return "None";
+	}
+	sf::Vector2f getPos() const override { return body.getPosition(); }
 	bool getBlocked() { return blocked; }
 	sf::Vector2f getSpawnPoint();
 	bool isAggressive() { return aggressive; }
-	bool isAlive() { return alive; }
+	bool getAlive() const override { return alive; }
 	bool canAttack();
-	virtual std::string GetUnitType() const = 0;
+	float getRadius() const override { return body.getSize().x; }
+	UnitStats getUnitStats() const override;
+	int getCellID() const override;
 
 	void setAlive(bool t_alive) { alive = t_alive; }
 	void setPos(sf::Vector2f t_position);
 	void setBlocked(bool t_blocked) { blocked = t_blocked; }
+	void setDebug(bool t_debug) { debug = t_debug; }
 
 private:
 	
@@ -57,5 +64,7 @@ protected:
 	bool enemy{ false };
 	bool blocked{ false };
 	bool alive{ true };
+	bool debug{ false };
 };
+
 #endif

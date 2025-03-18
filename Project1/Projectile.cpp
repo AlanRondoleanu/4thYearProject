@@ -1,6 +1,6 @@
 #include "Projectile.h"
 
-Projectile::Projectile(sf::Vector2f t_startPos, sf::Vector2f t_dir, float t_speed, float t_dmg, std::shared_ptr<Units> targetUnit)
+Projectile::Projectile(sf::Vector2f t_startPos, sf::Vector2f t_dir, float t_speed, float t_dmg, std::shared_ptr<Targetable> targetUnit)
 	: position(t_startPos), direction(t_dir), speed(t_speed), damage(t_dmg), active(true), currentTarget(targetUnit)
 {
 
@@ -8,13 +8,26 @@ Projectile::Projectile(sf::Vector2f t_startPos, sf::Vector2f t_dir, float t_spee
 
 void Projectile::Update(float deltaTime)
 {
-	position += direction * speed * deltaTime;
-	body.setPosition(position);
+    sf::Vector2f toTarget = currentTarget->getPos() - position;
+    float length = std::sqrt(toTarget.x * toTarget.x + toTarget.y * toTarget.y);
 
-	if (IsNearTarget())
-	{
-		OnImpact();
-	}
+    if (length != 0)
+    {
+        sf::Vector2f normalizedDirection = toTarget / length;
+
+        // Move toward the target
+        position += normalizedDirection * speed * deltaTime;
+        body.setPosition(position);
+
+        if (IsNearTarget())
+        {
+            OnImpact();
+        }
+    }
+    else
+    {
+        OnImpact();
+    }
 }
 
 void Projectile::Render(sf::RenderWindow& t_window)

@@ -18,14 +18,14 @@ protected:
     sf::RectangleShape body;
 
 public:
-    Projectile(sf::Vector2f t_startPos, sf::Vector2f t_dir, float t_speed, float t_dmg, std::shared_ptr<Units> targetUnit);
+    Projectile(sf::Vector2f t_startPos, sf::Vector2f t_dir, float t_speed, float t_dmg, std::shared_ptr<Targetable> targetUnit);
     virtual ~Projectile() = default;
 
     virtual void Update(float deltaTime);
     virtual void Render(sf::RenderWindow& t_window);
     virtual void OnImpact() = 0;
 
-    std::shared_ptr<Units> currentTarget;
+    std::shared_ptr<Targetable> currentTarget;
 
     bool IsActive() const { return active; }
     bool IsNearTarget() const;

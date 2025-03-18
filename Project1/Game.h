@@ -9,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Buildings.h"
-#include "Spawner.h"
 #include "FlowField.h"
 #include "SelectorTool.h"
 #include "Mouse.h"
@@ -18,6 +17,7 @@
 #include "UnitUI.h"
 #include "BuildingManager.h"
 #include "CombatHandler.h"
+#include "ResourceManager.h"
 #include "TileMap.h"
 
 class Game
@@ -36,6 +36,8 @@ private:
 	void processMouse(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
+	void createCallbacks();
+	bool tickEverySecond();
 
 	// Map Texture Tiling
 	TileMap tileMap;
@@ -60,9 +62,13 @@ private:
 	// Combat
 	CombatHandler combat;
 
+	// Resource Manager
+	ResourceManager resourceManager;
+
 	// Building
 	BuildingManager buildingManager;
 	bool buildingMode{ false };
+	std::string selectedBuildingType{ "" };
 
 	//Camera
 	sf::View camera;

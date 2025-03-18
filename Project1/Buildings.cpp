@@ -12,9 +12,14 @@ Buildings::Buildings(const sf::Vector2f& position, bool isEnemy)
 
 void Buildings::draw(sf::RenderWindow& t_window)
 {
-	//t_window.draw(body);
-    t_window.draw(sprite);
-    healthBar.render(t_window);
+    if (alive)
+    {
+        if (debug)
+            t_window.draw(body);
+        else
+            t_window.draw(sprite);
+        healthBar.render(t_window);
+    }
 }
 
 void Buildings::resetAttackTimer()
@@ -37,6 +42,11 @@ void Buildings::loadTileTexture(const std::string& filePath)
     sf::Vector2u textureSize = texture.getSize();
     sprite.setOrigin(textureSize.x / 2.f, textureSize.y / 2.f);
     sprite.setPosition(body.getPosition());  
+}
+
+void Buildings::takeDamage(float amount)
+{
+    stats.health -= amount;
 }
 
 sf::Vector2f Buildings::getSpawnPoint()
@@ -68,6 +78,16 @@ bool Buildings::canAttack()
     else {
         return false;
     }
+}
+
+UnitStats Buildings::getUnitStats() const
+{
+    return stats;
+}
+
+int Buildings::getCellID() const
+{
+    return 0;
 }
 
 void Buildings::setPos(sf::Vector2f t_position)

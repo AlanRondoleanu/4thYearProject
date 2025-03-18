@@ -67,11 +67,12 @@ void SelectorTool::selectUnits()
     UnitHandler::getInstance().selectedUnits.clear();
     for (auto& unit : UnitHandler::getInstance().playerUnits)
     {
-        bool inside = unit->isInsideSelection(selectionBox.getGlobalBounds());
+        std::shared_ptr<Units> currentUnit = std::dynamic_pointer_cast<Units>(unit);
+        bool inside = currentUnit->isInsideSelection(selectionBox.getGlobalBounds());
         if (inside == true)
         {
-            UnitHandler::getInstance().selectedUnits.insert(unit.get());
-            unit->select();
+            UnitHandler::getInstance().selectedUnits.insert(currentUnit.get());
+            currentUnit->select();
         }
     }
 }

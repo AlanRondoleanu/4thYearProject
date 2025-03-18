@@ -125,6 +125,31 @@ std::string Units::stateToString()
 	
 }
 
+void Units::takeDamage(float amount)
+{
+	stats.health -= amount;
+}
+
+std::shared_ptr<Targetable> Units::getTarget()
+{
+	return currentTarget;
+}
+
+UnitState Units::getState()
+{
+	return state;
+}
+
+UnitStats Units::getUnitStats() const
+{
+	return stats;
+}
+
+int Units::getCellID() const
+{
+	return cellID;
+}
+
 void Units::setPos(sf::Vector2f t_position)
 {
 	pos = t_position;
@@ -139,4 +164,14 @@ void Units::setCellID()
 
 	Cell cell = flowfieldMovement.getFlowfield()->Grid[gridY][gridX];
 	cellID = cell.getID();
+}
+
+void Units::setState(UnitState t_state)
+{
+	state = t_state;
+}
+
+void Units::setTarget(std::shared_ptr<Targetable> t_target)
+{
+	currentTarget = std::move(t_target);
 }

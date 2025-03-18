@@ -8,7 +8,10 @@ Orc::Orc(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AS
 	body.setOrigin({ size, size });
 	body.setFillColor(sf::Color::Blue);
 
-	stats.range = 50;
+	stats.range = 100;
+	stats.attackSpeed = 0.8f;
+	stats.damage = 34;
+	stats.projectile_speed = 400;
 
 	// Texture
 	loadTexture("Assets/Textures/Fantasy/Orc_Back.png");

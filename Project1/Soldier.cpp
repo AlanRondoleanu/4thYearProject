@@ -9,6 +9,9 @@ Soldier::Soldier(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMove
 	body.setFillColor(sf::Color::Blue);
 
 	stats.range = 200;
+	stats.attackSpeed = 1.5f;
+	stats.damage = 15;
+	stats.projectile_speed = 500;
 
 	// Texture
 	loadTexture("Assets/Textures/Sci-fi/Soldier_Back_.png");

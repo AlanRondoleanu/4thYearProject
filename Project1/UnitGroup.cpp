@@ -1,11 +1,11 @@
 #include "UnitGroup.h"
 
-void UnitGroup::addUnit(Units* t_unit)
+void UnitGroup::addUnit(Targetable* t_unit)
 {
     units.push_back(t_unit);
 }
 
-void UnitGroup::removeUnit(Units* t_unit)
+void UnitGroup::removeUnit(Targetable* t_unit)
 {
     auto it = std::remove(units.begin(), units.end(), t_unit);
     if (it != units.end()) 
@@ -14,13 +14,13 @@ void UnitGroup::removeUnit(Units* t_unit)
     }
 }
 
-void UnitGroup::targetUnit(std::weak_ptr<Units> t_unit)
+void UnitGroup::targetUnit(std::weak_ptr<Targetable> t_unit)
 {
     targetedUnit = t_unit;
-    targetLastCellID = t_unit.lock()->cellID;
+    targetLastCellID = t_unit.lock()->getCellID();
 }
 
-const std::vector<Units*>& UnitGroup::getUnits() const
+const std::vector<Targetable*>& UnitGroup::getUnits() const
 {
     return units;
 }
