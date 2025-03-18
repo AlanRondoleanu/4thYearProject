@@ -158,6 +158,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementManager.cpp" />
+    <ClCompile Include="Nexus.cpp" />
+    <ClCompile Include="Nexus_Fantasy.cpp" />
     <ClCompile Include="NightElf.cpp" />
     <ClCompile Include="NightElf_Building.cpp" />
     <ClCompile Include="NightElf_Bullet.cpp" />
@@ -198,6 +200,8 @@
     <ClInclude Include="HealthBars.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementManager.h" />
+    <ClInclude Include="Nexus.h" />
+    <ClInclude Include="Nexus_Fantasy.h" />
     <ClInclude Include="NightElf.h" />
     <ClInclude Include="NightElf_Building.h" />
     <ClInclude Include="NightElf_Bullet.h" />

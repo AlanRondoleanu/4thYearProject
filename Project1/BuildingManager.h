@@ -12,6 +12,8 @@
 #include "UnitHandler.h"
 #include "Turret.h"
 #include "Turret_Fantasy.h"
+#include "Nexus.h"
+#include "Nexus_Fantasy.h"
 #include "Placement_Building.h"
 
 class BuildingManager

@@ -70,7 +70,7 @@ public:
 	// Texture
 	std::vector<sf::Texture> textures;
 	sf::Sprite sprite;
-	UnitFacing currentFacing{UnitFacing::Front};
+	UnitFacing currentFacing;
 
 	//Booleans
 	bool enemy{ false };

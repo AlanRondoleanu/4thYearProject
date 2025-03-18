@@ -38,15 +38,21 @@ void Units::update(float t_deltaTime)
 			setAlive(false);
 		}
 
-		if (velocity.y < 0 && currentFacing != UnitFacing::Back) 
+		if (velocity.y < 0) 
 		{
-			swapTexture(0);
-			currentFacing = UnitFacing::Back;
+			if (currentFacing != UnitFacing::Back)
+			{
+				swapTexture(0);
+				currentFacing = UnitFacing::Back;
+			}
 		}
-		else if (velocity.y > 0 && currentFacing != UnitFacing::Front) 
+		else if (velocity.y > 0) 
 		{
-			swapTexture(1);
-			currentFacing = UnitFacing::Front;
+			if (currentFacing != UnitFacing::Front)
+			{
+				swapTexture(1);
+				currentFacing = UnitFacing::Front;
+			}
 		}
 
 		tickEverySecond();

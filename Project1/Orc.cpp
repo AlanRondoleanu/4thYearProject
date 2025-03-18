@@ -8,7 +8,7 @@ Orc::Orc(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement, AS
 	body.setOrigin({ size, size });
 	body.setFillColor(sf::Color::Blue);
 
-	stats.range = 100;
+	stats.range = 75;
 	stats.attackSpeed = 0.8f;
 	stats.damage = 34;
 	stats.projectile_speed = 400;

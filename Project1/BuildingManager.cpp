@@ -10,13 +10,13 @@ BuildingManager::BuildingManager(sf::Vector2f t_mapSize)
 
 	// Needed Buildings
 	sf::Vector2f playerSpawner = { mapSize.x / 2, mapSize.y * 0.95f };
-	playerBuildings.push_back(std::make_unique<Soldier_Building>(playerSpawner, false));
+	//playerBuildings.push_back(std::make_unique<Orc_Building>(playerSpawner, false));
 	sf::Vector2f enemySpawner = { mapSize.x / 2, mapSize.y * 0.05f };
-	enemyBuildings.push_back(std::make_unique<Soldier_Building>(enemySpawner, true));
+	//enemyBuildings.push_back(std::make_unique<Soldier_Building>(enemySpawner, true));
 	sf::Vector2f playerTurret = { mapSize.x / 2, mapSize.y * 0.85f };
-	playerBuildings.push_back(std::make_unique<Turret_Fantasy>(playerTurret, false));
+	playerBuildings.push_back(std::make_unique<Nexus_Fantasy>(playerTurret, false));
 	sf::Vector2f enemyTurret = { mapSize.x / 2, mapSize.y * 0.15f };
-	enemyBuildings.push_back(std::make_unique<Turret>(enemyTurret, true));
+	enemyBuildings.push_back(std::make_unique<Nexus>(enemyTurret, true));
 	sf::Vector2f playerTurret2 = { mapSize.x / 2, mapSize.y * 0.65f };
 	playerBuildings.push_back(std::make_unique<Turret_Fantasy>(playerTurret2, false));
 	sf::Vector2f enemyTurret2 = { mapSize.x / 2, mapSize.y * 0.35f };

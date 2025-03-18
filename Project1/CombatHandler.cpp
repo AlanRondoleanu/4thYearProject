@@ -66,8 +66,13 @@ void CombatHandler::handleBuildingAttack(Buildings& attacker, std::shared_ptr<Ta
 	// Decide which projectile to create based on unit type
 	if (attacker.GetUnitType() == "Turret")
 		newProjectile = std::make_shared<Turret_Bullet>(attacker.getPos(), direction, target);
-	if (attacker.GetUnitType() == "Turret_Fantasy")
+	else if (attacker.GetUnitType() == "Turret_Fantasy")
 		newProjectile = std::make_shared<Turret_Bullet>(attacker.getPos(), direction, target);
+	else if (attacker.GetUnitType() == "Nexus")
+		newProjectile = std::make_shared<Turret_Bullet>(attacker.getPos(), direction, target);
+	else if (attacker.GetUnitType() == "Nexus_Fantasy")
+		newProjectile = std::make_shared<Turret_Bullet>(attacker.getPos(), direction, target);
+
 
 	if (newProjectile)
 		projectiles.push_back(newProjectile);
