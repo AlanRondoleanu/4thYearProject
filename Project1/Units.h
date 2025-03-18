@@ -64,6 +64,7 @@ public:
 	
 	int cellID;
 	sf::CircleShape body;
+	sf::CircleShape selectCircle;
 	std::shared_ptr<Targetable> currentTarget;
 
 	// Texture
@@ -96,7 +97,7 @@ public:
 	void setCellID();
 	void setState(UnitState t_state);
 	void setTarget(std::shared_ptr<Targetable> t_target);
-
+	bool tickEverySecond();
 
 private:
 

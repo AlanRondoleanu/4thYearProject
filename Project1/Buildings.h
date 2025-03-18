@@ -45,7 +45,7 @@ public:
 	bool isAggressive() { return aggressive; }
 	bool getAlive() const override { return alive; }
 	bool canAttack();
-	float getRadius() const override { return body.getSize().x; }
+	float getRadius() const override { return 32; }
 	UnitStats getUnitStats() const override;
 	int getCellID() const override;
 

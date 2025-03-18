@@ -188,10 +188,16 @@ void Game::processMouse(sf::Event t_event)
 		}
 		else {
 			if (buildingMode && !selectedBuildingType.empty() &&
-				resourceManager.spendResource("Gold", resourceManager.getCost(selectedBuildingType)))
+				resourceManager.checkCost("Gold", resourceManager.getCost(selectedBuildingType)))
 			{
-				buildingManager.addBuilding(selectedBuildingType, Mouse::getInstance().getPositionWithGrid(), false);
-
+				if (buildingManager.addBuilding(selectedBuildingType, Mouse::getInstance().getPositionWithGrid(), false))
+				{
+					resourceManager.spendResource("Gold", resourceManager.getCost(selectedBuildingType));
+					buildingMode = false;
+					selectedBuildingType = "";
+				}			
+			}
+			else {
 				buildingMode = false;
 				selectedBuildingType = "";
 			}
@@ -297,14 +303,14 @@ void Game::render()
 		marker.render(m_window);
 	}
 
-	// Render for projectiles
-	combat.renderProjectiles(m_window);
-
 	// Building Render
 	buildingManager.draw(m_window, buildingMode);
 
 	// Unit rendering
 	UnitHandler::getInstance().render(m_window);
+
+	// Render for projectiles
+	combat.renderProjectiles(m_window);
 
 	// Selector Render
 	selector.render(m_window);
@@ -340,27 +346,22 @@ void Game::createCallbacks()
 		});
 
 	unitUI.SetDefaultButtonAction(3, [&]() {
-		buildingMode = true;
 		selectedBuildingType = "4";
 		});
 
 	unitUI.SetDefaultButtonAction(4, [&]() {
-		buildingMode = true;
 		selectedBuildingType = "5";
 		});
 
 	unitUI.SetDefaultButtonAction(5, [&]() {
-		buildingMode = true;
 		selectedBuildingType = "6";
 		});
 
 	unitUI.SetDefaultButtonAction(6, [&]() {
-		buildingMode = true;
 		selectedBuildingType = "7";
 		});
 
 	unitUI.SetDefaultButtonAction(7, [&]() {
-		buildingMode = true;
 		selectedBuildingType = "8";
 		});
 }

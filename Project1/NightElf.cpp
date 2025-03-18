@@ -11,7 +11,7 @@ NightElf::NightElf(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMo
 	stats.range = 300;
 	stats.attackSpeed = 0.5f;
 	stats.damage = 25;
-	stats.projectile_speed = 300;
+	stats.projectile_speed = 400;
 
 	// Texture
 	loadTexture("Assets/Textures/Fantasy/NightElf_Back.png");

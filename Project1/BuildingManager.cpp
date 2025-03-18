@@ -6,18 +6,27 @@ BuildingManager::BuildingManager(sf::Vector2f t_mapSize)
 	placementTemp = new Placement_Building({0,0}, false);
 	placementTemp->setDebug(true);
 
-	sf::Vector2f playerSpawner = { 625, 2425 };
-	sf::Vector2f playerTurret = { 625, 2025 };
-	sf::Vector2f enemySpawner = { 625, 75 };
-	sf::Vector2f enemyTurret = { 625, 475 };
+	sf::Vector2f mapSize = { 1250, 2500 };
 
-	playerBuildings.push_back(std::make_unique<Spawner>(playerSpawner, false));
-	playerBuildings.push_back(std::make_unique<Turret>(playerTurret, false));
-	enemyBuildings.push_back(std::make_unique<Spawner>(enemySpawner, true));
+	// Needed Buildings
+	sf::Vector2f playerSpawner = { mapSize.x / 2, mapSize.y * 0.95f };
+	playerBuildings.push_back(std::make_unique<Soldier_Building>(playerSpawner, false));
+	sf::Vector2f enemySpawner = { mapSize.x / 2, mapSize.y * 0.05f };
+	enemyBuildings.push_back(std::make_unique<Soldier_Building>(enemySpawner, true));
+	sf::Vector2f playerTurret = { mapSize.x / 2, mapSize.y * 0.85f };
+	playerBuildings.push_back(std::make_unique<Turret_Fantasy>(playerTurret, false));
+	sf::Vector2f enemyTurret = { mapSize.x / 2, mapSize.y * 0.15f };
 	enemyBuildings.push_back(std::make_unique<Turret>(enemyTurret, true));
+	sf::Vector2f playerTurret2 = { mapSize.x / 2, mapSize.y * 0.65f };
+	playerBuildings.push_back(std::make_unique<Turret_Fantasy>(playerTurret2, false));
+	sf::Vector2f enemyTurret2 = { mapSize.x / 2, mapSize.y * 0.35f };
+	enemyBuildings.push_back(std::make_unique<Turret>(enemyTurret2, true));
+
+	// Additional Buildings
+
 }
 
-void BuildingManager::addBuilding(std::string t_type, const sf::Vector2f& position, bool isEnemy)
+bool BuildingManager::addBuilding(std::string t_type, const sf::Vector2f& position, bool isEnemy)
 {
 	if (placementTemp->body.getFillColor() == sf::Color::Green)
 	{
@@ -37,7 +46,9 @@ void BuildingManager::addBuilding(std::string t_type, const sf::Vector2f& positi
 		{
 			playerBuildings.push_back(std::make_unique<NightElf_Building>(position, isEnemy));
 		}
+		return true;
 	}
+	return false;
 }
 
 void BuildingManager::update(float deltaTime, bool buildingMode)

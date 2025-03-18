@@ -40,5 +40,9 @@ bool Projectile::IsNearTarget() const
 	float dx = position.x - currentTarget->getPos().x;
 	float dy = position.y - currentTarget->getPos().y;
 	float distSq = dx * dx + dy * dy;
-	return distSq <= (currentTarget->getRadius() * currentTarget->getRadius());
+
+    float targetRadius = currentTarget->getRadius();
+    float targetDiameter = targetRadius * targetRadius;
+
+	return distSq <= targetDiameter;
 }

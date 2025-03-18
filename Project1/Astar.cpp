@@ -1,4 +1,6 @@
 #include "Astar.h"
+#include <iostream>
+
 
 Astar::Astar()
 {
@@ -21,10 +23,16 @@ std::vector<sf::Vector2f> Astar::FindPath(sf::Vector2f start, float pathfindingU
     openSet.push(startNode);
     allNodes[GridToIndex(startGrid)] = startNode;
 
-    // Stop Astar if no path is found
+    // If target cell is blocked, find the nearest valid cell
     if (!IsWalkable(targetGrid, unitPositions, pathfindingUnitSize))
     {
-        return {};
+        targetGrid = FindNearestWalkableCell(targetGrid, 5, pathfindingUnitSize); // 5 is a reasonable radius
+
+        if (targetGrid == sf::Vector2i(-1, -1))
+        {
+            // Still no valid cell found after searching
+            return {};
+        }
     }
 
     while (!openSet.empty()) 
@@ -92,8 +100,11 @@ float Astar::Heuristic(sf::Vector2i a, sf::Vector2i b)
 bool Astar::IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit>& units, float pathfindingUnitSize)
 {
     // Check bounds
-    if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= gridSize.x || gridPos.y >= gridSize.y)
+    if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= gridSize.x || gridPos.y >= gridSize.y) 
+    {
+        std::cout << "out" << std::endl;
         return false;
+    }
 
     float pathfindingUnitGridSize = pathfindingUnitSize / cellSize;
     float pathfindingUnitRadius = pathfindingUnitGridSize / 2;
@@ -118,6 +129,31 @@ bool Astar::IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit>& units
     }
 
     return true;
+}
+
+sf::Vector2i Astar::FindNearestWalkableCell(sf::Vector2i blockedCell, int maxSearchRadius, float pathfindingUnitSize)
+{
+    for (int radius = 1; radius <= maxSearchRadius; ++radius)
+    {
+        for (int dx = -radius; dx <= radius; ++dx)
+        {
+            for (int dy = -radius; dy <= radius; ++dy)
+            {
+                // Skip center cell
+                if (dx == 0 && dy == 0) continue;
+
+                sf::Vector2i neighbor = blockedCell + sf::Vector2i(dx, dy);
+
+                if (IsWalkable(neighbor, unitPositions, pathfindingUnitSize))
+                {
+                    return neighbor;
+                }
+            }
+        }
+    }
+
+    // No valid cell found
+    return sf::Vector2i(-1, -1); // Sentinel: invalid cell
 }
 
 std::vector<sf::Vector2f> Astar::ReconstructPath(Node node)

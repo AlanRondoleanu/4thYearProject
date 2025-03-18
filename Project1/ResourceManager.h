@@ -14,7 +14,8 @@ public:
 
     void setGoldString(int t_int);
     void addResource(const std::string& type, int amount);
-    bool spendResource(const std::string& type, int amount);
+    bool checkCost(const std::string& type, int amount);
+    void spendResource(const std::string& type, int amount);
     int getResource(const std::string& type) const;
     int getCost(std::string t_typename);
 

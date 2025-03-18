@@ -178,6 +178,7 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="Turret_Bullet.cpp" />
+    <ClCompile Include="Turret_Fantasy.cpp" />
     <ClCompile Include="UnitGroup.cpp" />
     <ClCompile Include="UnitHandler.cpp" />
     <ClCompile Include="Units.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="Turret_Bullet.h" />
+    <ClInclude Include="Turret_Fantasy.h" />
     <ClInclude Include="UnitGroup.h" />
     <ClInclude Include="UnitHandler.h" />
     <ClInclude Include="Units.h" />

@@ -64,6 +64,7 @@ private:
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Targetable* t_target);
 	void aStarHandout(sf::Vector2f postion, Units* unit);
 	std::shared_ptr<Targetable> findSharedPtrFromRaw(Targetable* rawPtr);
+	std::vector<AstarUnit> AStarUnitHandOut(Units* t_unit);
 
 	int const MAX_UNITS{ 100 };
 

@@ -4,6 +4,14 @@ Units::Units(sf::Vector2f t_startPosition, FlowfieldMovement t_flowfieldMovement
 	pos(t_startPosition), flowfieldMovement(t_flowfieldMovement), astarMovement(t_astarMovement)
 {
 	setPos(pos);
+
+	selectCircle.setRadius(20);
+	selectCircle.setOrigin(20, 20);
+	selectCircle.setOutlineThickness(3);
+	selectCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
+	selectCircle.setFillColor(sf::Color(0,0,0,0));
+	selectCircle.setScale(1, 0.5f);
+	selectCircle.setPosition(pos.x, pos.y);
 }
 Units::~Units() {}
 
@@ -37,10 +45,11 @@ void Units::update(float t_deltaTime)
 		}
 		else if (velocity.y > 0 && currentFacing != UnitFacing::Front) 
 		{
-
 			swapTexture(1);
 			currentFacing = UnitFacing::Front;
 		}
+
+		tickEverySecond();
 	}
 }
 
@@ -69,7 +78,8 @@ void Units::draw(sf::RenderWindow& t_window)
 {
 	if (getAlive() == true)
 	{
-		t_window.draw(body);
+		//t_window.draw(body);
+		t_window.draw(selectCircle);
 		t_window.draw(sprite);
 	}
 }
@@ -82,12 +92,12 @@ void Units::setFlowField(FlowField t_field, UnitState t_state)
 
 void Units::select()
 {
-	body.setFillColor(sf::Color::Green);
+	selectCircle.setOutlineColor(sf::Color::Green);
 }
 
 void Units::deselect()
 {
-	body.setFillColor(sf::Color::Blue);
+	selectCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
 }
 
 bool Units::isInsideSelection(const sf::FloatRect& selection) const
@@ -154,6 +164,7 @@ void Units::setPos(sf::Vector2f t_position)
 {
 	pos = t_position;
 	body.setPosition(pos); 
+	selectCircle.setPosition(pos.x, pos.y + 25);
 	sprite.setPosition(pos);
 }
 
@@ -174,4 +185,19 @@ void Units::setState(UnitState t_state)
 void Units::setTarget(std::shared_ptr<Targetable> t_target)
 {
 	currentTarget = std::move(t_target);
+}
+
+bool Units::tickEverySecond()
+{
+	static sf::Clock clock;
+	static float interval = 3.0f; // Seconds
+
+	if (clock.getElapsedTime().asSeconds() >= interval)
+	{
+		clock.restart();
+		blocked = false;
+		return true;
+	}
+
+	return false;
 }

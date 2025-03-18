@@ -39,7 +39,7 @@ public:
     void setUnitPositions(std::vector<AstarUnit> t_positions) { unitPositions = t_positions; }
 
 private:
-    sf::Vector2u gridSize{ 50,50 };
+    sf::Vector2u gridSize{ 25 * 2, 50 * 2 };
     int cellSize = 25;
     sf::Vector2f target;
     std::vector<AstarUnit> unitPositions;
@@ -60,6 +60,8 @@ private:
 
     // Check if a grid position is walkable
     bool IsWalkable(sf::Vector2i gridPos, const std::vector<AstarUnit>& units, float pathfindingUnitSize);
+
+    sf::Vector2i FindNearestWalkableCell(sf::Vector2i blockedCell, int maxSearchRadius, float pathfindingUnitSize);
 
     // Reconstruct the path from the goal node
     std::vector<sf::Vector2f> ReconstructPath(Node node);

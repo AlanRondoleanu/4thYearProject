@@ -165,6 +165,9 @@
     <ClCompile Include="NightElf_Bullet.cpp">
       <Filter>Source Files\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="Turret_Fantasy.cpp">
+      <Filter>Source Files\Buildings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -277,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="NightElf_Bullet.h">
       <Filter>Header Files\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Turret_Fantasy.h">
+      <Filter>Header Files\Buildings</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

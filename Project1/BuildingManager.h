@@ -11,13 +11,14 @@
 #include "Mouse.h"
 #include "UnitHandler.h"
 #include "Turret.h"
+#include "Turret_Fantasy.h"
 #include "Placement_Building.h"
 
 class BuildingManager
 {
 public:
     BuildingManager(sf::Vector2f t_mapSize);
-    void addBuilding(std::string t_type, const sf::Vector2f& position, bool isEnemy);
+    bool addBuilding(std::string t_type, const sf::Vector2f& position, bool isEnemy);
     void update(float deltaTime, bool buildingMode);
     void draw(sf::RenderWindow& window, bool buildingMode);
 

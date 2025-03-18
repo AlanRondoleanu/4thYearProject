@@ -4,7 +4,6 @@
 Buildings::Buildings(const sf::Vector2f& position, bool isEnemy)
 {
 	setPos(position);
-	body.setPosition(position);
 	body.setFillColor(sf::Color::Black);
 	placed = true;
 	enemy = isEnemy;
@@ -18,6 +17,7 @@ void Buildings::draw(sf::RenderWindow& t_window)
             t_window.draw(body);
         else
             t_window.draw(sprite);
+
         healthBar.render(t_window);
     }
 }

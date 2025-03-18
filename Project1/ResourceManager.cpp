@@ -3,7 +3,7 @@
 ResourceManager::ResourceManager(sf::RenderWindow& window)
 {
     // Initialize starting resources
-    resources["Gold"] = 1000;
+    resources["Gold"] = 500;
     setGoldString(resources["Gold"]);
 
     // Load the font (use your font path)
@@ -59,19 +59,22 @@ void ResourceManager::addResource(const std::string& type, int amount)
     setGoldString(resources[type]);
 }
 
-bool ResourceManager::spendResource(const std::string& type, int amount)
+bool ResourceManager::checkCost(const std::string& type, int amount)
 {
     if (resources[type] >= amount)
     {
-        resources[type] -= amount;
-        setGoldString(resources[type]);
         return true;
     }
     else
     {
-        std::cout << "Not enough " << type << "!\n";
         return false;
     }
+}
+
+void ResourceManager::spendResource(const std::string& type, int amount)
+{
+    resources[type] -= amount;
+    setGoldString(resources[type]);
 }
 
 int ResourceManager::getResource(const std::string& type) const

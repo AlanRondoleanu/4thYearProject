@@ -85,6 +85,34 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 			playerUnit->velocity = { 0,0 };
 		}
 
+		// Preparing Raycasting
+		Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
+		std::vector<Unit> unitsToAvoid;
+
+		// Partitioned Units Update
+		for (auto& partitionUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
+		{
+			Units* otherUnit = dynamic_cast<Units*>(partitionUnit);
+
+			if (playerUnit.get() != otherUnit)
+			{
+				// Repulsion
+				sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
+				otherUnit->push(-repulsion);
+				playerUnit->push(repulsion);
+
+				// Raycasting Check
+				Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
+				unitsToAvoid.push_back(avoiding);
+			}
+		}
+		// Raycasting finds any units blocking current unit
+		if (unitsToAvoid.size() > 0 && playerUnit->blocked == false)
+		{
+			Unit mainUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->velocity };
+			playerUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
+		}
+
 		// Movement Update
 		if (playerUnit->state != UnitState::Idle && playerUnit->state != UnitState::Attacking)
 		{
@@ -96,6 +124,7 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 			}
 			else if (playerUnit->blocked == true) // Astar Movement
 			{
+				playerUnit->astarMovement.getAstar()->setUnitPositions(AStarUnitHandOut(playerUnit.get()));
 				playerUnit->velocity = playerUnit->astarMovement.MoveTo(currentPostion, playerUnit->getRadius());
 
 				if (playerUnit->velocity == sf::Vector2{ 0.f,0.f }) // NEEDED TO STOP LAG
@@ -103,7 +132,6 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 					playerUnit->state = UnitState::Idle;
 				}
 			}
-			//std::cout << playerUnit->stateToString() << std::endl;
 
 			// Direct movement 
 			playerUnit->velocity = movementManager.useDirectMovement(currentPostion, playerUnit->velocity, playerUnit->flowfieldMovement.getFlowfield()->destinationPosition, playerUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
@@ -141,33 +169,6 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 				playerUnit->destinationReached = true;
 			}
 
-			// Preparing Raycasting
-			Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
-			std::vector<Unit> unitsToAvoid;
-
-			// Partitioned Units Update
-			for (auto& partitionUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
-			{
-				Units* otherUnit = dynamic_cast<Units*>(partitionUnit);
-
-				if (playerUnit.get() != otherUnit)
-				{
-					// Repulsion
-					sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
-					otherUnit->push(-repulsion);
-					playerUnit->push(repulsion);
-
-					// Raycasting Check
-					Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
-					unitsToAvoid.push_back(avoiding);
-				}
-			}
-			// Raycasting finds any units blocking current unit
-			if (unitsToAvoid.size() > 0 && playerUnit->blocked == false)
-			{
-				Unit mainUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->velocity };
-				playerUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
-			}
 		}
 		else {
 			playerUnit->velocity = { 0,0 };
@@ -284,26 +285,6 @@ void UnitHandler::singleMoveOrder(Units* t_unit, sf::Vector2f t_position)
 
 	// Astar Handout
 	t_unit->astarMovement.getAstar()->setTarget(t_position);
-	std::vector<AstarUnit> astarUnits;
-	for (auto& unit : playerUnits)
-	{
-		std::shared_ptr<Units> playerUnit = std::dynamic_pointer_cast<Units>(unit);
-		if (playerUnit->getPos() != t_unit->getPos())
-		{
-			AstarUnit astarUnit(playerUnit->getPos(), playerUnit->getDiameter());
-			astarUnits.push_back(astarUnit);
-		}
-	}
-	for (auto& unit : enemyUnits)
-	{
-		std::shared_ptr<Units> enemyUnit = std::dynamic_pointer_cast<Units>(unit);
-		if (enemyUnit->getPos() != t_unit->getPos())
-		{
-			AstarUnit astarUnit(enemyUnit->getPos(), enemyUnit->getDiameter());
-			astarUnits.push_back(astarUnit);
-		}
-	}
-	t_unit->astarMovement.getAstar()->setUnitPositions(astarUnits);
 }
 
 std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
@@ -341,26 +322,6 @@ std::vector<sf::Vector2f> UnitHandler::formationMoveOrder(UnitState t_state)
 
 		// Astar Handout
 		selected->astarMovement.getAstar()->setTarget(formationPositions[i]);
-		std::vector<AstarUnit> astarUnits;
-		for (auto& unit : playerUnits)
-		{
-			std::shared_ptr<Units> playerUnit = std::dynamic_pointer_cast<Units>(unit);
-			if (playerUnit->getPos() != selected->getPos())
-			{
-				AstarUnit astarUnit(playerUnit->getPos(), playerUnit->getDiameter());
-				astarUnits.push_back(astarUnit);
-			}
-		}
-		for (auto& unit : enemyUnits)
-		{
-			std::shared_ptr<Units> enemyUnit = std::dynamic_pointer_cast<Units>(unit);
-			if (enemyUnit->getPos() != selected->getPos())
-			{
-				AstarUnit astarUnit(enemyUnit->getPos(), enemyUnit->getDiameter());
-				astarUnits.push_back(astarUnit);
-			}
-		}
-		selected->astarMovement.getAstar()->setUnitPositions(astarUnits);
 
 		// Increment
 		i++;
@@ -553,6 +514,29 @@ std::shared_ptr<Targetable> UnitHandler::findSharedPtrFromRaw(Targetable* rawPtr
 	}
 
 	return nullptr; // Not found
+}
+
+std::vector<AstarUnit> UnitHandler::AStarUnitHandOut(Units* t_unit)
+{
+	std::vector<AstarUnit> astarUnits;
+	
+	for (auto& unit : playerUnits)
+	{
+		if (unit.get() != t_unit)
+		{
+			AstarUnit astarUnit(unit->getPos(), unit->getRadius() * 2);
+			astarUnits.push_back(astarUnit);
+		}
+	}
+	for (auto& unit : enemyUnits)
+	{
+		if (unit.get() != t_unit)
+		{
+			AstarUnit astarUnit(unit->getPos(), unit->getRadius() * 2);
+			astarUnits.push_back(astarUnit);
+		}
+	}
+	return astarUnits;
 }
 
 Cell* UnitHandler::selectCell()
