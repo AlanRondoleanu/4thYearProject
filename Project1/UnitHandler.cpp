@@ -7,14 +7,16 @@ void UnitHandler::update(float t_deltaTime)
 	eraseDeadUnits(enemyUnits);
 
 	// Spacial Partition
-	partitionedMap.clear();
-	for (auto& playerUnit : playerUnits) // Player Units
+	partitioning.clear();
+
+	for (auto& playerUnit : playerUnits)
 	{
-		partitionedMap[playerUnit->getCellID()].push_back(playerUnit.get());
+		partitioning.registerUnit(playerUnit.get(), playerUnit->getCellID());
 	}
-	for (auto& enemyUnit : enemyUnits) // Player Units
+
+	for (auto& enemyUnit : enemyUnits)
 	{
-		partitionedMap[enemyUnit->getCellID()].push_back(enemyUnit.get());
+		partitioning.registerUnit(enemyUnit.get(), enemyUnit->getCellID());
 	}
 
 	// Update for units
@@ -85,32 +87,13 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 			playerUnit->velocity = { 0,0 };
 		}
 
-		// Preparing Raycasting
-		Unit raycastingUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->flowfieldDirection };
-		std::vector<Unit> unitsToAvoid;
+		// Repulsion
+		movementManager.repulsion(*playerUnit.get(), partitioning);
 
-		// Partitioned Units Update
-		for (auto& partitionUnit : getUnitsInCellAndNeighbors(playerUnit->cellID))
-		{
-			Units* otherUnit = dynamic_cast<Units*>(partitionUnit);
-
-			if (playerUnit.get() != otherUnit)
-			{
-				// Repulsion
-				sf::Vector2f repulsion = movementManager.repulsion(playerUnit->getPos(), otherUnit->getPos(), playerUnit->body.getRadius(), otherUnit->body.getRadius());
-				otherUnit->push(-repulsion);
-				playerUnit->push(repulsion);
-
-				// Raycasting Check
-				Unit avoiding = { otherUnit->getPos(), otherUnit->getRadius() };
-				unitsToAvoid.push_back(avoiding);
-			}
-		}
 		// Raycasting finds any units blocking current unit
-		if (unitsToAvoid.size() > 0 && playerUnit->blocked == false)
+		if (playerUnit->blocked == false)
 		{
-			Unit mainUnit = { playerUnit->getPos(), playerUnit->getRadius(), playerUnit->velocity };
-			playerUnit->blocked = raycasting.isBlocked(mainUnit, unitsToAvoid);
+			playerUnit->blocked = raycasting.isBlocked(*playerUnit, partitioning);
 		}
 
 		// Movement Update
@@ -135,7 +118,6 @@ void UnitHandler::updateUnits(std::vector<std::shared_ptr<Targetable>>& t_units,
 
 			// Direct movement 
 			playerUnit->velocity = movementManager.useDirectMovement(currentPostion, playerUnit->velocity, playerUnit->flowfieldMovement.getFlowfield()->destinationPosition, playerUnit->flowfieldMovement.getFlowfield()->destination->getPosition());
-
 
 			// Compile all needed variables for adding flocking/swarm weights
 			std::vector<sf::Vector2f> unitVelocities;
@@ -360,31 +342,6 @@ sf::Vector2f UnitHandler::attackFollowMoveOrder(Units* t_target)
 	return mousePosition;
 }
 
-
-std::vector<Targetable*> UnitHandler::getUnitsInCellAndNeighbors(int cellID)
-{
-	std::vector<Targetable*> result;
-
-	// Neighboring cell offsets including the current cell
-	std::vector<int> offsets = 
-	{ -FlowField::GRID_WIDTH - 1, -FlowField::GRID_WIDTH, -FlowField::GRID_WIDTH + 1,
-	  -1, 0, 1,
-	  FlowField::GRID_WIDTH - 1, FlowField::GRID_WIDTH, FlowField::GRID_WIDTH + 1 
-	};
-
-	for (int offset : offsets) 
-	{
-		int neighborCellID = cellID + offset;
-
-		if (partitionedMap.find(neighborCellID) != partitionedMap.end()) 
-		{
-			result.insert(result.end(), partitionedMap[neighborCellID].begin(), partitionedMap[neighborCellID].end());
-		}
-	}
-
-	return result;
-}
-
 void UnitHandler::createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits)
 {
 	UnitGroup newGroup;
@@ -519,23 +476,18 @@ std::shared_ptr<Targetable> UnitHandler::findSharedPtrFromRaw(Targetable* rawPtr
 std::vector<AstarUnit> UnitHandler::AStarUnitHandOut(Units* t_unit)
 {
 	std::vector<AstarUnit> astarUnits;
-	
-	for (auto& unit : playerUnits)
+
+	auto nearbyUnits = partitioning.getUnitsInCellAndNeighbors(t_unit->getCellID());
+
+	for (auto* unit : nearbyUnits)
 	{
-		if (unit.get() != t_unit)
-		{
-			AstarUnit astarUnit(unit->getPos(), unit->getRadius() * 2);
-			astarUnits.push_back(astarUnit);
-		}
+		if (unit == t_unit)
+			continue;
+
+		AstarUnit astarUnit(unit->getPos(), unit->getRadius() * 2);
+		astarUnits.push_back(astarUnit);
 	}
-	for (auto& unit : enemyUnits)
-	{
-		if (unit.get() != t_unit)
-		{
-			AstarUnit astarUnit(unit->getPos(), unit->getRadius() * 2);
-			astarUnits.push_back(astarUnit);
-		}
-	}
+
 	return astarUnits;
 }
 

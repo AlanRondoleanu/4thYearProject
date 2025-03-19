@@ -166,6 +166,7 @@
     <ClCompile Include="Orc.cpp" />
     <ClCompile Include="Orc_Building.cpp" />
     <ClCompile Include="Orc_Bullet.cpp" />
+    <ClCompile Include="PartitionGrid.cpp" />
     <ClCompile Include="PlaceMarkers.cpp" />
     <ClCompile Include="Placement_Building.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Orc.h" />
     <ClInclude Include="Orc_Building.h" />
     <ClInclude Include="Orc_Bullet.h" />
+    <ClInclude Include="PartitionGrid.h" />
     <ClInclude Include="PlaceMarkers.h" />
     <ClInclude Include="Placement_Building.h" />
     <ClInclude Include="Projectile.h" />

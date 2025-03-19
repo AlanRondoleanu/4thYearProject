@@ -5,19 +5,13 @@
 #include <algorithm> 
 #include <vector> 
 #include <iostream> 
-
-class Unit 
-{
-public:
-    sf::Vector2f position;
-    float radius;
-    sf::Vector2f velocity;
-};
+#include "PartitionGrid.h"
+#include "Units.h"
 
 class RayCasting
 {
 public:
-    bool isBlocked(Unit movingUnit, std::vector<Unit> otherUnits);
+    bool isBlocked(Units& movingUnit, PartitionGrid& partition);
 
 private:
     bool rayIntersectsCircle(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, float totalRadius);

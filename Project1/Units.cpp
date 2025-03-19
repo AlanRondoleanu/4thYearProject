@@ -113,7 +113,8 @@ bool Units::isInsideSelection(const sf::FloatRect& selection) const
 
 void Units::push(sf::Vector2f t_direction)
 {
-	body.move(t_direction);
+	if (state != UnitState::Attacking)
+		body.move(t_direction);
 }
 
 bool Units::canAttack()

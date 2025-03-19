@@ -1,24 +1,25 @@
 #include "RayCasting.h"
 
-bool RayCasting::isBlocked(Unit movingUnit, std::vector<Unit> otherUnits)
+bool RayCasting::isBlocked(Units& movingUnit, PartitionGrid& partition)
 {
-    sf::Vector2f A = movingUnit.position;
-    sf::Vector2f B = A + movingUnit.velocity * (movingUnit.radius / 2);
-    float r1 = movingUnit.radius;
+    sf::Vector2f A = movingUnit.getPos();
+    sf::Vector2f B = A + movingUnit.velocity * movingUnit.getRadius();
+    float r1 = movingUnit.getRadius();
   
-
     // Check for collision with any other unit
-    for (const Unit& otherUnit : otherUnits)
+    for (auto& otherUnit : partition.getUnitsInCellAndNeighbors(movingUnit.getCellID()))
     {
-        sf::Vector2f C = otherUnit.position;
-        float r2 = otherUnit.radius;
+        if (movingUnit.getPos() == otherUnit->getPos())
+            continue;
+
+        sf::Vector2f C = otherUnit->getPos();
+        float r2 = otherUnit->getRadius();
 
         if (rayIntersectsCircle(A, B, C, r1 + r2))
         {
             return true;
         }
     }
-
     return false;
 }
 

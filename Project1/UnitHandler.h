@@ -14,6 +14,7 @@
 #include "UnitGroup.h"
 #include "RayCasting.h"
 #include "FlowfieldMovement.h"
+#include "PartitionGrid.h"
 
 class UnitHandler
 {
@@ -44,10 +45,12 @@ public:
 	FlowField* mainFlowField;
 	Astar* mainAstar;
 
+	// Partitioning
+	PartitionGrid partitioning{ FlowField::GRID_WIDTH, FlowField::GRID_HEIGHT };
+
 	// Raycasting
 	RayCasting raycasting;
 
-	std::unordered_map<int, std::vector<Targetable*>> partitionedMap;
 	std::vector<std::shared_ptr<Targetable>> playerUnits;
 	std::vector<std::shared_ptr<Targetable>> enemyUnits;
 	std::unordered_set<Units*> selectedUnits;
@@ -59,7 +62,6 @@ private:
 	void eraseDeadUnits(std::vector<std::shared_ptr<Targetable>>& t_units);
 	Cell* selectCell();
 	Cell* selectCell(sf::Vector2f t_position);
-	std::vector<Targetable*> getUnitsInCellAndNeighbors(int cellID);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits);
 	void createNewGroupFromSelectedUnits(const std::unordered_set<Units*>& selectedUnits, Targetable* t_target);
 	void aStarHandout(sf::Vector2f postion, Units* unit);
